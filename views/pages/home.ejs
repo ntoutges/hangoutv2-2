@@ -1,0 +1,20 @@
+<%- contentFor("head") %>
+<script src="js/home.js" defer></script>
+<link rel="stylesheet" href="css/home.css">
+
+<%- contentFor("main") %>
+<div id="basic-info-panel">
+  <div id="profile-picture-holder">
+    <img src="favicon.png" id="profile-picture" draggable="false">
+  </div>
+  <div id="info-holder">
+    <div id="display-name-centerer">
+      <div id="display-name"><%=name%></div>
+    </div>
+    <div id="bio-box">
+      <textarea id="biography" maxlength="500"><%=bio%></textarea>
+      <div id="bio-save-message">Saved!</div>
+    </div>
+  </div>
+</div>
+<div id="name-size-getter"><%=name%></div>

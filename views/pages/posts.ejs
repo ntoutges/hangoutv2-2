@@ -1,0 +1,26 @@
+<%- contentFor("head") %>
+<script src="js/posts.js" type="module" defer></script>
+<link rel="stylesheet" href="css/posts.css">
+
+<%- contentFor("main") %>
+<div id="posts-scroller">
+  <div id="posts-container">
+    <% if (isLoggedIn) { %>
+      <div class="ejs-infos" id="logged-in"></div>
+      <div class="posts" id="posts-preview">
+        <div class="headers inputs">
+          <input class="titles inputs" placeholder="Title"></input>
+          <div id="title-underline"></div>
+        </div>
+        <div class="texts inputs" contenteditable="true"></div>
+        <div class="footers">
+          <!-- to be set in JS (on client) -->
+          <div class="published-dates"></div>
+          <div class="published-times"></div>
+          <div class="usernames inputs">Publish</div>
+        </div>
+      </div>
+    <% } %>
+    <div id="posts-holder"></div>
+  </div>
+</div>

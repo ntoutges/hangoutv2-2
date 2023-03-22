@@ -1,0 +1,101 @@
+:root {
+  --main-theme-color: #42c5bc;
+  --comp-theme-color: #2a817b;
+  --main-border-color: #3a4c4b;
+  --success: #91fe91;
+  --failure: rgb(242, 125, 125);
+  --toolbar-width: 40px;
+}
+
+@font-face {
+  font-family: 'SpaceMono';
+  src: url('../SpaceMono/SpaceMono-Regular.ttf');
+}
+
+body {
+  margin: 0px;
+  background-color: cornsilk;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#toolbar {
+  height: 100vh;
+  width: calc( var(--toolbar-width) + 20px );
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-color: var(--main-theme-color);
+
+  transition-property: width;
+  transition-duration: 100ms;
+  transition-timing-function: ease-out;
+  z-index: 1;
+  user-select: none;
+}
+
+#toolbar:hover {
+  width: 300px;
+  border-right: solid 4px var(--main-border-color);
+}
+
+.toolbar-items {
+  position: relative;
+  height: 2em;
+  width: calc( 100% - 20px);
+  font-size: calc(var(--toolbar-width) / 2);
+  padding: 0.5em;
+  display: block;
+}
+
+.toolbar-items:hover {
+  background-color: var(--comp-theme-color);
+  cursor: pointer;
+}
+
+.toolbar-logos {
+  position: absolute;
+  left: calc( var(--toolbar-width) / 2 + 10px - 1em );
+  top: 0.5em;
+  width: 2em;
+
+  image-rendering: pixelated;
+  z-index: 1;
+}
+
+.toolbar-descs {
+  position: absolute;
+  top: 1em;
+  right: 0.5em;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+  width: calc( 100% - 2em - 35px );
+
+  font-size: 1em;
+  font-family: 'Roboto', sans-serif;
+
+  color: black !important;
+}
+
+#signOut {
+  position: absolute;
+  bottom: 0px;
+  font-size: 15px;
+}
+
+#useable-area {
+  width: calc(100vw - var(--toolbar-width) - 20px);
+  height: 100vh;
+  position: absolute;
+  left: calc(var(--toolbar-width) + 20px);
+  top: 0px;
+
+  background-color: cornsilk;
+  overflow: hidden;
+}
+
+/* roundabout way for conveying info to JS */
+#ejs-infos { display: none; }

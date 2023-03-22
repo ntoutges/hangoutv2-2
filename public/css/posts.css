@@ -1,0 +1,164 @@
+:root {
+  --message-color: #77a9cd;
+  --message-overlay-color: #90c1e3;
+  --message-username-color: #7bd4c6;
+}
+
+#posts-container {
+  min-height: calc(100vh - 20px);
+  width: 70%;
+  margin: auto;
+  background-image: linear-gradient(to left, #4e908b,#3bada5,#4e908b);
+  padding: 20px 20px 0px 20px;
+}
+
+#posts-scroller {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.posts {
+  display: inline-block;
+  width: 100%;
+  background-color: var(--message-color);
+  font-family: 'SpaceMono';
+  
+  text-align: center;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.texts {
+  resize: none;
+  background-color: #bcbcbc;
+  font-size: 0.8rem;
+
+  border: none;
+  padding: 5px;
+  margin: 0px;
+  overflow: hidden;
+
+  width: calc(100% - 50px);
+  display: inline-block;
+
+  border-radius: 5px;
+  text-align: left;
+
+  font-family: inherit;
+}
+
+.lines {
+  margin: 0px;
+  display: inline;
+}
+
+.titles {
+  text-align: left;
+  padding-left: 10px;
+  font-family: inherit;
+  font-size: 20px;
+  margin: 0px;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: 700;
+}
+
+.footers {
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.published-dates {
+  float: left;
+  padding: 0px 10px 0px 10px;
+  background-color: var(--message-overlay-color);
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  font-size: inherit;
+  user-select: none;
+}
+
+.published-times {
+  float: left;
+  margin-left: 10px;
+  padding: 0px 10px 0px 10px;
+  background-color: var(--message-overlay-color);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-size: inherit;
+  user-select: none;
+}
+
+.usernames {
+  float: right;
+  padding: 0px 10px 0px 10px;
+  background-color: var(--message-username-color);
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  font-size: inherit;
+  user-select: none;
+}
+
+.usernames:hover {
+  cursor: pointer;
+  background-color: #494949;
+  color: var(--message-username-color);
+}
+
+
+.texts.inputs {
+  min-height: calc(5 * 1.2rem);
+  background-color: #999999;
+  border: solid 2px #127485;
+}
+
+.texts.inputs:focus, .texts.inputs.actives {
+  background-color: #bcbcbc;
+  border: none;
+}
+
+.titles.inputs {
+  width: calc(100% - 50px);
+  margin: 5px 0px 5px 0px;
+  padding: 5px;
+  border: none;
+  text-align: center;
+
+  background-color: #e6e6e685;
+}
+
+.titles.inputs:focus, .titles.inputs.actives {
+  background-color: transparent;
+  
+  /* get around needing to style placeholder differently */
+  text-align: left;
+}
+
+.usernames.inputs {
+  background-color: #aec2ad;
+}
+
+.usernames.inputs.actives {
+  background-color: #62dc38;
+}
+
+.usernames.inputs.actives:hover {
+  color: #62dc38;
+  background-color: #886d22;
+}
+
+.usernames.inputs:not(.actives):hover {
+  color: black;
+  background-color: #aec2ad;
+  cursor: not-allowed;
+}
+
+#posts-preview {
+  filter: brightness(1.1);
+}
+
+.missings {
+  background-image: linear-gradient(90deg, #c88484, #ffcfcf)
+}

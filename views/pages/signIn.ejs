@@ -1,0 +1,29 @@
+<%- contentFor ('head') %>
+<script src="js/signIn.js" defer type="module"></script>
+<link rel="stylesheet" href="css/signIn.css">
+
+<%- contentFor ('main') %>
+<aside id="sign-in-side">
+  <div id="sign-in-container">
+    <h1 id="sign-in-title">Sign In</h1>
+    <div id="credentials-container">
+      <div id="username-holder" class="credential-holders">
+        <input id="username" class="log-in-inputs" type="text">
+        <div id="username-underline" class="credential-underlines"></div>
+        <div id="username-warning" class="credential-warnings"></div>
+      </div>
+      <div id="password-holder" class="credential-holders">
+        <input id="password" class="log-in-inputs" type="password">
+        <div id="password-underline" class="credential-underlines"></div>
+        <div id="password-warning" class="credential-warnings"></div>
+      </div>
+      <button id="submit">Sign In</button>
+    </div>
+  </div>
+</aside>
+<div id="promo-photos">
+  <div id="slide-a" class="slides">
+    <img src="/getPhoto/<%=promoPhotoSrc%>" id="photo-a" class="photos">
+  </div>
+  <div id="slide-b" class="slides"></div>
+</div>
