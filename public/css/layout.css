@@ -3,7 +3,8 @@
   --comp-theme-color: #2a817b;
   --main-border-color: #3a4c4b;
   --success: #91fe91;
-  --failure: rgb(242, 125, 125);
+  --failure: #f27d7d;
+  --indeterminate: #e2d02e;
   --toolbar-width: 40px;
 }
 

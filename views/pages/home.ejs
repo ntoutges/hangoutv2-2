@@ -1,20 +1,26 @@
 <%- contentFor("head") %>
-<script src="js/home.js" defer></script>
+<script src="js/home.js" defer type="module"></script>
 <link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/modules.css">
 
 <%- contentFor("main") %>
-<div id="basic-info-panel">
-  <div id="profile-picture-holder">
-    <img src="favicon.png" id="profile-picture" draggable="false">
-  </div>
-  <div id="info-holder">
-    <div id="display-name-centerer">
-      <div id="display-name"><%=name%></div>
+<div id="home-flexbox">
+  <div id="basic-info-panel">
+    <div id="profile-picture-holder">
+      <img src="graphics/favicon.png" id="profile-picture" draggable="false">
     </div>
-    <div id="bio-box">
-      <textarea id="biography" maxlength="500"><%=bio%></textarea>
-      <div id="bio-save-message">Saved!</div>
+    <div id="info-holder">
+      <div id="display-name-centerer">
+        <div id="display-name"><%=name%></div>
+      </div>
+      <div id="bio-box">
+        <textarea id="biography" class="bio-texts" maxlength="500"><%=bio%></textarea>
+        <div id="biography-sizer" class="bio-texts"></div>
+        <div id="bio-save-message">Saved!</div>
+      </div>
     </div>
   </div>
+  <div id="module-parent-container"></div>
 </div>
-<div id="name-size-getter"><%=name%></div>
+
+<!-- <div id="name-size-getter"><%=name%></div> -->

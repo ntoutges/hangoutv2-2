@@ -5,12 +5,13 @@
   max-width: 650px;
 
   position: absolute;
-  top: calc(3vh - 5px);
+  top: calc(3vh - 3px);
   left: 3vh;
   z-index: 1;
 
-  background-color: var(--comp-theme-color);
-  border: solid var(--main-border-color) 5px;
+  background-image: url(../graphics/tablecloth.jpg);
+  border: solid var(--main-border-color) 3px;
+  border-radius: 10px;
 }
 
 #sign-in-container {
@@ -149,9 +150,16 @@
   width: 100%;
   height: 100%;
   position: absolute;
-
+  
   z-index: 0;
   background-color: cornsilk;
+}
+
+.slides > img {
+  top: 50%;
+  transform: translateY(-50%);
+  height: 100%;
+  object-fit: cover;
 }
 
 #slide-a {

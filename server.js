@@ -7,15 +7,16 @@ const formidable = require('formidable');
 const imageMagick = require('node-imagemagick');
 const socketio = require('socket.io');
 const fs = require('fs');
-const Datastore = require('nedb');
 
 const board = require("./board.js");
 
 require('dotenv').config(); // give access to .env file
 
-const m = require(__dirname + "/neDB_ext.js");
+const dbManager = require("./db.js");
+const sockets = require("./socketManager.js")
 
 const app = express();
+const http = require("http").Server(app);
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 
@@ -28,24 +29,24 @@ app.use( session({
   saveUninitialized: false
 }) );
 
-const db = new m.nedbExt(Datastore);
-db.addCollection("accounts", __dirname + "/db/accounts.txt");
-db.addCollection("posts", __dirname + "/db/posts.txt");
-
-const MS_PER_DAY = 86400000;
-db.init(() => {
-  const server = app.listen(process.env.PORT || 52975, function () {
+dbManager.init(__dirname + "/db").then(() => {
+  http.listen(process.env.PORT || 52975, function () {
     getPhotoRollContents();
     console.log("app started");
   });
+  board.init(dbManager.db);
+  sockets.init(http);
 
-  board.init(db);
-  // do compaction once every two days
-  db.collection("accounts").persistence.setAutocompactionInterval(172800000);
-  db.collection("posts").persistence.setAutocompactionInterval(172800000);
+  dbManager.setAutocompactionInterval(172800000);
+  // setInterval(board.removeOldMessages.bind(MS_PER_DAY*5), MS_PER_DAY*1);
 
-  setInterval(board.removeOldMessages.bind(MS_PER_DAY*5), MS_PER_DAY*1);
-});
+}).catch((err) => {
+  console.log("An error occured starting the server: ", err)
+})
+
+dbManager.addCollection("accounts");
+dbManager.addCollection("posts");
+dbManager.addCollection("channels");
 
 var photoRollContents = [];
 function getPhotoRollContents() {
@@ -72,7 +73,9 @@ app.get("/", (req,res) => {
     title: "Sign In",
     isLoggedIn: false,
     isSidebar: false,
-    promoPhotoSrc: firstPhoto
+    promoPhotoSrc: firstPhoto,
+    id: null,
+    accountId: null
   });
 });
 
@@ -80,11 +83,12 @@ app.post("/signIn", (req,res) => {
   let username = req.body.user;
   let password = req.body.pass;
   
-  db.collection("accounts").findOne({
+  dbManager.db.collection("accounts").findOne({
     "_id": username
-  }, (err, doc) => {
-    if (err)
+  }).exec((err, doc) => {
+    if (err) {
       console.log("ERROR: ", err);
+    }
     else if (doc) {
       let passwordHash = doc.pass;
       bcrypt.compare(password, passwordHash, function(err, matches) {
@@ -134,19 +138,22 @@ app.get("/home", (req,res) => {
     return;
   }
 
-  db.collection("accounts").findOne({
+  dbManager.db.collection("accounts").findOne({
     "_id": req.session.user
   }, (err, doc) => {
     if (err) {
       res.send("An error occured");
     }
     else {
+      sockets.moveToRoom(req.sessionID, "home");
       res.render("pages/home.ejs", {
         title: "Home",
         isLoggedIn: true,
         isSidebar: true,
         name: req.session.name,
-        bio: doc.bio ?? ""
+        bio: doc.bio ?? "",
+        id: req.sessionID,
+        accountId: req.session.user
       });
     }
   });
@@ -160,8 +167,8 @@ app.post("/updateBio", (req,res) => {
 
   const MAX_BIO_LENGTH = 500;
 
-  let bio = (req.body.bio ?? "").toString().substring(0, MAX_BIO_LENGTH); // bio must ALWAYS be a string // limit bio to 200 characters
-  db.collection("accounts").update({
+  let bio = (req.body.bio ?? "").toString().substring(0, MAX_BIO_LENGTH); // bio must ALWAYS be a string // limit bio to 500 characters
+  dbManager.db.collection("accounts").update({
     "name": req.session.name
   }, {
     $set: {
@@ -175,6 +182,24 @@ app.post("/updateBio", (req,res) => {
   });
 });
 
+app.get("/profile", (req,res) => {
+  const id = req.query.id ?? null;
+  if (id == null) {
+    res.send({});
+    return;
+  }
+
+  dbManager.db.collection("accounts").findOne({
+    "_id": id
+  }).exec((err,data) => {
+    if (err) { res.send({}); }
+    else {
+      data.pass = "";
+      res.send(data);
+    }
+  });
+})
+
 /* ________________
   /                \
   | jmp POSTS CODE |
@@ -186,8 +211,12 @@ app.get("/posts", (req,res) => {
     title: "Posts",
     isLoggedIn: !!req.session.user,
     isSidebar: true,
-    user: req.session.user
+    user: req.session.user,
+    id: req.sessionID,
+    accountId: req.session.user
   });
+  let channel = req.query.channel ?? "main";
+  sockets.moveToRoom(req.sessionID, `posts-${channel}`);
 });
 
 app.post("/createPost", (req,res) => {
@@ -196,37 +225,102 @@ app.post("/createPost", (req,res) => {
     return;
   }
 
-  if (!("t" in req.body) || req.body.t.trim().length == 0) {
-    res.send("Bad Title");
+  if (!("title" in req.body)) {
+    res.send({"msg":"Bad Title"});
     return;
   }
-  if (!("c" in req.body) || req.body.c.trim().length == 0) {
-    res.send("Bad Content");
+  if (!("content" in req.body)) {
+    res.send({"msg":"Bad Content"});
     return;
   }
 
-  const document = {
-    "q": req.body.t.trim(),
-    "t": req.body.c.trim(),
-    "p": (new Date()).getTime(),
-    "u": req.session.user
+  // remove trailing white space
+  const title = req.body.title.replace(/\s+$/g, "");
+  const content = req.body.content.replace(/\s+$/g, "");
+  const channel = ("channel" in req.body) ? (req.body.channel.trim()) : "main";
+
+  if (title.trim().length == 0 || title.length > 200) {
+    res.send({"msg":"Bad Title"});
+    return;
+  }
+  if (content.trim().length == 0 || content.length > 4000) {
+    res.send({"msg":"Bad Content"});
+    return;
   }
 
-  db.collection("posts").insert(document, (err) => {
-    if (err) {
+  dbManager.db.collection("channels").findOne({
+    "_id": channel
+  }).exec((err, channelData) => {
+    if (err) { // something bad happened...
       res.sendStatus(500);
       return;
     }
-    res.send("Valid");
-  })
+    if (!channelData) { // the channel does not exist
+      res.sendStatus(404);
+      return;
+    }
+    const document = {
+      "title": title,
+      "content": content,
+      "published": (new Date()).getTime(),
+      "user": req.session.user,
+      "channel": channel
+    }
+  
+    dbManager.db.collection("posts").insert(document, (err, finalDoc) => {
+      if (err) {
+        res.sendStatus(500);
+        return;
+      }
+      res.send({"msg":"Valid", "body":document});
+      sockets.emitToRoom("newDocs", finalDoc._id, `posts-${channel}`);
+
+      dbManager.db.collection("channels").update({
+        "_id": channel
+      }, {
+        $push: {
+          "posts": finalDoc._id
+        },
+        $set: {
+          "activity": document.published
+        }
+      }, (err) => {
+        if (err) console.log("ERROR:", err);
+      });
+    });
+  });
+
 });
 
 app.get("/getPosts", (req,res) => {
-  db.collection("posts").find({}).sort({
-    "p": -1
-  }).limit(300).exec((err, docs) => {
+  const index = parseInt(req.query.index ?? 0);
+  const limit = parseInt(req.query.limit || 10);
+  const channel = req.query.channel ?? "main"
+
+  dbManager.db.collection("posts").find({
+    channel
+  }).sort({
+    "published": -1
+  }).skip(index).limit(limit).exec((err, docs) => {
     if (err) res.sendStatus(500);
     res.send(docs);
+  });
+});
+
+app.get("/getPost", (req,res) => {
+  const id = req.query.id ?? null;
+  if (id == null) {
+    res.send({});
+    return;
+  }
+  dbManager.db.collection("posts").findOne({
+    _id: id
+  }).exec((err, data) => {
+    if (err) {
+      res.send({});
+      return;
+    }
+    res.send(data);
   });
 })
 

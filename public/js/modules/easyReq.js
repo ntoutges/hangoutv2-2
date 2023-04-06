@@ -19,10 +19,11 @@ export function post(path, data={}) {
 }
 
 export function get(path, data={}) {
-  let queryString = "";
+  let queryStrings = [];
   for (let key in data) {
-    queryString += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+    queryStrings.push(`${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`);
   }
+  const queryString = queryStrings.join("&");
   return new Promise((res) => {
     fetch(
       (queryString.length == 0) ? path : (path + "?" + queryString),
@@ -40,4 +41,16 @@ export function get(path, data={}) {
       });
     });
   })
+}
+
+export class HttpError {
+  constructor(errStr) {
+    this.err = errStr;
+
+    const codeMatch = /\d+$/.exec(errStr);
+    const msgMatch = /^.+(?=#)/.exec(errStr);
+
+    this.code = codeMatch ? parseInt(codeMatch[0]) : 0;
+    this.msg = msgMatch ? msgMatch[0].replace("Error: ", "") : "";
+  }
 }

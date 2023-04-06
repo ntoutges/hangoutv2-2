@@ -15,7 +15,8 @@
     "fs": "0.0.1-security",
     "nedb": "^1.8.0",
     "node-imagemagick": "^0.1.8",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.18"

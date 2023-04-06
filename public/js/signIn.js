@@ -18,7 +18,7 @@ function init() { // prevents code from floating in space
 
   req.get("/getPhotoRoll", {}).then(([data, success]) => {
     if (success == success)
-    pictureKey = data;
+    pictureKey = randomize(data);
     preloadNextSlide();
     
     if (pictureKey.length > 1) // don't swap if only one (or zero) photo(s)
@@ -27,6 +27,16 @@ function init() { // prevents code from floating in space
         setInterval(swapSlides, INTERVAL_DURATION);
       }, INTERVAL_DURATION - TRANSITION_DURATION);
   });
+}
+
+function randomize(arr) {
+  for (let i = 0; i < arr.length-1; i++) {
+    let j = Math.floor(Math.random() * (arr.length - i)) + i;
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  return arr;
 }
 
 function submitCredentials() {
@@ -115,7 +125,9 @@ function swapSlides() { // move one photo over another
     $("#slide-b").style.display = "none";
     
     $("#slide-a").innerHTML = ""; // remove anything on this slide
-    $("#slide-a").append( $("#slide-b").childNodes );
+    for (let i = $("#slide-b").childNodes.length-1; i >= 0; i--) { // transfer all children (if multiple somehow end up in "slide-b")
+      $("#slide-a").append( $("#slide-b").childNodes[i] );
+    }
     preloadNextSlide();
   }, TRANSITION_DURATION);
 }

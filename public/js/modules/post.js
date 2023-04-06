@@ -4,11 +4,11 @@ const $ = document.querySelector.bind(document);
 
 export class Post {
   constructor(data) {
-    this.title = ("q" in data) ? data.q : "////";
-    this.text = ("t" in data) ? data.t : "////";
-    this.published = ("p" in data) ? new Date(data.p) : new Date();
-    this.formatting = ("f" in data) ? data.f : [];
-    this.user = ("u" in data) ? data.u : "???";
+    this.title = ("title" in data) ? data.title : "////";
+    this.text = ("content" in data) ? data.content : "////";
+    this.published = ("published" in data) ? new Date(data.published) : new Date();
+    this.formatting = ("formatting" in data) ? data.f : [];
+    this.user = ("user" in data) ? data.user : "???";
 
     this.blocks = [];
     let i = 0;
@@ -71,4 +71,5 @@ export class Post {
     this.el.append(this.footer);
   }
   appendTo(other) { other.append(this.el); }
+  prependTo(other) { other.prepend(this.el); }
 }

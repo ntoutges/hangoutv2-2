@@ -3,14 +3,23 @@
   <head>
     <!-- <script src="jquery-3.6.0.min.js"></script> -->
     <title>Hangout! - <%=title%></title>
-    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <link rel="icon" href="graphics/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="Roboto-Regular.ttf" rel="stylesheet">
+    <script src="/js/modules/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const accountId = "<%=accountId%>";
+      socket.on("connect", () => {
+        socket.emit("init", "<%=id%>");
+      })
+    </script>
     <%- defineContent ('head'); %>
   </head>
   <body>
+    <%=id%>
     <% if (isSidebar) { %>
     <%- include('partials/toolbar'); %>
     <div id="useable-area">

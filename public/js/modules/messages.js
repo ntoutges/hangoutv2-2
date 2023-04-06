@@ -1,13 +1,14 @@
 import * as req from "./easyReq.js";
 
-export function createMessage(title, content) {
+export function createMessage(title, content, channel) {
   return new Promise((resolve,reject) => {
     try {
       req.post("/createPost", {
-        t: title,
-        c: content
+        title,
+        content,
+        channel
       }).then(([data, success]) => {
-        if (success != "success") reject(new Error("fail"));
+        if (success != "success") reject(new Error(success));
         resolve(data);
       });
     }
@@ -17,14 +18,19 @@ export function createMessage(title, content) {
   })
 }
 
-export function getMessages(index=0, limit=2) {
+export function getMessages({
+  batch=0,
+  limit=20,
+  channel="main"
+}) {
   return new Promise((resolve,reject) => {
     try {
       req.get("/getPosts", {
-        index,
-        limit
+        index: batch*limit,
+        limit,
+        channel
       }).then(([data, success]) => {
-        if (success != "success") reject(new Error("fail"));
+        if (success != "success") reject(new Error(success));
         resolve(data);
       });
     }

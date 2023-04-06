@@ -3,9 +3,16 @@ const $ = document.querySelector.bind(document);
 import { Post } from "./modules/post.js";
 import { lFill } from "./modules/format.js"
 import * as msg from "./modules/messages.js";
+import { get, HttpError } from "./modules/easyReq.js";
+import { Query } from "./modules/query.js";
+import { showError } from "./modules/errorable.js"
+
+const query = new Query(window.location.search)
 
 const isMessageReady = [false, false];
 const posts = [];
+var lastId = null;
+var batchToLoad = 0;
 
 // only load code for someone signed in if EJS indicates the client is signed in
 if ($("#logged-in")) initSignedIn();
@@ -41,20 +48,39 @@ function initSignedIn() {
     const content = $(".texts.inputs").innerHTML.replace(/<br>/g, "\n").trim();
 
     if (title.length == 0) { renderPostError("Bad Title"); }
-    else if (content.length == 1) { renderPostError("Bad Content"); }
+    else if (content.length == 0) { renderPostError("Bad Content"); }
 
     msg.createMessage(
       title,
-      content
+      content,
+      query.get("channel", "main")
     ).then((data) => {
-      if (renderPostError(data)) { return }
+      if (renderPostError(data.msg)) { return }
       $(".titles.inputs").value = "";
       $(".titles.inputs").classList.remove("actives");
       $(".texts.inputs").innerHTML = "";
       $(".texts.inputs").classList.remove("actives");
       $(".usernames.inputs").classList.remove("actives");
+
+      // renderNewMessage( data.body, true ); // <- handled by sockets for everyone, now
     }).catch(err => {
-      console.error(err);
+      const httpError = new HttpError(err.toString());
+      console.log(httpError.code)
+      switch (httpError.code) {
+        case 403:
+          showError("Invalid Credentials").then(() => {
+            window.location.reload();
+          });
+          break;
+        case 404:
+          showError("Invalid Channel").then(() => {
+            query.set("channel", "main");
+          window.location.search = query.toString();
+          });
+          break;
+        default:
+          showError("Error?")
+      }
     })
   });
 
@@ -70,9 +96,11 @@ function renderPostError(data) {
   switch(data) {
     case "Bad Title":
       $(".titles.inputs").classList.add("missings");
+      showError("Bad Title");
       break;
     case "Bad Content":
       $(".texts.inputs").classList.add("missings");
+      showError("Bad Content")
       break;
     default:
       return false;
@@ -93,18 +121,55 @@ function updatePublishButton() {
 
 loadMessages();
 function loadMessages() {
-  msg.getMessages().then((data) => {
+  msg.getMessages({
+    batch: batchToLoad++,
+    channel: query.get("channel", "main")
+  }).then((data) => {
+    // prevent new messages from being loaded, as they will not actually exist
+    if (data.length == 0) { // no messages sent, therefore never more to load
+      return;
+    }
+    
+    isLoadingNew = false;
     renderNewMessages(data);
+
+    lastId = data[data.length-1]._id;
   }).catch(err => {
     console.log(err)
   });
 }
 
+const postHolder = $("#posts-holder");
 function renderNewMessages(newPosts) {
-  const postHolder = $("#posts-holder");
-  for (const post of newPosts) {
-    const postObj = new Post(post);
-    posts.push(postObj);
-    postObj.appendTo(postHolder);
-  }
+  for (const post of newPosts) { renderNewMessage(post, false); }
 }
+
+function renderNewMessage(post, prepend=false) {
+  const postObj = new Post(post);
+  posts.push(postObj);
+  if (prepend) postObj.prependTo(postHolder);
+  else postObj.appendTo(postHolder);
+}
+
+
+// lazy loading circuitry
+var isLoadingNew = false; // this also used to control whether or not lazy loading
+setInterval(() => {
+  if (
+      !isLoadingNew && 
+      postHolder.childNodes.length != 0 && 
+      postHolder.lastChild.getBoundingClientRect().bottom - window.innerHeight < 20
+    ) {
+    isLoadingNew = true;
+    loadMessages();
+  }
+}, 50);
+
+
+// socketio stuff
+socket.on("newDocs", (id) => {
+  get("/getPost", { id }).then((data) => {
+    if (data[1] != "success") throw new Error("Fetch error");
+    renderNewMessage(data[0], true);
+  })
+});

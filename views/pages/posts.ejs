@@ -9,15 +9,15 @@
       <div class="ejs-infos" id="logged-in"></div>
       <div class="posts" id="posts-preview">
         <div class="headers inputs">
-          <input class="titles inputs" placeholder="Title"></input>
+          <input class="titles inputs" placeholder="Title" tabindex="1" maxlength="200"></input>
           <div id="title-underline"></div>
         </div>
-        <div class="texts inputs" contenteditable="true"></div>
+        <div class="texts inputs" contenteditable="true" tabindex="2" maxlength="4000"></div>
         <div class="footers">
           <!-- to be set in JS (on client) -->
           <div class="published-dates"></div>
           <div class="published-times"></div>
-          <div class="usernames inputs">Publish</div>
+          <div class="usernames inputs" tabindex="3">Publish</div>
         </div>
       </div>
     <% } %>
