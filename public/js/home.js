@@ -77,6 +77,31 @@ function fillFriends() {
     friendsModule.addRequested(requested);
   }
   friendsModule.set();
+
+  friendsModule.on("accept", (name) => {
+    post("/changeFriends", {
+      "action": "accept",
+      "friend": name
+    }).then(([data,success]) => {
+      console.log(data,success)
+    });
+  });
+  friendsModule.on("reject", (name) => {
+    post("/changeFriends", {
+      "action": "reject",
+      "friend": name
+    }).then(([data,success]) => {
+      console.log(data,success)
+    });
+  });
+  friendsModule.on("remove", (name) => {
+    post("/changeFriends", {
+      "action": "remove",
+      "friend": name
+    }).then(([data,success]) => {
+      console.log(data,success)
+    });
+  })
 }
 
 

@@ -72,6 +72,11 @@ export class FriendsModule extends Module {
   constructor() {
     super("Friends");
     this.el.classList.add("friends");
+    this.listeners = {
+      "accept": [],
+      "reject": [],
+      "remove": []
+    };
 
     const container = document.createElement("div");
     this.confirmed = document.createElement("div");
@@ -93,18 +98,42 @@ export class FriendsModule extends Module {
   }
   addConfirmed(name) {
     const el = document.createElement("div");
+    const nameEl = document.createElement("span")
+    const remove = document.createElement("img");
+
+    remove.setAttribute("src", "graphics/reject.png");
+    remove.classList.add("friend-rejectors");
+    remove.setAttribute("title", "Remove request");
+    nameEl.innerText = name;
+
+    remove.addEventListener("click", this.onRemove.bind(this, name,el));
+
     el.classList.add("friend-names");
-    el.innerText = name;
+    el.append(nameEl);
+    el.append(remove);
     this.confirmed.append(el);
   }
   addRequested(name) {
     const el = document.createElement("div");
     const nameEl = document.createElement("span");
     const accept = document.createElement("img");
-    el.
+    const reject = document.createElement("img");
+
+    accept.setAttribute("src", "graphics/accept.png");
+    accept.classList.add("friend-acceptors");
+    accept.setAttribute("title", "Accept request");
+    reject.setAttribute("src", "graphics/reject.png");
+    reject.classList.add("friend-rejectors");
+    reject.setAttribute("title", "Reject request");
+    nameEl.innerText = name;
+
+    accept.addEventListener("click", this.onAccept.bind(this, name,el));
+    reject.addEventListener("click", this.onReject.bind(this, name,el));
 
     el.classList.add("friend-names");
-    el.innerHTML = name;
+    el.append(nameEl);
+    el.append(reject);
+    el.append(accept);
     this.requests.append(el);
   }
   set() {
@@ -119,5 +148,21 @@ export class FriendsModule extends Module {
     }
     if (this.confirmed.children.length == 0) this.confirmed.style.display = "none";
     else this.confirmed.style.display = "";
+  }
+  on(event, callback) {
+    if (event in this.listeners) this.listeners[event].push(callback);
+  }
+  onAccept(name,el) {
+    el.remove();
+    this.addConfirmed(name);
+    this.listeners.accept.forEach((callback) => { callback.call(this,name); });
+  }
+  onReject(name,el) {
+    el.remove();
+    this.listeners.reject.forEach((callback) => { callback.call(this,name); });
+  }
+  onRemove(name,el) {
+    el.remove();
+    this.listeners.remove.forEach((callback) => { callback.call(this,name); });
   }
 }

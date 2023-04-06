@@ -13,7 +13,8 @@ const board = require("./board.js");
 require('dotenv').config(); // give access to .env file
 
 const dbManager = require("./db.js");
-const sockets = require("./socketManager.js")
+const sockets = require("./socketManager.js");
+const friends = require("./friends.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -198,7 +199,45 @@ app.get("/profile", (req,res) => {
       res.send(data);
     }
   });
-})
+});
+
+app.post("/changeFriends", (req,res) => {
+  // don't know who to modify if not logged in
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+  // missing essential data
+  if (!("action" in req.body) || !("friend" in req.body)) {
+    res.sendStatus(400);
+    return;
+  }
+  const collection = dbManager.db.collection("accounts");
+  let functionToCall;
+  switch (req.body.action) {
+    case "accept":
+      functionToCall = friends.accept;
+      // friends.accept( collection, req.session.user, req.body.friend )
+      break;
+    case "reject":
+      functionToCall = friends.reject;
+      // friends.reject( collection, req.session.user, req.body.friend )
+      break;
+    case "remove":
+      functionToCall = friends.remove;
+      // friends.remove( collection, req.session.user, req.body.friend )
+      break;
+    default:
+      res.sendStatus(400);
+      return;
+  }
+  functionToCall(collection, req.session.user, req.body.friend).then(() => {
+    res.sendStatus(200);
+  }).catch((err) => {
+    console.log(err)
+    res.sendStatus(500);
+  })
+});
 
 /* ________________
   /                \
