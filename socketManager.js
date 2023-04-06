@@ -56,7 +56,6 @@ function on(emitType, callback) {
 
 function onDisconnection(arg, id, socket) {
   delete sockets[id];
-  console.log(`${Object.keys(sockets).length} sockets`)
 }
 
 function emitTo(sessionId, channel, arg, queueable=true) {

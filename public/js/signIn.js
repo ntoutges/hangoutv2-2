@@ -6,6 +6,8 @@ const TRANSITION_DURATION = 3500; // measured in ms
 
 var pictureCounter = 0;
 var pictureKey = [];
+var lastPictures = [];
+var MIN_REPEAT_CYCLES = 0;
 
 function init() { // prevents code from floating in space
   $("#username").addEventListener("focusin", function() { focusIn.call(this, $("#username-underline") ); });
@@ -18,25 +20,16 @@ function init() { // prevents code from floating in space
 
   req.get("/getPhotoRoll", {}).then(([data, success]) => {
     if (success == success)
-    pictureKey = randomize(data);
+    pictureKey = data;
+    MIN_REPEAT_CYCLES = Math.floor(pictureKey.length / 2);
     preloadNextSlide();
-    
+
     if (pictureKey.length > 1) // don't swap if only one (or zero) photo(s)
       setTimeout(() => {
         swapSlides();
         setInterval(swapSlides, INTERVAL_DURATION);
       }, INTERVAL_DURATION - TRANSITION_DURATION);
   });
-}
-
-function randomize(arr) {
-  for (let i = 0; i < arr.length-1; i++) {
-    let j = Math.floor(Math.random() * (arr.length - i)) + i;
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
-  return arr;
 }
 
 function submitCredentials() {
@@ -135,7 +128,7 @@ function swapSlides() { // move one photo over another
 function preloadNextSlide() {
   if (pictureKey.length == 0) // can't load another slide if no photos exist
     return;
-  pictureCounter = (pictureCounter + 1) % pictureKey.length;
+  pictureCounter = getNextPicture();
   let src = pictureKey[pictureCounter];
   let newPhoto = document.createElement("img");
   newPhoto.setAttribute("src", `/getPhoto/${src}`);
@@ -144,5 +137,22 @@ function preloadNextSlide() {
   $("#slide-b").append(newPhoto);
 }
 
+// blacklist is assumed to be between [min] and [max]
+// returns value in range [min,max]
+function randomNum(min,max,blacklist=[]) {
+  const nums = max - min - blacklist.length + 1;
+  let raw = Math.floor(Math.random() * nums) + min;
+  
+  while (blacklist.includes(raw)) {
+    raw++; // increment until out of blacklist
+  }
+  return Math.max(Math.min(raw, max),0); // just in case (somehow) [raw] sneaks up too high
+}
+
+function getNextPicture() {
+  lastPictures.push(pictureCounter);
+  if (lastPictures.length > MIN_REPEAT_CYCLES) lastPictures.splice(0,1); // remove first item in array to shorten
+  return randomNum(0,pictureKey.length-1, lastPictures)
+}
 
 init();

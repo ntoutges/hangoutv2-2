@@ -1,0 +1,3 @@
+{"parties":["test","user2"],"data":{"from":"test"},"type":"friendRequest","init":1680799966451,"_id":"ExJfbEmHPzjvHfEz"}
+{"parties":["test","user"],"data":{"from":"test"},"type":"friendRequest","init":1680799948935,"_id":"Orolesn4CaugHFF3"}
+{"parties":["test","test2"],"data":{"from":"test"},"type":"friendRequest","init":1680799976956,"_id":"SCbjDtwZosiu12vT"}

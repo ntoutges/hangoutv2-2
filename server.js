@@ -15,6 +15,7 @@ require('dotenv').config(); // give access to .env file
 const dbManager = require("./db.js");
 const sockets = require("./socketManager.js");
 const friends = require("./friends.js");
+const transactions = require("./transactions.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -37,7 +38,11 @@ dbManager.init(__dirname + "/db").then(() => {
   });
   board.init(dbManager.db);
   sockets.init(http);
+  friends.init(transactions, dbManager.db.collection("accounts"));
+  transactions.init(dbManager.db.collection("transactions"));
 
+  // friends.request("test", "test2");
+  
   dbManager.setAutocompactionInterval(172800000);
   // setInterval(board.removeOldMessages.bind(MS_PER_DAY*5), MS_PER_DAY*1);
 
@@ -48,6 +53,7 @@ dbManager.init(__dirname + "/db").then(() => {
 dbManager.addCollection("accounts");
 dbManager.addCollection("posts");
 dbManager.addCollection("channels");
+dbManager.addCollection("transactions");
 
 var photoRollContents = [];
 function getPhotoRollContents() {
@@ -201,41 +207,94 @@ app.get("/profile", (req,res) => {
   });
 });
 
-app.post("/changeFriends", (req,res) => {
+app.post("/requestFriend", (req,res) => {
   // don't know who to modify if not logged in
   if (!req.session.user) {
     res.sendStatus(403);
     return;
   }
   // missing essential data
-  if (!("action" in req.body) || !("friend" in req.body)) {
-    res.sendStatus(400);
+  if (!("friend" in req.body)) {
+    res.send("Missing transaction id");
     return;
   }
-  const collection = dbManager.db.collection("accounts");
+  
+  friends.request(req.session.user, req.body.friend).then(() => {
+    res.sendStatus(200);
+  }).catch((err) => {
+    console.log(err)
+    res.sendStatus(500);
+  });
+});
+
+app.post("/removeFriend", (req,res) => {
+  // don't know who to modify if not logged in
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+  // missing essential data
+  if (!("friend" in req.body)) {
+    res.send("Missing transaction id");
+    return;
+  }
+  
+  friends.remove(req.session.user, req.body.friend).then(() => {
+    res.sendStatus(200);
+  }).catch((err) => {
+    console.log(err)
+    res.sendStatus(500);
+  });
+});
+
+app.post("/changeFriendsRequest", (req,res) => {
+  // don't know who to modify if not logged in
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+  // missing essential data
+  if (!("action" in req.body)) {
+    res.send("Missing action to perform");
+  }
+  
+  if (!("transaction" in req.body)) {
+    res.send("Missing transaction id");
+    return;
+  }
   let functionToCall;
   switch (req.body.action) {
     case "accept":
       functionToCall = friends.accept;
-      // friends.accept( collection, req.session.user, req.body.friend )
       break;
     case "reject":
       functionToCall = friends.reject;
-      // friends.reject( collection, req.session.user, req.body.friend )
-      break;
-    case "remove":
-      functionToCall = friends.remove;
-      // friends.remove( collection, req.session.user, req.body.friend )
       break;
     default:
       res.sendStatus(400);
       return;
   }
-  functionToCall(collection, req.session.user, req.body.friend).then(() => {
+  functionToCall(req.body.transaction, req.session.user).then(() => {
     res.sendStatus(200);
   }).catch((err) => {
     console.log(err)
     res.sendStatus(500);
+  });
+});
+
+app.get("/transactions", (req,res) => {
+  if (!("transactions" in req.query)) {
+    res.sendStatus(400);
+    return;
+  }
+  const transactions = req.query.transactions.split(",");
+  dbManager.db.collection("transactions").find({
+    _id: {
+      $in: transactions
+    }
+  }, (err,docs) => {
+    if (err) res.sendStatus(500);
+    else res.send(docs);
   })
 });
 

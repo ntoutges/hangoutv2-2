@@ -73,30 +73,34 @@ function fillFriends() {
   for (const confirmed of profile.friends.confirmed) {
     friendsModule.addConfirmed(confirmed);
   }
-  for (const requested of profile.friends.requested) {
-    friendsModule.addRequested(requested);
-  }
-  friendsModule.set();
+  get("/transactions", {
+    transactions: profile.friends.requested,
+  }).then(([transactions,success]) => {
 
-  friendsModule.on("accept", (name) => {
-    post("/changeFriends", {
+    for (const transaction of transactions) {
+      friendsModule.addRequested(transaction.parties[1], transaction._id); // .from not entirely accurate...
+    };
+    friendsModule.set();
+  })
+
+  friendsModule.on("accept", (transaction) => {
+    post("/changeFriendsRequest", {
       "action": "accept",
-      "friend": name
+      "transaction": transaction
     }).then(([data,success]) => {
       console.log(data,success)
     });
   });
-  friendsModule.on("reject", (name) => {
-    post("/changeFriends", {
+  friendsModule.on("reject", (transaction) => {
+    post("/changeFriendsRequest", {
       "action": "reject",
-      "friend": name
+      "transaction": transaction
     }).then(([data,success]) => {
       console.log(data,success)
     });
   });
   friendsModule.on("remove", (name) => {
-    post("/changeFriends", {
-      "action": "remove",
+    post("/removeFriend", {
       "friend": name
     }).then(([data,success]) => {
       console.log(data,success)

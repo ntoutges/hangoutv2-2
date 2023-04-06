@@ -103,7 +103,7 @@ export class FriendsModule extends Module {
 
     remove.setAttribute("src", "graphics/reject.png");
     remove.classList.add("friend-rejectors");
-    remove.setAttribute("title", "Remove request");
+    remove.setAttribute("title", "Remove friend");
     nameEl.innerText = name;
 
     remove.addEventListener("click", this.onRemove.bind(this, name,el));
@@ -113,7 +113,7 @@ export class FriendsModule extends Module {
     el.append(remove);
     this.confirmed.append(el);
   }
-  addRequested(name) {
+  addRequested(name, transactionId) {
     const el = document.createElement("div");
     const nameEl = document.createElement("span");
     const accept = document.createElement("img");
@@ -127,8 +127,8 @@ export class FriendsModule extends Module {
     reject.setAttribute("title", "Reject request");
     nameEl.innerText = name;
 
-    accept.addEventListener("click", this.onAccept.bind(this, name,el));
-    reject.addEventListener("click", this.onReject.bind(this, name,el));
+    accept.addEventListener("click", this.onAccept.bind(this, name,transactionId,el));
+    reject.addEventListener("click", this.onReject.bind(this, name,transactionId,el));
 
     el.classList.add("friend-names");
     el.append(nameEl);
@@ -152,14 +152,14 @@ export class FriendsModule extends Module {
   on(event, callback) {
     if (event in this.listeners) this.listeners[event].push(callback);
   }
-  onAccept(name,el) {
+  onAccept(name,transactionId, el) {
     el.remove();
     this.addConfirmed(name);
-    this.listeners.accept.forEach((callback) => { callback.call(this,name); });
+    this.listeners.accept.forEach((callback) => { callback.call(this,transactionId); });
   }
-  onReject(name,el) {
+  onReject(name,transactionId, el) {
     el.remove();
-    this.listeners.reject.forEach((callback) => { callback.call(this,name); });
+    this.listeners.reject.forEach((callback) => { callback.call(this,transactionId); });
   }
   onRemove(name,el) {
     el.remove();
