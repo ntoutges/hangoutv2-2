@@ -2,9 +2,12 @@ var $ = document.querySelector.bind(document);
 import { get, post } from "./modules/easyReq.js";
 import * as modules from "./modules/homeModule.js";
 import { Profile } from "./modules/profile.js"
+import { showError } from "./modules/errorable.js";
 
 var profile;
-const parentModule = new modules.ParentModule($("#module-parent-container"))
+const parentModule = new modules.ParentModule($("#module-parent-container"));
+const friendsModule = new modules.FriendsModule(true);
+var oldBio = $("#biography").value;
 
 fillProfile().then(() => {
   fillFriends();
@@ -32,19 +35,40 @@ $("#biography").addEventListener("input", (e) => {
   updateBiographyTimeout = setTimeout(updateBiography, UPDATE_BIOGRAPHY_TIMEOUT);
 });
 
+$("#biography").addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key == "s") { // including metaKey for mac
+    e.preventDefault(); // prevent save dialogue from appearing
+    updateBiography();
+  }
+})
+
 function updateBiography() {
+  clearTimeout(updateBiographyTimeout);
   let text = $("#biography").value.replace(/\s+$/g, ""); // remove whitespace from end of string (but not front)
   setBioMessage("Saving", "loadings actives");
-  post("/updateBio", {
-    bio: text
-  }).then((data) => {
-    if (data[1] != "success" || !data[0]) setBioMessage("Unsaved", "fails actives");
-    else setBioMessage("Saved!", "actives");
-
+  
+  if (oldBio == text) { // fake save message, for people who love pressing ctrl-s without actually changing anything
     setTimeout(() => {
-      setBioMessage();
-    }, 1000)
-  });
+      setBioMessage("Saved!", "actives");
+  
+      setTimeout(() => {
+        setBioMessage();
+      }, 1000);
+    }, Math.random()*200);
+  }
+  else { // real save message, for when something is actually changed
+    post("/updateBio", {
+      bio: text
+    }).then((data) => {
+      if (data[1] != "success" || !data[0]) setBioMessage("Unsaved", "fails actives");
+      else setBioMessage("Saved!", "actives");
+  
+      setTimeout(() => {
+        setBioMessage();
+      }, 1000)
+    });
+  }
+  oldBio = text;
 }
 
 function setBioMessage(msg=null, classState="") {
@@ -68,27 +92,34 @@ function fillProfile() {
 }
 
 function fillFriends() {
-  const friendsModule = new modules.FriendsModule();
   parentModule.appendModule(friendsModule, 0,0);
   for (const confirmed of profile.friends.confirmed) {
     friendsModule.addConfirmed(confirmed);
   }
-  get("/transactions", {
-    transactions: profile.friends.requested,
-  }).then(([transactions,success]) => {
-
-    for (const transaction of transactions) {
-      friendsModule.addRequested(transaction.parties[1], transaction._id); // .from not entirely accurate...
-    };
-    friendsModule.set();
-  })
+  if (profile.friends.requested.length > 0) {
+    get("/transactions", {
+      transactions: profile.friends.requested,
+    }).then(([transactions,success]) => {
+      if (success != "success") {
+        showError(success);
+        return;
+      }
+      for (const transaction of transactions) {
+        const friend = transaction.parties[(transaction.parties[0] == accountId) ? 1 : 0];
+        friendsModule.addRequested(friend, transaction); // .from not entirely accurate...
+      };
+      friendsModule.set();
+    });
+  }
+  else friendsModule.set();
 
   friendsModule.on("accept", (transaction) => {
     post("/changeFriendsRequest", {
       "action": "accept",
       "transaction": transaction
     }).then(([data,success]) => {
-      console.log(data,success)
+      if (success != "success") showError(success);
+      else if (data != "success") showError(data);
     });
   });
   friendsModule.on("reject", (transaction) => {
@@ -96,26 +127,52 @@ function fillFriends() {
       "action": "reject",
       "transaction": transaction
     }).then(([data,success]) => {
-      console.log(data,success)
+      if (success != "success") showError(success);
+      else if (data != "success") showError(data);
     });
   });
   friendsModule.on("remove", (name) => {
     post("/removeFriend", {
       "friend": name
     }).then(([data,success]) => {
-      console.log(data,success)
+      if (success != "success") showError(success);
+      else if (data != "success") showError(data);
     });
   })
 }
 
-
-
-var m = []
-for (var i = 0; i < 10; i++) {
-  m.push( new modules.Module() )
+{
+  // placeholder modules
+  var m = []
+  for (var i = 0; i < 4; i++) {
+    m.push( new modules.Module() )
+  }
+  parentModule.appendModule(m[0],0,1)
+  parentModule.appendModule(m[2],1,0)
 }
-parentModule.appendModule(m[1],0,1)
-parentModule.appendModule(m[2],0,2)
-parentModule.appendModule(m[3],1,0)
-parentModule.appendModule(m[4],2,0)
-parentModule.appendModule(m[5],2,1)
+
+// update biography
+socket.on("updateBio", (newBio) => {
+  $("#biography").value = newBio;
+});
+
+socket.on("requestFriend", (data) => {
+  const name = (data.from == accountId) ? data.to : data.from; // name to add is opposite of this account
+  friendsModule.addRequested(name, data.transaction);
+  friendsModule.set();
+});
+
+socket.on("removeFriend", (data) => {
+  const name = (data.from == accountId) ? data.to : data.from; // name to add is opposite of this account
+  friendsModule.popConfirmed(name);
+  friendsModule.set();
+});
+
+socket.on("changeFriendsRequest", (data) => {
+  const name = (data.from == accountId) ? data.to : data.from; // name to add is opposite of this account
+  friendsModule.popRequested(name);
+  if (data.action == "accept") {
+    friendsModule.addConfirmed(name);
+  }
+  friendsModule.set();
+});

@@ -78,7 +78,7 @@ function emitToRoom(channel, arg, ...rooms) {
 }
 
 function moveToRoom(sessionId, room, queueable=true) {
-  if (sessionId in sockets) { sockets[sessionId.emit(channel)]; }
+  if (sessionId in sockets) { sockets[sessionId].join(room); }
   else if (queueable) {
     emitQueue.push({
       timeout: (new Date()).getTime() + QUEUE_TIMEOUT,

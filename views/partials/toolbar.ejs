@@ -1,16 +1,25 @@
 <nav id="toolbar">
+  <% if (isLoggedIn) { %>
   <a href="/home" class="toolbar-items">
     <img class="toolbar-logos" src="graphics/favicon.png">
     <div class="toolbar-descs">Home</div>
   </a>
-  <a href="/posts" class="toolbar-items">
+  <% } %>
+  <a href="/posts" class="toolbar-items" id="posts-toolbar-item">
     <img class="toolbar-logos" src="graphics/favicon.png">
-    <div class="toolbar-descs">Posts</div>
+    <div class="toolbar-descs" id="posts-selection-wrapper">
+      <div id="posts-toolbar-descs">
+        Posts
+      </div>
+      <select id="posts-selection">
+        <%- include('popularChannels'); %>
+      </select>
+    </div>
   </a>
-  <a href="/main" class="toolbar-items">
+  <!-- <a href="/main" class="toolbar-items">
     <img class="toolbar-logos" src="graphics/favicon.png">
     <div class="toolbar-descs">Main</div>
-  </a>
+  </a> -->
 
   <% if (isLoggedIn) { %>
   <a href="/signOut" class="toolbar-items" id="signOut">

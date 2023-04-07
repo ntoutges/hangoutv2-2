@@ -32,6 +32,19 @@ function getTransaction(transactionId) {
   });
 }
 
+function getTransactions(transactionIds) {
+  return new Promise((res,rej) => {
+    collection.find({
+      "_id": {
+        $in: transactionIds
+      }
+    }, (err,transactions) => {
+      if (err) rej(err);
+      else res(transactions);
+    });
+  });
+}
+
 function resolveTransaction(transactionId) {
   return new Promise((res,rej) => {
     collection.remove({
@@ -48,4 +61,5 @@ exports.collection = collection
 exports.init = init;
 exports.createTransaction = createTransaction;
 exports.getTransaction = getTransaction;
+exports.getTransactions = getTransactions;
 exports.resolveTransaction = resolveTransaction;

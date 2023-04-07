@@ -40,8 +40,6 @@ dbManager.init(__dirname + "/db").then(() => {
   sockets.init(http);
   friends.init(transactions, dbManager.db.collection("accounts"));
   transactions.init(dbManager.db.collection("transactions"));
-
-  // friends.request("test", "test2");
   
   dbManager.setAutocompactionInterval(172800000);
   // setInterval(board.removeOldMessages.bind(MS_PER_DAY*5), MS_PER_DAY*1);
@@ -136,31 +134,32 @@ app.get("/signOut", (req,res) => {
 */
 
 app.get("/home", (req,res) => {
-  // TEMP CODE
-  // req.session.user = "test";
-  // req.session.name = "Nicholas T";
-
-  if (!req.session.user) {
+  let userId;
+  if ("user" in req.query) userId = req.query.user;
+  else if (req.session.user) userId = req.session.user;
+  else {
     res.redirect("/");
     return;
   }
 
   dbManager.db.collection("accounts").findOne({
-    "_id": req.session.user
+    "_id": userId
   }, (err, doc) => {
-    if (err) {
+    if (err || !doc) {
       res.send("An error occured");
     }
     else {
-      sockets.moveToRoom(req.sessionID, "home");
+      sockets.moveToRoom(req.sessionID, `home-${userId}`);
       res.render("pages/home.ejs", {
         title: "Home",
-        isLoggedIn: true,
+        isLoggedIn: !!req.session.user,
         isSidebar: true,
-        name: req.session.name,
+        name: doc.name,
         bio: doc.bio ?? "",
         id: req.sessionID,
-        accountId: req.session.user
+        accountId: req.session.user,
+        viewingAccoundId: userId,
+        homeJS: (userId == req.session.user) ? "home.js" : "homeView.js"
       });
     }
   });
@@ -184,8 +183,10 @@ app.post("/updateBio", (req,res) => {
   }, (err, updatedCount) => {
     if (err || updatedCount != 1)
       res.send(false);
-    else
+    else {
       res.send(true);
+      sockets.emitToRoom("updateBio", bio, `home-${req.session.user}`);
+    }
   });
 });
 
@@ -199,7 +200,7 @@ app.get("/profile", (req,res) => {
   dbManager.db.collection("accounts").findOne({
     "_id": id
   }).exec((err,data) => {
-    if (err) { res.send({}); }
+    if (err || !data) { res.send({}); }
     else {
       data.pass = "";
       res.send(data);
@@ -219,8 +220,21 @@ app.post("/requestFriend", (req,res) => {
     return;
   }
   
-  friends.request(req.session.user, req.body.friend).then(() => {
+  friends.request(req.session.user, req.body.friend).then((transactionId) => {
     res.sendStatus(200);
+    sockets.emitToRoom(
+      "requestFriend",
+      {
+        from: req.session.user,
+        to: req.body.friend,
+        transaction: { /* this is enough data for updating the user */
+          _id: transactionId,
+          data: {
+            from: req.session.user
+          }
+        }
+      },
+      `home-${req.body.friend}`);
   }).catch((err) => {
     console.log(err)
     res.sendStatus(500);
@@ -240,10 +254,17 @@ app.post("/removeFriend", (req,res) => {
   }
   
   friends.remove(req.session.user, req.body.friend).then(() => {
-    res.sendStatus(200);
+    res.send("success");
+    const socketData = {
+      from: req.session.user,
+      to: req.body.friend
+    };
+    
+    sockets.emitToRoom("removeFriend", socketData, `home-${req.session.user}`);
+    sockets.emitToRoom("removeFriend", socketData, `home-${req.body.friend}`);
   }).catch((err) => {
     console.log(err)
-    res.sendStatus(500);
+    res.send(err);
   });
 });
 
@@ -274,11 +295,18 @@ app.post("/changeFriendsRequest", (req,res) => {
       res.sendStatus(400);
       return;
   }
-  functionToCall(req.body.transaction, req.session.user).then(() => {
-    res.sendStatus(200);
+  functionToCall(req.body.transaction, req.session.user).then((friendId) => {
+    res.send("success");
+    
+    const socketData = {
+      from: friendId,
+      to: req.session.user,
+      action: req.body.action
+    };
+    sockets.emitToRoom("changeFriendsRequest", socketData, `home-${req.session.user}` );
+    sockets.emitToRoom("changeFriendsRequest", socketData, `home-${friendId}` );
   }).catch((err) => {
-    console.log(err)
-    res.sendStatus(500);
+    res.send(err);
   });
 });
 
@@ -296,6 +324,20 @@ app.get("/transactions", (req,res) => {
     if (err) res.sendStatus(500);
     else res.send(docs);
   })
+});
+
+app.get("/userRelations", (req,res) => {
+  if (!("userA" in req.query) || !("userB" in req.query)) {
+    res.sendStatus(400);
+    return;
+  }
+  friends.getFriendStatus(req.query.userA, req.query.userB).then((relation) => {
+    
+    res.send(relation);
+  }).catch((err) => {
+    console.log(err)
+    res.sendStatus(400)
+  });
 });
 
 /* ________________

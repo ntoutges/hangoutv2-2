@@ -1,4 +1,5 @@
 import { lFill } from "./format.js";
+import { RevQuery } from "./query.js";
 
 const $ = document.querySelector.bind(document);
 
@@ -38,8 +39,11 @@ export class Post {
     publishedTime.classList.add("published-times");
     publishedTime.innerText = `${lFill(p.getHours(),"0")}:${lFill(p.getMinutes(),"0")}`;
     
-    const username = document.createElement("div");
+    const query = new RevQuery({ "user": this.user });
+
+    const username = document.createElement("a");
     username.classList.add("usernames");
+    username.setAttribute("href", `/home?${query.toString()}`);
     username.innerText = this.user;
     
     this.footer.append(publishedDate);
@@ -72,4 +76,6 @@ export class Post {
   }
   appendTo(other) { other.append(this.el); }
   prependTo(other) { other.prepend(this.el); }
+  hide() { this.el.style.opacity = 0; }
+  show() { this.el.style.opacity = 1; }
 }

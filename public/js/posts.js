@@ -8,6 +8,7 @@ import { Query } from "./modules/query.js";
 import { showError } from "./modules/errorable.js"
 
 const query = new Query(window.location.search)
+const POST_ANIMATION_TIME = 30;
 
 const isMessageReady = [false, false];
 const posts = [];
@@ -61,6 +62,9 @@ function initSignedIn() {
       $(".texts.inputs").innerHTML = "";
       $(".texts.inputs").classList.remove("actives");
       $(".usernames.inputs").classList.remove("actives");
+
+      isMessageReady[0] = false;
+      isMessageReady[1] = false;
 
       // renderNewMessage( data.body, true ); // <- handled by sockets for everyone, now
     }).catch(err => {
@@ -141,7 +145,16 @@ function loadMessages() {
 
 const postHolder = $("#posts-holder");
 function renderNewMessages(newPosts) {
-  for (const post of newPosts) { renderNewMessage(post, false); }
+  for (const i in newPosts) {
+    // loads in scroll bar quickly
+    const postObj = renderNewMessage(newPosts[i], false);
+    postObj.hide();
+    
+    // keeps nice animation
+    setTimeout(() => {
+      postObj.show();
+    }, i * POST_ANIMATION_TIME); // makes a loading animation that looks cool
+  }
 }
 
 function renderNewMessage(post, prepend=false) {
@@ -149,6 +162,7 @@ function renderNewMessage(post, prepend=false) {
   posts.push(postObj);
   if (prepend) postObj.prependTo(postHolder);
   else postObj.appendTo(postHolder);
+  return postObj;
 }
 
 

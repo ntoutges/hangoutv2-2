@@ -14,8 +14,11 @@
       const accountId = "<%=accountId%>";
       socket.on("connect", () => {
         socket.emit("init", "<%=id%>");
-      })
+      });
     </script>
+    <% if (isSidebar) { %>
+      <script src="js/layout.js" defer type="module"></script>
+    <% } %>
     <%- defineContent ('head'); %>
   </head>
   <body>
