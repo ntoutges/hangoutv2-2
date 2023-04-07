@@ -8,32 +8,59 @@ function init() { // prevents code from floating in space
   $("#username").addEventListener("keydown", goToPassword);
   $("#password").addEventListener("focusin", function() { focusIn.call(this, "password" ); });
   $("#password").addEventListener("focusout", function() { focusOut.call(this, "password" ); });
-  $("#password").addEventListener("keydown", submitViaEnter);
+  $("#password").addEventListener("keydown", goToConfirm);
+  $("#confirm").addEventListener("focusin", function() { focusIn.call(this, "confirm" ); });
+  $("#confirm").addEventListener("focusout", function() { focusOut.call(this, "confirm" ); });
+  $("#confirm").addEventListener("keydown", submitViaEnter);
   $("#submit").addEventListener("click", submitCredentials);
 }
 
 function submitCredentials() {
-  let username = $("#username").value;
-  let password = $("#password").value;
-  
+  const username = $("#username").value.trim();
+  const password = $("#password").value;
+  const confirm = $("#confirm").value;
+
   hideWarning("username");
   hideWarning("password");
+  hideWarning("confirm")
 
   if (username.trim().length == 0) { // username cannot be empty, but password can
     displayWarning("username", "invalid username");
     return;
   }
 
-  req.post("/signIn", {
+  if (password.length == 0) { // empty password
+    displayWarning("password", "invalid password");
+    return;
+  }
+
+  if (password != confirm) {
+    displayWarning("password", "passwords do not match");
+    displayWarning("confirm", "passwords do not match");
+    return;
+  }
+
+  req.post("/createAccount", {
     'user': username,
     "pass": password
   }).then(([data, success]) => {
     console.log(data, success)
-    if (success == "success" && data)
-      window.location.replace("/home")
+    if (success == "success" && data) {
+      switch (data) {
+        case "username":
+          displayWarning("username", "username already taken");
+          break;
+        case "password":
+          displayWarning("password", "invalid password");
+          break;
+        default:
+          window.location.replace("/home")
+      }
+    }
     else {
       displayWarning("username", "invalid username or password");
       displayWarning("password", "invalid username or password");
+      displayWarning("confirm", "invalid username or password");
     }
   });
 }
@@ -72,11 +99,18 @@ function goToPassword(e) {
     hideWarning("username");
 }
 
+function goToConfirm(e) {
+  if (e.keyCode == 13) // enter pressed
+    $("#confirm").focus();
+  else if (isCharCode(e.keyCode))
+    hideWarning("password"); 
+}
+
 function submitViaEnter(e) {
   if (e.keyCode == 13) // enter pressed
     submitCredentials();
   else if (isCharCode(e.keyCode))
-    hideWarning("password");
+    hideWarning("confirm");
 }
 
 function isCharCode(keyCode) {
@@ -96,9 +130,12 @@ function focusIn(idModifier) {
 }
 
 function focusOut(idModifier) {
-  if (this.value.trim().length == 0) {
+  const isInvalid = (idModifier == "username" && this.value.trim().length == 0);
+  if (isInvalid) {
     this.classList.remove("actives");
     $(`#${idModifier}-underline`).classList.remove("actives");
     $(`#${idModifier}-identifier`).classList.remove("actives");
+    console.log(this.value)
+    this.value = this.value.trim();
   }
 }

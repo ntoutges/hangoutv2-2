@@ -31,6 +31,8 @@ app.use( session({
   saveUninitialized: false
 }) );
 
+const SALTING_ROUNDS = 10;
+
 dbManager.init(__dirname + "/db").then(() => {
   http.listen(process.env.PORT || 52975, function () {
     getPhotoRollContents();
@@ -73,7 +75,7 @@ app.get("/", (req,res) => {
     return;
   }
   
-  let firstPhoto = (photoRollContents.length > 0) ? photoRollContents[0] : ""; // need to decide what to do if PhotoRolLContents is empty
+  let firstPhoto = (photoRollContents.length > 0) ? photoRollContents[Math.floor(Math.random()*photoRollContents.length)] : ""; // need to decide what to do if PhotoRolLContents is empty
   res.render("pages/signIn.ejs", {
     title: "Sign In",
     isLoggedIn: false,
@@ -85,9 +87,17 @@ app.get("/", (req,res) => {
 });
 
 app.post("/signIn", (req,res) => {
+  if (!("user" in req.body)) { // no username sent
+    res.send(false);
+    return;
+  }
+  if (!("pass" in req.body) || req.body.pass.length == 0) { // no password sent
+    res.send(false);
+    return;
+  }
   let username = req.body.user;
   let password = req.body.pass;
-  
+
   dbManager.db.collection("accounts").findOne({
     "_id": username
   }).exec((err, doc) => {
@@ -115,6 +125,76 @@ app.post("/signIn", (req,res) => {
   });
 
 });
+
+/* __________________
+  /                  \
+  | jmp SIGN UP CODE |
+  \__________________/
+*/
+
+app.get("/signUp", (req,res) => {
+  if (req.session.name) {
+    res.redirect("/home");
+    return;
+  }
+  
+  let firstPhoto = (photoRollContents.length > 0) ? photoRollContents[Math.floor(Math.random()*photoRollContents.length)] : ""; // need to decide what to do if PhotoRolLContents is empty
+  res.render("pages/signUp.ejs", {
+    title: "Sign Up",
+    isLoggedIn: false,
+    isSidebar: false,
+    promoPhotoSrc: firstPhoto,
+    id: null,
+    accountId: null
+  });
+});
+
+app.post("/createAccount", (req,res) => {
+  if (!("user" in req.body)) { // no username sent
+    res.send("user");
+    return;
+  }
+  if (!("pass" in req.body) || req.body.pass.length == 0) { // no password sent
+    res.send("pass");
+    return;
+  }
+  let username = req.body.user;
+  let password = req.body.pass;
+  
+  dbManager.db.collection("accounts").findOne({
+    "_id": username
+  }, (err,doc) => {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+    if (doc) { // user already exists
+      res.send("username");
+      return;
+    }
+    
+    bcrypt.hash(password, SALTING_ROUNDS).then(hashPassword => {
+      dbManager.db.collection("accounts").insert({
+        "_id": username,
+        "name": username,
+        "pass": hashPassword
+      }, (err, doc) => {
+        if (err) { // something bad happened?
+          res.send(500);
+          return;
+        }
+        // automagically sign user in
+        req.session.name = doc.name;
+        req.session.user = username;
+        res.send(true);
+      });
+    }).catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  });
+})
+
 
 /* ___________________
   /                   \

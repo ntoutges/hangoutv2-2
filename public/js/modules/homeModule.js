@@ -1,3 +1,5 @@
+import { RevQuery } from "./query.js";
+
 export class ParentModule {
   constructor(parent) {
     this.columns = [];
@@ -120,13 +122,16 @@ export class FriendsModule extends Module {
   }
   addConfirmed(name) {
     if (name in this.els.confirmed) return;
-    const el = document.createElement("div");
+    const el = document.createElement("a");
     const nameEl = document.createElement("span")
     const remove = document.createElement("img");
 
     nameEl.innerText = name;
     
+    const query = new RevQuery({ "user": name });
+
     el.classList.add("friend-names");
+    el.setAttribute("href", `/home?${query.toString()}`);
     el.append(nameEl);
     this.confirmed.append(el);
     this.els.confirmed[name] = el;
@@ -142,14 +147,16 @@ export class FriendsModule extends Module {
   }
   addRequested(name, transaction) {
     if (name in this.els.requested) return;
-    const el = document.createElement("div");
+    const el = document.createElement("a");
     const nameEl = document.createElement("span");
     const accept = document.createElement("img");
     const reject = document.createElement("img");
-
     nameEl.innerText = name;
     
+    const query = new RevQuery({ "user": name });
+
     el.classList.add("friend-names");
+    el.setAttribute("href", `/home?${query.toString()}`);
     el.append(nameEl);
     this.requests.append(el);
     
@@ -218,18 +225,21 @@ export class FriendsModule extends Module {
       this.noFriends.classList.add("inactives");
     }
   }
-  onAccept(name,transactionId, el) {
+  onAccept(name,transactionId, el, e) {
+    e.preventDefault(); // stop link from acting when pressing button
     el.remove();
     this.addConfirmed(name);
     this.set();
     this.listeners.accept.forEach((callback) => { callback.call(this,transactionId); });
   }
-  onReject(name,transactionId, el) {
+  onReject(name,transactionId, el, e) {
+    e.preventDefault(); // stop link from acting when pressing button
     el.remove();
     this.set();
     this.listeners.reject.forEach((callback) => { callback.call(this,transactionId); });
   }
-  onRemove(name,el) {
+  onRemove(name,el, e) {
+    e.preventDefault(); // stop link from acting when pressing button
     el.remove();
     this.set();
     this.listeners.remove.forEach((callback) => { callback.call(this,name); });

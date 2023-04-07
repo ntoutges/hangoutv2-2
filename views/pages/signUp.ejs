@@ -1,13 +1,13 @@
 <%- contentFor ('head') %>
-<script src="js/signIn.js" defer type="module"></script>
+<script src="js/signUp.js" defer type="module"></script>
 <script src="js/photoroll.js" defer type="module"></script>
-<link rel="stylesheet" href="css/signIn.css">
+<link rel="stylesheet" href="css/signUp.css">
 <link rel="stylesheet" href="css/credentials-core.css">
 
 <%- contentFor ('main') %>
 <aside id="sign-in-side">
   <div id="sign-in-container">
-    <h1 id="sign-in-title">Sign In</h1>
+    <h1 id="sign-in-title">Sign Up</h1>
     <div id="credentials-container">
       <div id="username-holder" class="credential-holders">
         <label class="credentials-identifiers" id="username-identifier">username</label>
@@ -21,13 +21,18 @@
         <div id="password-underline" class="credential-underlines"></div>
         <div id="password-warning" class="credential-warnings"></div>
       </div>
-      <button id="submit">Sign In</button>
-      <a href="/posts" id="guest-browse">Browse as guest</a>
+      <div id="confirm-holder" class="credential-holders">
+        <label class="credentials-identifiers" id="confirm-identifier">confirm password</label>
+        <input id="confirm" class="log-in-inputs" type="password">
+        <div id="confirm-underline" class="credential-underlines"></div>
+        <div id="confirm-warning" class="credential-warnings"></div>
+      </div>
+      <button id="submit">Create Account</button>
     </div>
   </div>
   <div id="create-account-container">
     <div id="create-account-container-text">
-      <a href="/signUp">Don't have an account? Click here!</a>
+      <a href="/">Already have an account? Click here!</a>
     </div>
   </div>
 </aside>
