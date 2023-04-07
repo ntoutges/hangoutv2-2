@@ -16,10 +16,12 @@
       </select>
     </div>
   </a>
-  <!-- <a href="/main" class="toolbar-items">
+  <% if (isLoggedIn && adminLevel != 0) { %>
+  <a href="/home" class="toolbar-items"> <!-- currently just a test -->
     <img class="toolbar-logos" src="graphics/favicon.png">
-    <div class="toolbar-descs">Main</div>
-  </a> -->
+    <div class="toolbar-descs">Admin</div>
+  </a>
+  <% } %>
 
   <% if (isLoggedIn) { %>
   <a href="/signOut" class="toolbar-items" id="signOut">

@@ -1,4 +1,0 @@
-{"parties":["test","user"],"data":{"from":"test"},"type":"friendRequest","init":1680887068884,"_id":"ocD5rOO8EblZVDT3"}
-{"$$deleted":true,"_id":"ocD5rOO8EblZVDT3"}
-{"parties":["test","user"],"data":{"from":"test"},"type":"friendRequest","init":1680887076967,"_id":"fhnmPppRKG1PxBS7"}
-{"$$deleted":true,"_id":"fhnmPppRKG1PxBS7"}

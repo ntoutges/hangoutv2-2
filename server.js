@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt')
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const formidable = require('formidable');
@@ -16,6 +15,7 @@ const dbManager = require("./db.js");
 const sockets = require("./socketManager.js");
 const friends = require("./friends.js");
 const transactions = require("./transactions.js");
+const accounts = require("./accounts.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -42,6 +42,7 @@ dbManager.init(__dirname + "/db").then(() => {
   sockets.init(http);
   friends.init(transactions, dbManager.db.collection("accounts"));
   transactions.init(dbManager.db.collection("transactions"));
+  accounts.init(dbManager.db.collection("accounts"));
   
   dbManager.setAutocompactionInterval(172800000);
   // setInterval(board.removeOldMessages.bind(MS_PER_DAY*5), MS_PER_DAY*1);
@@ -80,6 +81,7 @@ app.get("/", (req,res) => {
     title: "Sign In",
     isLoggedIn: false,
     isSidebar: false,
+    adminLevel: req.session.admin,
     promoPhotoSrc: firstPhoto,
     id: null,
     accountId: null
@@ -98,32 +100,16 @@ app.post("/signIn", (req,res) => {
   let username = req.body.user;
   let password = req.body.pass;
 
-  dbManager.db.collection("accounts").findOne({
-    "_id": username
-  }).exec((err, doc) => {
-    if (err) {
-      console.log("ERROR: ", err);
+  accounts.verifyAccountIdentity(username, password).then((userDoc) => {
+    const sessionValues = accounts.getSessionValues(userDoc);
+    for (const key in sessionValues) {
+      req.session[key] = sessionValues[key];
     }
-    else if (doc) {
-      let passwordHash = doc.pass;
-      bcrypt.compare(password, passwordHash, function(err, matches) {
-        if (err) {
-          res.send(false);
-          return;
-        }
-        if (matches) {
-          req.session.name = doc.name;
-          req.session.user = username;
-          res.send(true);
-        }
-        else // password doesn't match
-          res.send(false);
-      });
-    }
-    else // username doesn't match
-      res.send(false);
+    res.send(true);
+  }).catch((err) => {
+    if (err == "username" || err == "password") res.send(false);
+    else res.send(err);
   });
-
 });
 
 /* __________________
@@ -143,6 +129,7 @@ app.get("/signUp", (req,res) => {
     title: "Sign Up",
     isLoggedIn: false,
     isSidebar: false,
+    adminLevel: req.session.admin,
     promoPhotoSrc: firstPhoto,
     id: null,
     accountId: null
@@ -161,37 +148,18 @@ app.post("/createAccount", (req,res) => {
   let username = req.body.user;
   let password = req.body.pass;
   
-  dbManager.db.collection("accounts").findOne({
-    "_id": username
-  }, (err,doc) => {
-    if (err) {
-      res.sendStatus(500);
-      return;
-    }
-    if (doc) { // user already exists
-      res.send("username");
-      return;
-    }
-    
-    bcrypt.hash(password, SALTING_ROUNDS).then(hashPassword => {
-      dbManager.db.collection("accounts").insert({
-        "_id": username,
-        "name": username,
-        "pass": hashPassword
-      }, (err, doc) => {
-        if (err) { // something bad happened?
-          res.send(500);
-          return;
-        }
-        // automagically sign user in
-        req.session.name = doc.name;
-        req.session.user = username;
-        res.send(true);
-      });
-    }).catch(err => {
-      console.log(err);
-      res.sendStatus(500);
-    });
+  accounts.createAccount(
+    username,
+    password,
+    SALTING_ROUNDS
+  ).then(() => {
+    // automagically sign user in
+    req.session.name = doc.name;
+    req.session.user = username;
+    res.send(true);
+  }).catch(err => {
+    if (err == "user already exists") res.send("username");
+    else res.sendStatus(500);
   });
 })
 
@@ -234,6 +202,7 @@ app.get("/home", (req,res) => {
         title: "Home",
         isLoggedIn: !!req.session.user,
         isSidebar: true,
+        adminLevel: req.session.admin,
         name: doc.name,
         bio: doc.bio ?? "",
         id: req.sessionID,
@@ -431,6 +400,7 @@ app.get("/posts", (req,res) => {
     title: "Posts",
     isLoggedIn: !!req.session.user,
     isSidebar: true,
+    adminLevel: req.session.admin,
     user: req.session.user,
     id: req.sessionID,
     accountId: req.session.user
