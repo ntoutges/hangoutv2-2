@@ -22,7 +22,6 @@
     <%- defineContent ('head'); %>
   </head>
   <body>
-    <%=id%>
     <% if (isSidebar) { %>
     <%- include('partials/toolbar'); %>
     <div id="useable-area">
@@ -31,5 +30,6 @@
     <% } else { %>
     <%- defineContent ('main'); %>
     <% } %>
+    <%- include('partials/errorBox'); %>
   </body>
 </html>

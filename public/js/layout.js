@@ -1,5 +1,6 @@
 var $ = document.querySelector.bind(document);
 import { Query, RevQuery } from "./modules/query.js";
+import { showMessage } from "./modules/errorable.js";
 
 {
   const POSTS_PATH = "/posts";
@@ -32,3 +33,14 @@ import { Query, RevQuery } from "./modules/query.js";
     window.location.href = `${POSTS_PATH}?${query.toString()}`;
   });
 }
+
+socket.on("ban", (isBanned) => {
+  console.log(isBanned)
+  if (isBanned) {
+    showError({
+      title: "Ban",
+      body: "You have been banned"
+    });
+    window.location.reload();
+  }
+});

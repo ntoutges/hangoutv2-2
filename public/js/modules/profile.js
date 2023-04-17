@@ -3,6 +3,7 @@ export class Profile {
     this._id = ("_id" in data) ? data._id : "";
     this.name = ("name" in data) ? data.name : "";
     this.biography = ("bio" in data) ? data.bio : "";
+    this.awards = ("awards" in data) ? data.awards : [];
     // this.password = ("pass" in data) ? data.pass : "";
     
     this.friends = {};
@@ -27,5 +28,7 @@ export class Profile {
       if (this.friends.confirmed.length != 0) obj.friends.confirmed = this.friends.confirmed;
       if (this.friends.requested.length != 0) obj.friends.requested = this.friends.requested;
     }
+    if (this.awards.length != 0) obj.awards = this.awards;
+    return obj;
   }
 }

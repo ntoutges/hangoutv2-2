@@ -7,15 +7,18 @@ const imageMagick = require('node-imagemagick');
 const socketio = require('socket.io');
 const fs = require('fs');
 
-const board = require("./board.js");
+const board = require("./serverModules/board.js");
 
 require('dotenv').config(); // give access to .env file
 
-const dbManager = require("./db.js");
-const sockets = require("./socketManager.js");
-const friends = require("./friends.js");
-const transactions = require("./transactions.js");
-const accounts = require("./accounts.js");
+const dbManager = require("./serverModules/db.js");
+const sockets = require("./serverModules/socketManager.js");
+const friends = require("./serverModules/friends.js");
+const transactions = require("./serverModules/transactions.js");
+const accounts = require("./serverModules/accounts.js");
+const ban = require("./serverModules/ban.js");
+const awards = require("./serverModules/awards.js")
+const metadata = require("./serverModules/metadata.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -34,19 +37,23 @@ app.use( session({
 const SALTING_ROUNDS = 10;
 
 dbManager.init(__dirname + "/db").then(() => {
-  http.listen(process.env.PORT || 52975, function () {
-    getPhotoRollContents();
-    console.log("app started");
-  });
   board.init(dbManager.db);
   sockets.init(http);
   friends.init(transactions, dbManager.db.collection("accounts"));
   transactions.init(dbManager.db.collection("transactions"));
   accounts.init(dbManager.db.collection("accounts"));
-  
-  dbManager.setAutocompactionInterval(172800000);
-  // setInterval(board.removeOldMessages.bind(MS_PER_DAY*5), MS_PER_DAY*1);
+  ban.init(transactions, accounts, dbManager.db.collection("accounts"));
+  awards.init(dbManager.db.collection("awards"), metadata);
+  metadata.init(dbManager.db.collection("metadata"), dbManager).then(() => {
+    http.listen(process.env.PORT || 52975, function () {
+      getPhotoRollContents();
+      console.log("app started");
+    });
+  }).catch(err => {
+    console.log(err);
+  });
 
+  dbManager.setAutocompactionInterval(172800000);  
 }).catch((err) => {
   console.log("An error occured starting the server: ", err)
 })
@@ -55,6 +62,8 @@ dbManager.addCollection("accounts");
 dbManager.addCollection("posts");
 dbManager.addCollection("channels");
 dbManager.addCollection("transactions");
+dbManager.addCollection("awards");
+dbManager.addCollection("metadata");
 
 var photoRollContents = [];
 function getPhotoRollContents() {
@@ -97,20 +106,31 @@ app.post("/signIn", (req,res) => {
     res.send(false);
     return;
   }
-  let username = req.body.user;
-  let password = req.body.pass;
+  doSignIn(req.body.user, req.body.pass, req,res);
+});
 
+function doSignIn(username, password, req,res) {
   accounts.verifyAccountIdentity(username, password).then((userDoc) => {
-    const sessionValues = accounts.getSessionValues(userDoc);
-    for (const key in sessionValues) {
-      req.session[key] = sessionValues[key];
-    }
-    res.send(true);
+    ban.checkBanStatus(userDoc.bans).then((isBanned) => {
+      if (isBanned) {
+        res.send("banned");
+      }
+      else {
+        const sessionValues = accounts.getSessionValues(userDoc);
+        for (const key in sessionValues) {
+          req.session[key] = sessionValues[key];
+        }
+        accounts.addSession(username, req.session, req.sessionID);
+        res.send(true);
+      }
+    }).catch(err => {
+      res.send(err);
+    });
   }).catch((err) => {
     if (err == "username" || err == "password") res.send(false);
     else res.send(err);
   });
-});
+}
 
 /* __________________
   /                  \
@@ -153,15 +173,12 @@ app.post("/createAccount", (req,res) => {
     password,
     SALTING_ROUNDS
   ).then(() => {
-    // automagically sign user in
-    req.session.name = doc.name;
-    req.session.user = username;
-    res.send(true);
+    doSignIn(username, password, req,res);
   }).catch(err => {
     if (err == "user already exists") res.send("username");
     else res.sendStatus(500);
   });
-})
+});
 
 
 /* ___________________
@@ -171,9 +188,14 @@ app.post("/createAccount", (req,res) => {
 */
 
 app.get("/signOut", (req,res) => {
-  req.session.destroy();
   res.redirect("/");
+  doLogout(req.session);
 });
+
+function doLogout(session) {
+  accounts.removeSession(session.user, session);
+  session.destroy();
+}
 
 /* _______________
   /               \
@@ -304,13 +326,9 @@ app.post("/removeFriend", (req,res) => {
   
   friends.remove(req.session.user, req.body.friend).then(() => {
     res.send("success");
-    const socketData = {
-      from: req.session.user,
-      to: req.body.friend
-    };
     
-    sockets.emitToRoom("removeFriend", socketData, `home-${req.session.user}`);
-    sockets.emitToRoom("removeFriend", socketData, `home-${req.body.friend}`);
+    sockets.emitToRoom("removeFriend", req.session.friend, `home-${req.session.user}`);
+    sockets.emitToRoom("removeFriend", req.session.user, `home-${req.body.friend}`);
   }).catch((err) => {
     console.log(err)
     res.send(err);
@@ -485,7 +503,7 @@ app.post("/createPost", (req,res) => {
 app.get("/getPosts", (req,res) => {
   const index = parseInt(req.query.index ?? 0);
   const limit = parseInt(req.query.limit || 10);
-  const channel = req.query.channel ?? "main"
+  const channel = req.query.channel ?? "main";
 
   dbManager.db.collection("posts").find({
     channel
@@ -530,5 +548,112 @@ app.get("/getPhoto/*", (req,res) => {
   photoRequested = photoRequested.replace(/%20/g, " "); // unescape space characters in the name
   res.sendFile(__dirname + "/photo-roll/" + photoRequested);
 });
+
+/* ______________
+  /              \
+  | jmp BAN CODE |
+  \______________/
+*/
+
+app.get("/ban", (req,res) => {
+  if (!req.session.user || req.session.admin == 0) {
+    res.redirect("/");
+    return;
+  }
+
+  res.render("pages/ban.ejs", {
+    title: "Ban",
+    isLoggedIn: true,
+    isSidebar: true,
+    adminLevel: req.session.admin,
+    id: req.sessionID,
+    accountId: req.session.user
+  });
+});
+
+app.post("/banUser", (req,res) => {
+  if (!req.session.user || req.session.admin == 0) {
+    res.sendStatus(403); // not an admin
+    return;
+  }
+  if (!("user" in req.body)) {
+    res.send("Missing user to ban");
+    return;
+  }
+
+  const user = req.body.user;
+  const duration = req.body.duration ?? 86400000; // stored in ms // default of 1 day
+
+  ban.ban(user, req.session.user, (new Date()).getTime() + duration).then(banId => {
+    accounts.getSessions(user).forEach(({ session, id }) => {
+      sockets.emitTo(id, "ban", true);
+      doLogout(session);
+    });
+    res.send({ id: banId });
+  }).catch(err => {
+    console.log(err)
+    res.send({ err });
+  });
+});
+
+app.post("/unbanUser", (req,res) => {
+  if (!req.session.user || req.session.admin == 0) {
+    res.sendStatus(403); // not an admin
+    return;
+  }
+  if (!("banId" in req.body)) {
+    res.send("Missing banId to unban");
+    return;
+  }
+
+  ban.unban(req.body.banId).then((user) => {
+    // shouldn't really be logged in, so this would be useless
+    // accounts.getSessions(user).forEach((session) => {
+    //   sockets.emitTo(session.id, "ban", false);
+    // });
+    res.send({});
+  }).catch(err => {
+    res.send({ err });
+  });
+});
+
+app.get("/award", (req,res) => {
+  if (!req.session.user || req.session.admin == 0) {
+    res.redirect("/");
+    return;
+  }
+  res.render("pages/award.ejs", {
+    title: "Award",
+    isLoggedIn: true,
+    isSidebar: true,
+    adminLevel: req.session.admin,
+    id: req.sessionID,
+    accountId: req.session.user
+  });
+});
+
+app.get("/awards", (req,res) => {
+  if (!("awards" in req.query)) {
+    res.send([]); // don't need to check database to know there is no data
+    return;
+  }
+  if (typeof req.query.awards != "string") {
+    res.sendStatus(400); // user error -- wrong data type
+    return;
+  }
+
+  const awards = req.query.awards.split(",");
+
+  dbManager.db.collection("awards").find({
+    _id: {
+      $in: awards
+    }
+  }, (err,docs) => {
+    if (err) res.sendStatus(500);
+    else res.send(docs);
+  })
+});
+
+
 
 app.use( express.static(__dirname + '/public') ); // at the end to prevent 404 errors

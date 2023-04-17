@@ -11,6 +11,7 @@ var oldBio = $("#biography").value;
 
 fillProfile().then(() => {
   fillFriends();
+  fillAwards();
 });
 
 const UPDATE_BIOGRAPHY_TIMEOUT = 1000;
@@ -141,13 +142,49 @@ function fillFriends() {
   })
 }
 
+function fillAwards() {
+  const awards = new modules.AwardsModule();
+  parentModule.appendModule( awards, 0,1 );
+
+  get("/awards", {
+    awards: profile.awards.join(",")
+  }).then(([awardData,success]) => {
+    if (success != "success") {
+      showError(success);
+      return;
+    }
+    for (let award of awardData) {
+      awards.add(award);
+    }
+    awards.set();
+  });
+
+
+  // awards.add("test", "award!");
+  // awards.add("test", "award1!");
+  // awards.add("test", "award2!");
+  // awards.add("test", "award3!");
+  // awards.add("test", "award4!");
+  // awards.add("test", "award5!");
+  // awards.add("test", "award6!");
+  // awards.add("test", "award7!");
+  // awards.add("test", "award8!");
+  // awards.add("test2", "award8!");
+  // awards.add("test2", "award8!");
+  // awards.add("test2", "award8!");
+  // awards.add("test2", "award8!");
+  // awards.add("test2", "award8!");
+  // awards.add("test2", "award8!");
+  // awards.set();
+}
+
 {
   // placeholder modules
   var m = []
   for (var i = 0; i < 4; i++) {
     m.push( new modules.Module() )
   }
-  parentModule.appendModule(m[0],0,1)
+  // parentModule.appendModule(m[0],0,1)
   parentModule.appendModule(m[2],1,0)
 }
 
@@ -162,8 +199,7 @@ socket.on("requestFriend", (data) => {
   friendsModule.set();
 });
 
-socket.on("removeFriend", (data) => {
-  const name = (data.from == accountId) ? data.to : data.from; // name to add is opposite of this account
+socket.on("removeFriend", (name) => {
   friendsModule.popConfirmed(name);
   friendsModule.set();
 });

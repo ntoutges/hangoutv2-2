@@ -297,3 +297,73 @@ export class FriendsRequestModule extends Module {
     this.listeners.click.forEach((callback) => { callback.call(this); });
   }
 }
+
+export class AwardsModule extends Module {
+  constructor() {
+    super("Awards");
+    this.el.classList.add("awards");
+
+    this.awardHolder = document.createElement("div");
+    this.awardHolder.classList.add("award-holders");
+    this.content.append(this.awardHolder);
+
+    this.awardTypes = {};
+    this.awards = {};
+  }
+
+  add(awardData) {
+    const category = awardData.category;
+    const name = awardData.name;
+
+    if (!(category in this.awards)) this.addCategory(category);
+
+    const award = document.createElement("div");
+    award.classList.add("award-elements");
+    award.setAttribute("id", `a-${category}:${name}`);
+    
+    const img = document.createElement("img");
+    img.classList.add("award-images")
+    img.setAttribute("title", awardData.description);
+    img.setAttribute("src", `/graphics/awards/${awardData.src}`);
+
+    const title = document.createElement("div");
+    title.classList.add("award-titles");
+    title.innerText = name;
+
+    award.append(img, title);
+
+    this.awards[category].push(award);
+    this.awardTypes[category].append(award);
+  }
+  
+  addCategory(category) {
+    if (Object.keys(this.awardTypes).length != 0) {
+      const divider = document.createElement("div");
+      divider.classList.add("award-dividers");
+      this.awardHolder.append(divider);
+    }
+
+    const awardEl = document.createElement("div");
+    awardEl.classList.add("award-types");
+    this.awardHolder.append(awardEl);
+    
+    const title = document.createElement("div");
+    title.classList.add("award-type-titles");
+    title.innerText = category;
+    awardEl.append(title);
+
+    const container = document.createElement("div");
+    container.classList.add("award-type-containers");
+    awardEl.append(container);
+
+    this.awardTypes[category] = container;
+    this.awards[category] = [];
+  }
+
+  set() {
+    for (let category in this.awards) {
+      if (this.awards[category].length == 0) this.awardTypes[category].parentNode.classList.remove("actives");
+      else this.awardTypes[category].parentNode.classList.add("actives");
+    }
+  }
+}

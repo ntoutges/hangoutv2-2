@@ -140,3 +140,80 @@ body {
   66%  { content: '...' }
   100% { content: '.' }
 }
+
+
+#background-blocker {
+  z-index: 98;
+  display: none;
+  opacity: 0;
+  background-color: #00000079;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+
+  transition-property: opacity;
+  transition-duration: 300ms;
+}
+
+#error-box {
+  z-index: 99;
+  display: none;
+  opacity: 0;
+  background-color: white;
+  width: 500px;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px;
+
+  width: 40%;
+  min-width: 400px;
+  max-width: 600px;
+
+  border-radius: 5px;
+  border: solid black 3px;
+
+  transition-property: opacity top;
+  transition-duration: 300ms;
+}
+
+#background-blocker.actives, #error-box.actives {
+  display: block;
+}
+
+#background-blocker.animates {
+  opacity: 1;
+}
+
+#error-box.animates {
+  opacity: 1;
+  top: 100px;
+}
+
+#error-title {
+  margin: 0px;
+  user-select: none;
+}
+
+#error-body {
+  margin: 10px 0px 10px 0px;
+  user-select: none;
+}
+
+#error-button {
+  font-size: 20px;
+}
+
+#error-button:hover {
+  cursor: pointer;
+}
+
+#error-timeout {
+  height: 10px;
+  background-image: linear-gradient(to right, var(--comp-theme-color), var(--main-theme-color));
+  transition-property: width;
+  transition-timing-function: linear;
+}

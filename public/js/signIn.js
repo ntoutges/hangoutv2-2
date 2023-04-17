@@ -29,11 +29,19 @@ function submitCredentials() {
     "pass": password
   }).then(([data, success]) => {
     console.log(data, success)
-    if (success == "success" && data)
-      window.location.replace("/home")
-    else {
+    if (success == "success" && data) {
+      if (data == "banned") {
+        displayWarning("username", "You have been banned");
+        displayWarning("password", "You have been banned");
+      }
+      else window.location.replace("/home")
+    }
+    else if (!data) {
       displayWarning("username", "invalid username or password");
       displayWarning("password", "invalid username or password");
+    }
+    else {
+      showError(success);
     }
   });
 }
