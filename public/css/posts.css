@@ -177,21 +177,35 @@
   display: flex;
   flex-direction: column;
 
-  right: 5px;
-  top: 5px;
+  right: 0px;
+  top: 0px;
+  padding: 3px;
+  border-top-right-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+.rating-containers.actives {
+  background-color: #ffffff3d;
 }
 
 .up-votes, .down-votes {
   image-rendering: pixelated;
   user-select: none;
+  opacity: 0.5;
 }
 
-.up-votes:hover,
-.up-votes.actives,
-.down-votes:hover,
-.down-votes.actives {
+.up-votes:hover:not(.disabled),
+.up-votes.actives:not(.disabled),
+.down-votes:hover:not(.disabled),
+.down-votes.actives:not(.disabled) {
   filter: brightness(130%);
+  opacity: 1;
   cursor: pointer;
+}
+
+.up-votes.disabled:hover,
+.down-votes.disabled:hover {
+  cursor: not-allowed;
 }
 
 .vote-counters {

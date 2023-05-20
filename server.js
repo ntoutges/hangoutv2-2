@@ -45,25 +45,11 @@ dbManager.init(__dirname + "/db").then(() => {
   accounts.init(dbManager.db.collection("accounts"));
   ban.init(transactions, accounts, dbManager.db.collection("accounts"));
   awards.init(dbManager.db.collection("awards") /*, metadata */);
-  ratings.init(dbManager.db.collection("posts"));
+  ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"));
   // metadata.init(dbManager.db.collection("metadata"), dbManager).then(() => {
     http.listen(process.env.PORT || 52975, function () {
       getPhotoRollContents();
       console.log("app started");
-
-      // dbManager.db.collection("posts").update({
-        
-      // }, {
-      //   "$set": {
-      //     "likes": [],
-      //     "dislikes": []
-      //   },
-      // }, {
-      //   "multi": true
-      // },
-      // (err, updatedCt) => {
-      //   console.log(err, updatedCt); 
-      // })
     });
   }).catch(err => {
     console.log(err);
@@ -80,6 +66,7 @@ dbManager.addCollection("channels");
 dbManager.addCollection("transactions");
 dbManager.addCollection("awards");
 // dbManager.addCollection("metadata");
+dbManager.addCollection("ratings");
 
 var photoRollContents = [];
 function getPhotoRollContents() {
@@ -488,9 +475,7 @@ app.post("/createPost", (req,res) => {
       "content": content,
       "published": (new Date()).getTime(),
       "user": req.session.user,
-      "channel": channel,
-      "likes": [],
-      "dislikes": []
+      "channel": channel
     }
   
     dbManager.db.collection("posts").insert(document, (err, finalDoc) => {
@@ -582,6 +567,31 @@ app.post("/ratePost", (req,res) => {
   }).catch(err => {
     res.send(err.toString());
   })
+});
+
+app.get("/ratedPosts", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+
+  if (!("postIds" in req.query)) {
+    res.send("Missing postIds");
+    return;
+  }
+  if (typeof req.query.postIds != "string") {
+    res.send("Invalid postIds");
+    return;
+  }
+
+  ratings.hasRated(
+    req.session.user,
+    req.query.postIds.split(",")
+  ).then((ids) => {
+    res.send(ids);
+  }).catch(err => {
+    res.send(false);
+  });
 });
 
 

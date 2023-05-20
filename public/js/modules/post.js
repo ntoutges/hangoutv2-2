@@ -13,9 +13,6 @@ export class Post {
     this.user = ("user" in data) ? data.user : "???";
     this.rating = ("rating" in data) ? data.rating : 0;
     
-    this.likes = ("likes" in data) ? data.likes : [];
-    this.dislikes = ("dislikes" in data) ? data.dislikes: [];
-    
     this.rateCallbacks = [];
 
     this.blocks = [];
@@ -86,18 +83,23 @@ export class Post {
     this.votesEl = document.createElement("div");
     this.votesEl.classList.add("vote-counters");
     this.votesEl.innerText = this.rating;
-    if (viewUser) {
-      this.downVoteEl = document.createElement("img");
-      this.downVoteEl.classList.add("down-votes");
-      this.downVoteEl.setAttribute("src", "graphics/vote-down.png");
+    
+    this.downVoteEl = document.createElement("img");
+    this.downVoteEl.classList.add("down-votes");
+    this.downVoteEl.setAttribute("src", "graphics/vote-down.png");
 
+    this.ratingEl.append(this.upVoteEl);
+    this.ratingEl.append(this.votesEl);
+    this.ratingEl.append(this.downVoteEl);
+
+    if (viewUser) {
       this.upVoteEl.addEventListener("click", this.like.bind(this,true));
       this.downVoteEl.addEventListener("click", this.dislike.bind(this,true));
-
-      this.ratingEl.append(this.upVoteEl);
-      this.ratingEl.append(this.votesEl);
-      this.ratingEl.append(this.downVoteEl);
-  }
+    }
+    else {
+      this.downVoteEl.classList.add("disabled");
+      this.upVoteEl.classList.add("disabled");
+    }
 
     this.el = document.createElement("div");
     this.el.classList.add("posts");
@@ -105,11 +107,6 @@ export class Post {
     this.el.append(this.message);
     this.el.append(this.footer);
     this.el.append(this.ratingEl);
-
-    for (const username of this.likes) { if (username == viewUser) { this.like(false); break; } };
-    if (this.hasRated == 0) { // no rating, therefore not in likes list
-      for (const username of this.dislikes) { if (username == viewUser) { this.dislike(false); break; } };
-    }
   }
   appendTo(other) { other.append(this.el); }
   prependTo(other) { other.prepend(this.el); }
@@ -126,12 +123,14 @@ export class Post {
     if (this.hasRated == 0) {
       this.upVoteEl.classList.remove("inactives");;
       this.downVoteEl.classList.remove("actives");
+      this.upVoteEl.parentElement.classList.remove("actives");
     }
 
     // add new styling
     if (this.hasRated == 1) {
       this.upVoteEl.classList.add("actives");
       this.downVoteEl.classList.add("inactives");
+      this.upVoteEl.parentElement.classList.add("actives");
     }
     
     this.rateCallbacks.forEach(callback => { callback(this.hasRated, this.id); });
@@ -146,12 +145,14 @@ export class Post {
     if (this.hasRated == 0) {
       this.downVoteEl.classList.remove("inactives");;
       this.upVoteEl.classList.remove("actives");
+      this.upVoteEl.parentElement.classList.remove("actives");
     }
 
     // add new styling
     if (this.hasRated == -1) {
       this.downVoteEl.classList.add("actives");
       this.upVoteEl.classList.add("inactives");
+      this.upVoteEl.parentElement.classList.add("actives");
     }
 
     this.rateCallbacks.forEach(callback => { callback(this.hasRated, this.id); });

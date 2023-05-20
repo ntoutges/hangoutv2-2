@@ -14,6 +14,7 @@ const isMessageReady = [false, false];
 const posts = [];
 var lastId = null;
 var batchToLoad = 0;
+var postToUpdate = 0;
 
 // only load code for someone signed in if EJS indicates the client is signed in
 if ($("#logged-in")) initSignedIn();
@@ -69,7 +70,6 @@ function initSignedIn() {
       // renderNewMessage( data.body, true ); // <- handled by sockets for everyone, now
     }).catch(err => {
       const httpError = new HttpError(err.toString());
-      console.log(httpError.code)
       switch (httpError.code) {
         case 403:
           showError("Invalid Credentials").then(() => {
@@ -139,13 +139,15 @@ function loadMessages() {
 
     lastId = data[data.length-1]._id;
   }).catch(err => {
-    console.log(err)
+    showError(err.toString());
   });
 }
 
 const postHolder = $("#posts-holder");
 function renderNewMessages(newPosts) {
+  const ids = [];
   for (const i in newPosts) {
+    ids.push(newPosts[i]._id);
     // loads in scroll bar quickly
     const postObj = renderNewMessage(newPosts[i], false);
     postObj.hide();
@@ -155,6 +157,40 @@ function renderNewMessages(newPosts) {
       postObj.show();
     }, i * POST_ANIMATION_TIME); // makes a loading animation that looks cool
   }
+  
+  if (accountId) {
+    showUserRatings(ids);
+  }
+}
+
+function showUserRatings(postIds) {
+  get("/ratedPosts", {
+    "postIds": postIds.join(",")
+  }).then(([ids, success]) => {
+    if (success != "success") {
+      showError(success);
+      return;
+    }
+
+    if (!ids || typeof ids != "object") {
+      showError(ids);
+      return;
+    }
+
+    for (let id in ids) {
+      for (let i = postToUpdate; i < posts.length; i++) {
+        if (posts[i].id == id) {
+          if (ids[id] > 0) {
+            posts[i].like(false);}
+          else { posts[i].dislike(false); }
+          break;
+        }
+      }
+    }
+    postToUpdate = posts.length; // no need to itterate over irrelevant posts in the future
+  }).catch(err => {
+    showError(err.toString());
+  })
 }
 
 function renderNewMessage(post, prepend=false) {
@@ -185,7 +221,11 @@ function onRatePost(userRating, messageId) {
     "rating": userRating,
     "id": messageId
   }).then(([data,success]) => {
-    console.log(data,success)
+    if (success != "success") {
+      showError(success);
+    }
+  }).catch(err => {
+    showError(err.toString());
   })
 }
 
