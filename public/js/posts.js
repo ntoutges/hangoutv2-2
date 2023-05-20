@@ -3,7 +3,7 @@ const $ = document.querySelector.bind(document);
 import { Post } from "./modules/post.js";
 import { lFill } from "./modules/format.js"
 import * as msg from "./modules/messages.js";
-import { get, HttpError } from "./modules/easyReq.js";
+import { post, get, HttpError } from "./modules/easyReq.js";
 import { Query } from "./modules/query.js";
 import { showError } from "./modules/errorable.js"
 
@@ -158,7 +158,8 @@ function renderNewMessages(newPosts) {
 }
 
 function renderNewMessage(post, prepend=false) {
-  const postObj = new Post(post);
+  const postObj = new Post(post, accountId);
+  postObj.onRate(onRatePost);
   posts.push(postObj);
   if (prepend) postObj.prependTo(postHolder);
   else postObj.appendTo(postHolder);
@@ -179,11 +180,31 @@ setInterval(() => {
   }
 }, 50);
 
+function onRatePost(userRating, messageId) {
+  post("/ratePost", {
+    "rating": userRating,
+    "id": messageId
+  }).then(([data,success]) => {
+    console.log(data,success)
+  })
+}
 
 // socketio stuff
 socket.on("newDocs", (id) => {
   get("/getPost", { id }).then((data) => {
     if (data[1] != "success") throw new Error("Fetch error");
     renderNewMessage(data[0], true);
-  })
+  });
+});
+
+socket.on("rating", (data) => {
+  data = JSON.parse(data);
+
+  // search for post with matching id
+  for (const post of posts) {
+    if (post.id == data.id) {
+      post.setRating(data.rating);
+      break;
+    }
+  }
 });

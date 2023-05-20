@@ -18,7 +18,8 @@ const transactions = require("./serverModules/transactions.js");
 const accounts = require("./serverModules/accounts.js");
 const ban = require("./serverModules/ban.js");
 const awards = require("./serverModules/awards.js")
-const metadata = require("./serverModules/metadata.js");
+// const metadata = require("./serverModules/metadata.js");
+const ratings = require("./serverModules/ratings.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -43,27 +44,42 @@ dbManager.init(__dirname + "/db").then(() => {
   transactions.init(dbManager.db.collection("transactions"));
   accounts.init(dbManager.db.collection("accounts"));
   ban.init(transactions, accounts, dbManager.db.collection("accounts"));
-  awards.init(dbManager.db.collection("awards"), metadata);
-  metadata.init(dbManager.db.collection("metadata"), dbManager).then(() => {
+  awards.init(dbManager.db.collection("awards") /*, metadata */);
+  ratings.init(dbManager.db.collection("posts"));
+  // metadata.init(dbManager.db.collection("metadata"), dbManager).then(() => {
     http.listen(process.env.PORT || 52975, function () {
       getPhotoRollContents();
       console.log("app started");
+
+      // dbManager.db.collection("posts").update({
+        
+      // }, {
+      //   "$set": {
+      //     "likes": [],
+      //     "dislikes": []
+      //   },
+      // }, {
+      //   "multi": true
+      // },
+      // (err, updatedCt) => {
+      //   console.log(err, updatedCt); 
+      // })
     });
   }).catch(err => {
     console.log(err);
   });
 
   dbManager.setAutocompactionInterval(172800000);  
-}).catch((err) => {
-  console.log("An error occured starting the server: ", err)
-})
+// }).catch((err) => {
+//   console.log("An error occured starting the server: ", err)
+// })
 
 dbManager.addCollection("accounts");
 dbManager.addCollection("posts");
 dbManager.addCollection("channels");
 dbManager.addCollection("transactions");
 dbManager.addCollection("awards");
-dbManager.addCollection("metadata");
+// dbManager.addCollection("metadata");
 
 var photoRollContents = [];
 function getPhotoRollContents() {
@@ -472,7 +488,9 @@ app.post("/createPost", (req,res) => {
       "content": content,
       "published": (new Date()).getTime(),
       "user": req.session.user,
-      "channel": channel
+      "channel": channel,
+      "likes": [],
+      "dislikes": []
     }
   
     dbManager.db.collection("posts").insert(document, (err, finalDoc) => {
@@ -530,7 +548,42 @@ app.get("/getPost", (req,res) => {
     }
     res.send(data);
   });
-})
+});
+
+app.post("/ratePost", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+
+  if (!("rating" in req.body)) {
+    res.send("Missing rating");
+    return;
+  }
+  const rating = req.body.rating;
+
+  if (!("id" in req.body)) {
+    res.send("Missing message id");
+    return;
+  }
+  const id = req.body.id;
+
+  ratings.saveRating(id, rating, req.session.user).then(([newRating, channel]) => {
+    const socketData = {
+      "rating": newRating,
+      "id": id
+    };
+    sockets.emitToRoom(
+      "rating",
+      JSON.stringify(socketData),
+      `posts-${channel}`
+    );
+    res.send(true);
+  }).catch(err => {
+    res.send(err.toString());
+  })
+});
+
 
 /* _____________________
   /                     \

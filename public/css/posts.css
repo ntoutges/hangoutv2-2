@@ -19,6 +19,7 @@
 }
 
 .posts {
+  position: relative;
   display: inline-block;
   width: 100%;
   background-color: var(--message-color);
@@ -39,7 +40,7 @@
   margin: 0px;
   overflow: hidden;
 
-  width: calc(100% - 50px);
+  width: calc(100% - 70px);
   display: inline-block;
 
   border-radius: 5px;
@@ -167,4 +168,38 @@
 
 .missings {
   background-image: linear-gradient(90deg, #c88484, #ffcfcf)
+}
+
+
+.rating-containers {
+  width: 20px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+
+  right: 5px;
+  top: 5px;
+}
+
+.up-votes, .down-votes {
+  image-rendering: pixelated;
+  user-select: none;
+}
+
+.up-votes:hover,
+.up-votes.actives,
+.down-votes:hover,
+.down-votes.actives {
+  filter: brightness(130%);
+  cursor: pointer;
+}
+
+.vote-counters {
+  text-align: center;
+  font-size: 14px;
+  user-select: none;
+  position: relative;
+  width: 50px;
+  left: 50%;
+  transform: translateX(-50%);
 }

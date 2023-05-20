@@ -1,9 +1,9 @@
 var collection;
-var metadata;
+// var metadata;
 
-function init(awardsCollection, metadataLib) {
+function init(awardsCollection /*, metadataLib */) {
   collection = awardsCollection;
-  metadata = metadataLib;
+  // metadata = metadataLib;
 }
 
 function createAward(name, category, img, description="") {

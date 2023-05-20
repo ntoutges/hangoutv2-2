@@ -4,12 +4,19 @@ import { RevQuery } from "./query.js";
 const $ = document.querySelector.bind(document);
 
 export class Post {
-  constructor(data) {
+  constructor(data, viewUser) {
+    this.id = data._id;
     this.title = ("title" in data) ? data.title : "////";
     this.text = ("content" in data) ? data.content : "////";
     this.published = ("published" in data) ? new Date(data.published) : new Date();
     this.formatting = ("formatting" in data) ? data.f : [];
     this.user = ("user" in data) ? data.user : "???";
+    this.rating = ("rating" in data) ? data.rating : 0;
+    
+    this.likes = ("likes" in data) ? data.likes : [];
+    this.dislikes = ("dislikes" in data) ? data.dislikes: [];
+    
+    this.rateCallbacks = [];
 
     this.blocks = [];
     let i = 0;
@@ -68,14 +75,91 @@ export class Post {
       }
     }
 
+    this.ratingEl = document.createElement("div");
+    this.ratingEl.classList.add("rating-containers");
+    this.hasRated = 0; // -1/1 if has rated, 0 otherwise
+
+    this.upVoteEl = document.createElement("img");
+    this.upVoteEl.classList.add("up-votes");
+    this.upVoteEl.setAttribute("src", "graphics/vote-up.png");
+
+    this.votesEl = document.createElement("div");
+    this.votesEl.classList.add("vote-counters");
+    this.votesEl.innerText = this.rating;
+    if (viewUser) {
+      this.downVoteEl = document.createElement("img");
+      this.downVoteEl.classList.add("down-votes");
+      this.downVoteEl.setAttribute("src", "graphics/vote-down.png");
+
+      this.upVoteEl.addEventListener("click", this.like.bind(this,true));
+      this.downVoteEl.addEventListener("click", this.dislike.bind(this,true));
+
+      this.ratingEl.append(this.upVoteEl);
+      this.ratingEl.append(this.votesEl);
+      this.ratingEl.append(this.downVoteEl);
+  }
+
     this.el = document.createElement("div");
     this.el.classList.add("posts");
     this.el.append(this.header);
     this.el.append(this.message);
     this.el.append(this.footer);
+    this.el.append(this.ratingEl);
+
+    for (const username of this.likes) { if (username == viewUser) { this.like(false); break; } };
+    if (this.hasRated == 0) { // no rating, therefore not in likes list
+      for (const username of this.dislikes) { if (username == viewUser) { this.dislike(false); break; } };
+    }
   }
   appendTo(other) { other.append(this.el); }
   prependTo(other) { other.prepend(this.el); }
   hide() { this.el.style.opacity = 0; }
   show() { this.el.style.opacity = 1; }
+
+  like(doUpdate=true) {
+    if (this.hasRated == 1) return;
+    if (doUpdate) this.rating++;
+    this.hasRated++;
+    this.votesEl.innerText = this.rating;
+
+    // remove old styling
+    if (this.hasRated == 0) {
+      this.upVoteEl.classList.remove("inactives");;
+      this.downVoteEl.classList.remove("actives");
+    }
+
+    // add new styling
+    if (this.hasRated == 1) {
+      this.upVoteEl.classList.add("actives");
+      this.downVoteEl.classList.add("inactives");
+    }
+    
+    this.rateCallbacks.forEach(callback => { callback(this.hasRated, this.id); });
+  }
+  dislike(doUpdate=true) {
+    if (this.hasRated == -1) return;
+    if(doUpdate) this.rating--;
+    this.hasRated--;
+    this.votesEl.innerText = this.rating;
+
+    // remove old styling
+    if (this.hasRated == 0) {
+      this.downVoteEl.classList.remove("inactives");;
+      this.upVoteEl.classList.remove("actives");
+    }
+
+    // add new styling
+    if (this.hasRated == -1) {
+      this.downVoteEl.classList.add("actives");
+      this.upVoteEl.classList.add("inactives");
+    }
+
+    this.rateCallbacks.forEach(callback => { callback(this.hasRated, this.id); });
+  }
+  setRating(newRating) {
+    this.rating = newRating;
+    this.votesEl.innerText = this.rating;
+  }
+
+  onRate(callback) { this.rateCallbacks.push(callback); }
 }

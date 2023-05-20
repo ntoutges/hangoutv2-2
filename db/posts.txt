@@ -1,30 +1,53 @@
-{"title":"youve been pranked","content":"gustavo was here mwahahahaha","published":1681162717271,"user":"test","channel":"main","_id":"2CcyAEuhLdj1ZdHn"}
-{"title":"test","content":"test","published":1680663621796,"user":"test","channel":"main","_id":"3DfKMcuygb35muwg"}
-{"title":"new test","content":"<span style=\"font-size: 12.8px;\">Making a button actually a &lt;button&gt;!</span>","published":1680847053344,"user":"test","channel":"main","_id":"43gugjCIaK9tQVBN"}
-{"title":"Multiple sessions","content":"here","published":1680820855566,"user":"test","channel":"main","_id":"4mOAFAO6vZWLEzGa"}
-{"title":"New Post System","content":"content!","published":1680659356726,"user":"test","_id":"5YPeUZy9EwQwZ4qh"}
-{"title":"Welcome to words","content":"Hello world!","published":1680845925953,"user":"test","channel":"main","_id":"8BUncZJux1Zulegn"}
-{"title":"Can anyone help me program a chatroom?","content":"What, precisely, is a server? I have heard that these things are all the rage, but I don't quite know what it is... can anyone clear this up for me?","published":1680845916066,"user":"test","channel":"programming","_id":"DOHV74d2rfA1lo8T"}
-{"title":"My first post","content":"please be nice...","published":1680841828735,"user":"user","channel":"main","_id":"E2SeeVc2rdsIzEjG"}
-{"title":"new","content":"test","published":1680661448562,"user":"test","channel":"main","_id":"E81ekV1w542HpsP3"}
-{"title":"new test","content":"does it work?","published":1680847312732,"user":"test","channel":"main","_id":"EoMhwpUOVqW4PEZl"}
-{"title":"newer test","content":"I believe this will work...","published":1680847416623,"user":"test","channel":"main","_id":"Fpi2fPCgghN2BPX1"}
-{"title":"Another","content":"new test","published":1680661484392,"user":"test","channel":"main","_id":"NCelznNb7yMIYYT3"}
-{"title":"Test of posts","content":"here is a new post","published":1681420875498,"user":"test","channel":"main","_id":"P0AGsupBDTur0ZlE"}
-{"title":"a","content":"b","published":1680661074137,"user":"test","channel":"main","_id":"TOiqMFs7xRfU6uuo"}
-{"title":"Help","content":"I need to see if this works!?","published":1680845820608,"user":"test","channel":"help","_id":"UgGyAj292yCgbH6o"}
-{"title":"Check out this thing I made!","content":"Never mind, I forgot that it doesn't exist yet... Soon though.","published":1680845866175,"user":"test","channel":"creations","_id":"V14i6SuV213CEFEu"}
-{"title":"a","content":"bcd","published":1680663110155,"user":"test","channel":"main","_id":"X8pZnhKcE29S6Y0Q"}
-{"title":"test","content":"<span style=\"font-size: 12.8px;\">Please ignore the previous post</span>","published":1680847076380,"user":"test","channel":"main","_id":"XsBCrS8iqize6JiW"}
-{"title":"test of a button...","content":"&lt;button&gt; test","published":1680886826848,"user":"test","channel":"main","_id":"bmdIj3MSv9hu2Xoq"}
-{"title":"test2","content":"tset","published":1680661097348,"user":"test","channel":"helloWorld","_id":"dDA9889ybKwU4Aio"}
-{"title":"Help!","content":"My other account: \"new user\" has dropped its password! I thought it was \"test\", but it apparently is not... What do I do?","published":1680886612459,"user":"new user2","channel":"help","_id":"idB8SCGUpJRMNZ7X"}
-{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C"}
-{"title":"a","content":"b","published":1680847099009,"user":"test","channel":"main","_id":"omlU6t2AGGcJNtIm"}
-{"title":"time","content":"test","published":1680661515157,"user":"test","channel":"main","_id":"pyBbpWEHVlOxwIPQ"}
-{"title":"it","content":"works!","published":1680847422310,"user":"test","channel":"main","_id":"tkCJKKjQjFZ5wCso"}
-{"title":"a","content":"b","published":1680847101791,"user":"test","channel":"main","_id":"uEIHfmHPrw9wjhW4"}
-{"title":"test of some text","content":"more text that isn't broken?","published":1680847113031,"user":"test","channel":"main","_id":"vFVqrvCrMpZakKBd"}
-{"title":"So, anyone have a discussion Topic?","content":"I have no clue what normal people talk about... trains!","published":1680845844656,"user":"test","channel":"general","_id":"vy78tfd9YWeKwdUH"}
-{"title":"test2","content":"a second test","published":1680820913907,"user":"test","channel":"main","_id":"wbNRytv7DlFgsMBw"}
-{"title":"a","content":"casgasdg","published":1680663140664,"user":"test","channel":"main","_id":"zrgSpg4sXuKPFCQk"}
+{"title":"youve been pranked","content":"gustavo was here mwahahahaha","published":1681162717271,"user":"test","channel":"main","_id":"2CcyAEuhLdj1ZdHn","likes":[],"dislikes":[]}
+{"title":"test","content":"test","published":1680663621796,"user":"test","channel":"main","_id":"3DfKMcuygb35muwg","likes":[],"dislikes":[]}
+{"title":"new test","content":"<span style=\"font-size: 12.8px;\">Making a button actually a &lt;button&gt;!</span>","published":1680847053344,"user":"test","channel":"main","_id":"43gugjCIaK9tQVBN","likes":[],"dislikes":[]}
+{"title":"Multiple sessions","content":"here","published":1680820855566,"user":"test","channel":"main","_id":"4mOAFAO6vZWLEzGa","likes":[],"dislikes":[]}
+{"title":"New Post System","content":"content!","published":1680659356726,"user":"test","_id":"5YPeUZy9EwQwZ4qh","likes":[],"dislikes":[]}
+{"title":"Welcome to words","content":"Hello world!","published":1680845925953,"user":"test","channel":"main","_id":"8BUncZJux1Zulegn","likes":[],"dislikes":[]}
+{"title":"Super great title.","content":"The very best post of all posts\nHave you ever seen a post this posty?\nwhat is a post if not a post-it note...\nwhat in the world am I writing.\nthis is a post...","published":1684558895120,"user":"test","channel":"main","_id":"AiUOvJe9sPpCYa6M","likes":[],"dislikes":[],"rating":0}
+{"title":"Can anyone help me program a chatroom?","content":"What, precisely, is a server? I have heard that these things are all the rage, but I don't quite know what it is... can anyone clear this up for me?","published":1680845916066,"user":"test","channel":"programming","_id":"DOHV74d2rfA1lo8T","likes":[],"dislikes":[]}
+{"title":"My first post","content":"please be nice...","published":1680841828735,"user":"user","channel":"main","_id":"E2SeeVc2rdsIzEjG","likes":[],"dislikes":[]}
+{"title":"new","content":"test","published":1680661448562,"user":"test","channel":"main","_id":"E81ekV1w542HpsP3","likes":[],"dislikes":[]}
+{"title":"new test","content":"does it work?","published":1680847312732,"user":"test","channel":"main","_id":"EoMhwpUOVqW4PEZl","likes":[],"dislikes":[]}
+{"title":"newer test","content":"I believe this will work...","published":1680847416623,"user":"test","channel":"main","_id":"Fpi2fPCgghN2BPX1","likes":[],"dislikes":[]}
+{"title":"Another","content":"new test","published":1680661484392,"user":"test","channel":"main","_id":"NCelznNb7yMIYYT3","likes":[],"dislikes":[]}
+{"title":"Test of posts","content":"here is a new post","published":1681420875498,"user":"test","channel":"main","_id":"P0AGsupBDTur0ZlE","likes":["test2"],"dislikes":["test"],"rating":0}
+{"title":"a","content":"b","published":1680661074137,"user":"test","channel":"main","_id":"TOiqMFs7xRfU6uuo","likes":[],"dislikes":[]}
+{"title":"Help","content":"I need to see if this works!?","published":1680845820608,"user":"test","channel":"help","_id":"UgGyAj292yCgbH6o","likes":[],"dislikes":[]}
+{"title":"Check out this thing I made!","content":"Never mind, I forgot that it doesn't exist yet... Soon though.","published":1680845866175,"user":"test","channel":"creations","_id":"V14i6SuV213CEFEu","likes":[],"dislikes":[]}
+{"title":"a","content":"bcd","published":1680663110155,"user":"test","channel":"main","_id":"X8pZnhKcE29S6Y0Q","likes":[],"dislikes":[]}
+{"title":"test","content":"<span style=\"font-size: 12.8px;\">Please ignore the previous post</span>","published":1680847076380,"user":"test","channel":"main","_id":"XsBCrS8iqize6JiW","likes":[],"dislikes":[]}
+{"title":"test of a button...","content":"&lt;button&gt; test","published":1680886826848,"user":"test","channel":"main","_id":"bmdIj3MSv9hu2Xoq","likes":[],"dislikes":[]}
+{"title":"test2","content":"tset","published":1680661097348,"user":"test","channel":"helloWorld","_id":"dDA9889ybKwU4Aio","likes":[],"dislikes":[]}
+{"title":"Help!","content":"My other account: \"new user\" has dropped its password! I thought it was \"test\", but it apparently is not... What do I do?","published":1680886612459,"user":"new user2","channel":"help","_id":"idB8SCGUpJRMNZ7X","likes":[],"dislikes":[]}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":[]}
+{"title":"a","content":"b","published":1680847099009,"user":"test","channel":"main","_id":"omlU6t2AGGcJNtIm","likes":[],"dislikes":[]}
+{"title":"time","content":"test","published":1680661515157,"user":"test","channel":"main","_id":"pyBbpWEHVlOxwIPQ","likes":[],"dislikes":[]}
+{"title":"it","content":"works!","published":1680847422310,"user":"test","channel":"main","_id":"tkCJKKjQjFZ5wCso","likes":[],"dislikes":[]}
+{"title":"a","content":"b","published":1680847101791,"user":"test","channel":"main","_id":"uEIHfmHPrw9wjhW4","likes":[],"dislikes":[]}
+{"title":"test of some text","content":"more text that isn't broken?","published":1680847113031,"user":"test","channel":"main","_id":"vFVqrvCrMpZakKBd","likes":[],"dislikes":[]}
+{"title":"So, anyone have a discussion Topic?","content":"I have no clue what normal people talk about... trains!","published":1680845844656,"user":"test","channel":"general","_id":"vy78tfd9YWeKwdUH","likes":[],"dislikes":[]}
+{"title":"test2","content":"a second test","published":1680820913907,"user":"test","channel":"main","_id":"wbNRytv7DlFgsMBw","likes":[],"dislikes":[]}
+{"title":"a","content":"casgasdg","published":1680663140664,"user":"test","channel":"main","_id":"zrgSpg4sXuKPFCQk","likes":[],"dislikes":[]}
+{"title":"Super great title.","content":"The very best post of all posts\nHave you ever seen a post this posty?\nwhat is a post if not a post-it note...\nwhat in the world am I writing.\nthis is a post...","published":1684558895120,"user":"test","channel":"main","_id":"AiUOvJe9sPpCYa6M","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":["test2"],"dislikes":["test"],"rating":0}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test","test2"],"rating":-2}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":["test2"],"dislikes":["test"],"rating":0}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test","test2"],"rating":-2}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":["test2"],"dislikes":["test"],"rating":0}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":[],"rating":0}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":["test2"],"dislikes":["test"],"rating":0}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":["test2"],"dislikes":[],"rating":1}
+{"title":"Channels","content":"are they working?","published":1680660828641,"user":"test","channel":"main","_id":"oLkKpox7uaL5gP9C","likes":[],"dislikes":[],"rating":0}
+{"title":"Super great title.","content":"The very best post of all posts\nHave you ever seen a post this posty?\nwhat is a post if not a post-it note...\nwhat in the world am I writing.\nthis is a post...","published":1684558895120,"user":"test","channel":"main","_id":"AiUOvJe9sPpCYa6M","likes":[],"dislikes":["test","test2"],"rating":-2}
+{"title":"Test of posts","content":"here is a new post","published":1681420875498,"user":"test","channel":"main","_id":"P0AGsupBDTur0ZlE","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Test of posts","content":"here is a new post","published":1681420875498,"user":"test","channel":"main","_id":"P0AGsupBDTur0ZlE","likes":[],"dislikes":["test","test2"],"rating":-2}
+{"title":"Test of posts","content":"here is a new post","published":1681420875498,"user":"test","channel":"main","_id":"P0AGsupBDTur0ZlE","likes":[],"dislikes":["test"],"rating":-1}
+{"title":"Test of posts","content":"here is a new post","published":1681420875498,"user":"test","channel":"main","_id":"P0AGsupBDTur0ZlE","likes":["test2"],"dislikes":["test"],"rating":0}
