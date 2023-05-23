@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const formidable = require('formidable');
-const imageMagick = require('node-imagemagick');
 const socketio = require('socket.io');
+const jimp = require("jimp");
 const fs = require('fs');
 
 const board = require("./serverModules/board.js");
@@ -20,6 +20,7 @@ const ban = require("./serverModules/ban.js");
 const awards = require("./serverModules/awards.js")
 // const metadata = require("./serverModules/metadata.js");
 const ratings = require("./serverModules/ratings.js");
+const documents = require("./serverModules/documents.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -46,6 +47,7 @@ dbManager.init(__dirname + "/db").then(() => {
   ban.init(transactions, accounts, dbManager.db.collection("accounts"));
   awards.init(dbManager.db.collection("awards") /*, metadata */);
   ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"));
+  documents.init(dbManager.db.collection("documents"), jimp, fs, `${__dirname}/documents`);
   // metadata.init(dbManager.db.collection("metadata"), dbManager).then(() => {
     http.listen(process.env.PORT || 52975, function () {
       getPhotoRollContents();
@@ -67,6 +69,7 @@ dbManager.addCollection("transactions");
 dbManager.addCollection("awards");
 // dbManager.addCollection("metadata");
 dbManager.addCollection("ratings");
+dbManager.addCollection("documents");
 
 var photoRollContents = [];
 function getPhotoRollContents() {
@@ -232,7 +235,7 @@ app.get("/home", (req,res) => {
         bio: doc.bio ?? "",
         id: req.sessionID,
         accountId: req.session.user,
-        viewingAccoundId: userId,
+        viewingAccountId: userId,
         homeJS: (userId == req.session.user) ? "home.js" : "homeView.js"
       });
     }
@@ -273,7 +276,7 @@ app.get("/profile", (req,res) => {
 
   dbManager.db.collection("accounts").findOne({
     "_id": id
-  }).exec((err,data) => {
+  }, (err,data) => {
     if (err || !data) { res.send({}); }
     else {
       data.pass = "";
@@ -409,6 +412,137 @@ app.get("/userRelations", (req,res) => {
     res.sendStatus(400)
   });
 });
+
+app.get("/getProfilePicture", (req,res) => {
+  let user = req.session.user;
+  if ("user" in req.query) {
+    user = req.query.user;
+  }
+  
+  if (!user) {
+    res.send("Missing user");
+    return;
+  }
+
+  dbManager.db.collection("accounts").findOne({
+    "_id": user
+  }, (err,document) => {
+    if (err) {
+      console.log(err);
+      res.send("err");
+      return;
+    }
+    if (!document) {
+      res.send("Invalid user");
+      return;
+    }
+
+    if ("picture" in document) {
+      documents.getMainFileURI(document.picture).then((uri) => {
+        res.sendFile(uri);
+      }).catch(err => {
+        console.log(err);
+        res.sendFile(__dirname + "/documents/default.jpg");
+      })
+    }
+    else {
+      res.sendFile(__dirname + "/documents/default.jpg");
+    }
+  });
+});
+
+app.post("/setProfilePicture", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+
+  const form = formidable({
+    multiples: false,
+    maxFileSize: 26214400, // set max file size for images in bytes (25 x 1024 x 1024) // 25 MB
+    uploadDir: __dirname + "/documents/staging"
+  });
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      console.log(err);
+      res.send(err.type);
+      return;
+    }
+
+    const fileType = isValid(files.file);
+    if (fileType) {
+      dbManager.db.collection("accounts").findOne({
+        "_id": req.session.user
+      }, async (err,userDoc) => {
+        if (err) {
+          console.log(err);
+          res.send(err.type);
+          return;
+        }
+        if (!userDoc) {
+          res.send("Invalid user");
+          return;
+        }
+
+        // delete if will cause duplicates
+        if (userDoc.picture) {
+          try {
+            await documents.deleteDocument(userDoc.picture);
+          }
+          catch(err) {
+            console.log(err);
+            if (err.code > 0) { // codes less than 0 are non-essential errors
+              res.send(err.type);
+              return;
+            }
+          }
+        }
+
+        documents.createImageDocument(files.file.path, fileType).then(doc => {
+          dbManager.db.collection("accounts").update({
+            "_id": req.session.user
+          }, {
+            $set: {
+              "picture": doc._id
+            }
+          }, {}, (err,numUpdated) => {
+            if (err) {
+              console.log(err);
+              res.send(err.type);
+              return;
+            }
+            if (numUpdated == 0) {
+              res.send("Invalid user");
+              return;
+            }
+    
+            res.redirect("/profilePic");
+          });
+        }).catch(err => {
+          console.log(err);
+          res.send(err.type);
+        });
+      })
+    }
+    else {
+      res.send("Invalid file");
+    }
+  });
+});
+
+// expand on this later
+function isValid(file) {
+  if (!file) return "";
+  // const type = file.type.split("/").pop();
+  const type = file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase();
+  const validTypes = ["jpg", "jpeg", "png"];
+
+  const typeIndex = validTypes.indexOf(type);
+  if (typeIndex == -1) return "";
+
+  return validTypes[typeIndex];
+}
 
 /* ________________
   /                \
@@ -716,6 +850,24 @@ app.get("/awards", (req,res) => {
     else res.send(docs);
   })
 });
+
+/* _______________
+  /               \
+  | jmp TEMP CODE |
+  \_______________/
+*/
+
+app.get("/profilePic", (req,res) => {
+  res.render("pages/tempProfile.ejs", {
+    title: "Home",
+    isLoggedIn: !!req.session.user,
+    isSidebar: true,
+    adminLevel: req.session.admin,
+    id: req.sessionID,
+    accountId: req.session.user,
+  });
+});
+
 
 
 

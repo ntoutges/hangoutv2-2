@@ -3,14 +3,14 @@
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/modules.css">
 <script>
-  const viewingAccountId = "<%=viewingAccoundId%>"
+  const viewingAccountId = "<%=viewingAccountId%>"
 </script>
 
 <%- contentFor("main") %>
 <div id="home-flexbox">
   <div id="basic-info-panel">
     <div id="profile-picture-holder">
-      <img src="graphics/favicon.png" id="profile-picture" draggable="false">
+      <img src="/getProfilePicture?user=<%=viewingAccountId%>" id="profile-picture" draggable="false">
     </div>
     <div id="info-holder">
       <div id="display-name-centerer">
