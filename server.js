@@ -130,11 +130,12 @@ function doSignIn(username, password, req,res) {
         res.send(true);
       }
     }).catch(err => {
-      res.send(err);
+      console.log(err);
+      res.send(err.typer);
     });
   }).catch((err) => {
-    if (err == "username" || err == "password") res.send(false);
-    else res.send(err);
+    if (err.code < 0) res.send(false); // non-critical error = incorrect credentials
+    else res.send(err.type);
   });
 }
 

@@ -13,23 +13,38 @@ function verifyAccountIdentity(username, password) {
   return new Promise((resolve,reject) => {
     collection.findOne({
       "_id": username
-    }).exec((err, doc) => {
+    }, (err, doc) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 114,
+          "type": `Error trying to access user account with id [${username}]`,
+        });
         return;
       }
       if (!doc) {
-        reject("username"); // user doesn't exist (username wrong)
+        reject({
+          "err": "username",
+          "code": -115,
+          "type": `user with id [${id}] does not exist`,
+        });
         return;
       }
       let passwordHash = doc.pass;
       bcrypt.compare(password, passwordHash, function(err, matches) {
         if (err) {
-          reject(err);
-          return;
+          reject({
+            "err": err.toString(),
+            "code": 116,
+            "type": "Error when checking password",
+          });
         }
         if (matches) resolve(doc); // password correct
-        else reject("password") // password doesn't match
+        else reject({
+          "err": "password",
+          "code": -117,
+          "type": `invalid password`,
+        });
       });
     });
   })
@@ -41,11 +56,19 @@ function createAccount(username, password, saltRounds) {
       "_id": username
     }, (err,doc) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 118,
+          "type": `Error searching for account with id [${username}]`,
+        });
         return;
       }
       if (doc) { // user already exists
-        reject("user already exists");
+        reject({
+          "err": "Document already exists",
+          "code": -119, // non-critical -- username having been taken will not take down the server
+          "type": `document with id [${id}] already exist`,
+        });
         return;
       }
       
@@ -55,10 +78,22 @@ function createAccount(username, password, saltRounds) {
           "name": username,
           "pass": hashPassword
         }, (err, doc) => {
-          if (err) reject(err); // something bad happened?
+          if (err) { // something bad happened?
+            reject({
+              "err": err.toString(),
+              "code": 120,
+              "type": `Error creating new account`,
+            });
+          }
           else resolve();
         });
-      }).catch(err => { reject(err) });
+      }).catch(err => {
+        reject({
+          "err": err.toString(),
+          "code": 121,
+          "type": "Error generating password hash",
+        });
+      });
     });
   });
 }
@@ -104,7 +139,11 @@ function exists(user) {
       "_id": user
     }, (err,doc) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 114,
+          "type": `Error trying to access user account with id [${username}]`,
+        });
         return;
       }
       resolve(!!doc);
