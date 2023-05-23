@@ -1,3 +1,5 @@
+// HYPER deprecated
+
 var db = null;
 exports.init = function(database) {
   db = database;

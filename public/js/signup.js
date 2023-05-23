@@ -3,6 +3,8 @@ import * as req from "./modules/easyReq.js";
 
 
 function init() { // prevents code from floating in space
+  focusIn.call($("#username"), "username" ); // autofocus
+
   $("#username").addEventListener("focusin", function() { focusIn.call(this, "username" ); });
   $("#username").addEventListener("focusout", function() { focusOut.call(this, "username" ); });
   $("#username").addEventListener("keydown", goToPassword);

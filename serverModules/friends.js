@@ -11,11 +11,19 @@ function accept(transactionId, userId) {
     // make sure user cannot accept their own request
     transactions.getTransaction(transactionId).then(transaction => {
       if (transaction.type != "friendRequest") {
-        reject("Invalid transaction type");
+        reject({
+          "err": "Invalid Transaction Type",
+          "code": 135,
+          "type": `Transaction with id [${id}] is not of type \"friendRequest\"`
+        });
         return;
       }
       if (transaction.data.from == userId) { // user is trying to accept their own request (that they sent)
-        reject("User cannot accept their own request");
+        reject({
+          "err": "User cannot accept their own request",
+          "code": 136,
+          "type": "Friend request must be accepted by other user"
+        });
         return;
       }
       
@@ -26,8 +34,8 @@ function accept(transactionId, userId) {
           ["$pull", "friends.requested", transactionId],
           ["$push", "friends.confirmed", "%f"]
         ]
-      ).then(resolve).catch(reject);
-    }).catch(reject);
+      ).then(resolve).catch(err => { reject(err); });
+    }).catch(err => { reject(err); });
   })
 }
 
@@ -54,8 +62,20 @@ function remove(userId, friendId) {
     }, (err, numUpdated) => {
       if (err || numUpdated == 0) {
         if (didError) return; // don't call reject more than once
-        if (err) reject(err);
-        else reject("Invalid userId");
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 137,
+            "type": `Error updating user [${userId}]`
+          });
+        }
+        else { // numUpdated = 0
+          reject({
+            "err": "Invalid user id",
+            "code": -138,
+            "type": `Error updating user [${userId}]`
+          });
+        }
         didError = true;
       }
       activeProcesses--;
@@ -70,8 +90,20 @@ function remove(userId, friendId) {
     }, (err, numUpdated) => {
       if (err || numUpdated == 0) {
         if (didError) return; // don't call reject more than once
-        if (err) reject(err);
-        else reject("Invalid friendId");
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 139,
+            "type": `Error updating user [${friendId}]`
+          });
+        }
+        else { // numUpdated = 0
+          reject({
+            "err": "Invalid user id",
+            "code": -140,
+            "type": `Error updating user [${friendId}]`
+          });
+        }
         didError = true;
       }
       activeProcesses--;
@@ -86,7 +118,11 @@ function request(userId, friendId) {
     getFriendStatus(userId, friendId).then((relation) => {
       // make sure users are not already friends
       if (relation != "unrelated") { // already friends/request already sent
-        reject(`Already ${relation}`);
+        reject({
+          "err": "Users already related",
+          "code": -141,
+          "type": `[${userId}] and [${friendId}] are already \"${relation}\"`
+        });
         return;
       }
 
@@ -122,7 +158,11 @@ function updateFriends(transactionId, userId, updateDataConstruction, resolveTra
   return new Promise((resolve,reject) => {
     transactions.getTransaction(transactionId).then(transaction => {
       if (transaction.type != "friendRequest") {
-        reject("Invalid transaction type");
+        reject({
+          "err": "Invalid Transaction Type",
+          "code": 142,
+          "type": `Transaction with id [${transactionId} is not of type \"friendRequest\"]`
+        });
         return;
       }
 
@@ -174,8 +214,20 @@ function updateFriends(transactionId, userId, updateDataConstruction, resolveTra
       }, userUserInstruction, (err, numUpdated) => {
         if (err || numUpdated == 0) {
           if (didError) return; // don't call reject more than once
-          if (err) reject(err);
-          else reject("Invalid transaction data");
+          if (err) {
+            reject({
+              "err": err.toString(),
+              "code": 143,
+              "type": `Error trying to update user id [${userId}]`
+            });
+          }
+          else { // numUpdated = 0
+            reject({
+              "err": "Invalid User Id",
+              "code": -144,
+              "type": `unable to update user [${id}]`
+            });
+          }
           didError = true;
         }
         activeProcesses--;
@@ -186,8 +238,20 @@ function updateFriends(transactionId, userId, updateDataConstruction, resolveTra
       }, friendUserInstruction, (err, numUpdated) => {
         if (err || numUpdated == 0) {
           if (didError) return; // don't call reject more than once
-          if (err) reject(err);
-          else reject("Invalid transaction data");
+          if (err) {
+            reject({
+              "err": err.toString(),
+              "code": 145,
+              "type": `Error trying to update user id [${friendId}]`
+            });
+          }
+          else { // numUpdated = 0
+            reject({
+              "err": "Invalid User Id",
+              "code": -146,
+              "type": `unable to update user [${friendId}]`
+            });
+          }
           didError = true;
         }
         activeProcesses--;
@@ -197,11 +261,9 @@ function updateFriends(transactionId, userId, updateDataConstruction, resolveTra
         transactions.resolveTransaction(transactionId).then(() => {
           activeProcesses--;
           if (activeProcesses == 0) resolve(friendId);
-        }).catch(reject);
+        }).catch((err) => { reject(err) });
       }
-    }).catch(err => {
-      reject(err);
-    });
+    }).catch(err => { reject(err); });
   });
 }
 

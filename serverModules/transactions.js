@@ -11,7 +11,13 @@ function createTransaction(parties, data, type) {
       "type": type,
       "init": (new Date()).getTime()
     }, (err,transaction) => {
-      if (err) rej(err);
+      if (err) {
+        rej({
+          "err": err.toString(),
+          "code": 160,
+          "type": "Error creating new transaction"
+        });
+      }
       else res(transaction._id);
     });
   });
@@ -22,8 +28,20 @@ function getTransaction(transactionId) {
     collection.findOne({
       "_id": transactionId
     }, (err,transaction) => {
-      if (err) rej(err);
-      else if (!transaction) rej(`Transaction ${transactionId} does not exist`);
+      if (err) {
+        rej({
+          "err": err.toString(),
+          "code": 161,
+          "type": `Error when finding transaction with id ${transactionId}`
+        });
+      }
+      else if (!transaction) {
+        rej({
+          "err": "Transaction does not exist",
+          "code": -162,
+          "type": `unable to find transaction with id [${transactionId}]`
+        });
+      }
       else res(transaction);
     });
   });
@@ -36,7 +54,13 @@ function getTransactions(transactionIds) {
         $in: transactionIds
       }
     }, (err,transactions) => {
-      if (err) rej(err);
+      if (err) {
+        rej({
+          "err": err.toString(),
+          "code": 163,
+          "type": `Error when finding transactions with ids ${JSON.stringify(transactionIds)}`
+        });
+      }
       else res(transactions);
     });
   });
@@ -49,19 +73,39 @@ function resolveTransaction(transactionId, returnDoc=false) {
         "_id": transactionId
       }, (err, document) => {
         if (err) {
-          rej(err);
+          rej({
+            "err": err.toString(),
+            "code": 164,
+            "type": `Error when resolving transaction with id ${transactionId}`
+          });
           return;
         }
         if (!document) {
-          rej(`Transaction ${transactionId} does not exist`);
+          rej({
+            "err": "Transaction does not exist",
+            "code": -165,
+            "type": `unable to find transaction with id ${transactionId}`
+          });
           return;
         }
 
         collection.remove({
           "_id": transactionId
         }, {}, (err, numRemoved) => {
-          if (err) rej(err);
-          else if (numRemoved == 0) rej(`Transaction ${transactionId} does not exist`);
+          if (err) {
+            rej({
+              "err": err.toString(),
+              "code": 166,
+              "type": `Error when deleting transaction with id ${transactionId}`
+            });
+          }
+          else if (numRemoved == 0) {
+            rej({
+              "err": "Transaction does not exist",
+              "code": -167,
+              "type": `unable to delete transaction with id ${transactionId}`
+            });
+          }
           else res(document);
         });
       });
@@ -70,19 +114,37 @@ function resolveTransaction(transactionId, returnDoc=false) {
       collection.remove({
         "_id": transactionId
       }, {}, (err, numRemoved) => {
-        if (err) rej(err);
-        else if (numRemoved == 0) rej(`Transaction ${transactionId} does not exist`);
+        if (err) {
+          rej({
+            "err": err.toString(),
+            "code": 168,
+            "type": `Error when deleting transaction with id ${transactionId}`
+          });
+        }
+        else if (numRemoved == 0) {
+          rej({
+            "err": "Transaction does not exist",
+            "code": 169,
+            "type": `unable to delete transaction with id ${transactionId}`
+          });
+        }
         else res();
       });
     }
   });
 }
 
-function resolveTransactionsConditional(filterCondition, type) {
+function resolveTransactionsConditional(filterCondition, type=null) {
   return new Promise((resolve,reject) => {
-    filterCondition.type = type;
+    if (type) filterCondition.type = type;
     collection.remove(filterCondition, {}, (err, numRemoved) => {
-      if (err) reject(err);
+      if (err) {
+        reject({
+          "err": err.toString(),
+          "code": 158,
+          "type": `Error resolving transaction given conditions: ${JSON.stringify(filterCondition)}`
+        });
+      }
       else resolve(numRemoved);
     })
   })
@@ -101,10 +163,20 @@ function resolveOldTransactions(maxAge, types=[]) {
         $in: types
       };
     }
-    collection.remove(removeFilter, {}, (err, numRemoved) => {
-      if (err) reject(err);
+
+    resolveTransactionsConditional( removeFilter ).then((numRemoved) => {
       resolve(numRemoved);
-    })
+    }).catch(err => { reject(err); });
+    // collection.remove(removeFilter, {}, (err, numRemoved) => {
+    //   if (err) {
+    //     reject({
+    //       "err": err.toString(),
+    //       "code": 159,
+    //       "type": `Error resolving transaction given conditions: ${JSON.stringify(filterCondition)}`
+    //     });
+    //   }
+    //   resolve(numRemoved);
+    // })
   })
 }
 

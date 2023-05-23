@@ -8,12 +8,16 @@ var autocompactionInterval = 172800000;
 
 function init(root) {
   ROOT_DIR = root;
-  return new Promise((res, rej) => {
+  return new Promise((resolve, reject) => {
     try {
-      db.init(res);
+      db.init(resolve);
     }
     catch(err) {
-      rej(err);
+      reject({
+        "err": err.toString(),
+        "code": 134,
+        "type": `Error when initializing local NeDB database`,
+      });
     }
   });
 }

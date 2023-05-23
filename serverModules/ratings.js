@@ -21,7 +21,11 @@ exports.saveRating = function saveRating(
       _id: postId
     }, (err, ratingDoc) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 147,
+          "type": `Error trying to find rating for post [${postId}]`
+        });
         return;
       }
   
@@ -71,9 +75,7 @@ exports.saveRating = function saveRating(
         updateData
       ).then(data => {
         resolve(data);
-      }).catch(err => {
-        reject(err);
-      })
+      }).catch(err => { reject(err); });
     });
   });
 }
@@ -86,7 +88,11 @@ function createRating(postId) {
       "dislikes": []
     }, (err, finalDoc) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 148,
+          "type": `unable to create rating for post [${postId}]`
+        });
         return;
       }
       resolve(finalDoc);
@@ -112,11 +118,19 @@ function changeRating(
     }, {},
     (err, numUpdated) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 149,
+          "type": `Error updating post [${postId}]`
+        });
         return;
       }
       if (numUpdated == 0) {
-        reject("Invalid post id");
+        reject({
+          "err": "Post does not exist",
+          "code": -150,
+          "type": `unable to update post with id [${postId}]`
+        });
         return;
       }
 
@@ -127,7 +141,11 @@ function changeRating(
       _id: postId
     }, async (err, postDoc) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 151,
+          "type": `Error when finding [${postId}]`
+        });
         return;
       }
       if (!postDoc) await createRating(postId); // create new rating document
@@ -138,11 +156,19 @@ function changeRating(
       ratingsUpdateData,
       {}, (err, numUpdated) => {
         if (err) {
-          reject(err);
+          reject({
+            "err": err.toString(),
+            "code": 152,
+            "type": `Error updating rating for post [${postId}]`
+          });
           return;
         }
         if (numUpdated == 0) {
-          reject("Invalid post id");
+          reject({
+            "err": "Rating does not exist",
+            "code": -153, // I don't think this is critical...
+            "type": `unable to find rating for post [${postId}]`
+          });
           return;
         }
         checkIfComplete();
@@ -153,15 +179,24 @@ function changeRating(
       completionCounter++
       if (completionCounter != COMPLETION_STEPS) return;
 
+      // complete, now do final task
       postsCollection.findOne({
         _id: postId
       }, (err, post) => {
         if (err) {
-          reject(err);
+          reject({
+            "err": err.toString(),
+            "code": 154,
+            "type": `Error when finding post with id [${postId}]`
+          });
           return;
         }
-        if (!post) {
-          reject("Invalid post id");
+        if (!post) { // theoretically, this should never be invoked, because the post was just used earlier
+          reject({
+            "err": "Post does not exist",
+            "code": -155,
+            "type": `unable to find post with id [${postId}]`
+          });
           return;
         }
 
@@ -190,7 +225,11 @@ function hasRated(
       }
     }, (err, docs) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 156,
+          "type": `Error finding posts that ${userId} has liked`
+        });
         return;
       }
       
@@ -210,7 +249,11 @@ function hasRated(
       }
     }, (err, docs) => {
       if (err) {
-        reject(err);
+        reject({
+          "err": err.toString(),
+          "code": 157,
+          "type": `Error finding posts that ${userId} has disliked`
+        });
         return;
       }
 

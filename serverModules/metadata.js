@@ -1,3 +1,5 @@
+// only mildly deprecated (still deprecated)
+
 var collection = null;
 var dbManager = null;
 var autosaveInterval = 100;
