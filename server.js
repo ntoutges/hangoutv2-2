@@ -52,6 +52,8 @@ dbManager.init(__dirname + "/db").then(() => {
     http.listen(process.env.PORT || 52975, function () {
       getPhotoRollContents();
       console.log("app started");
+
+      // documents.createImageDocument(__dirname + "/documents/staging/default.png", "png");
     });
   }).catch(err => {
     console.log(err);
@@ -518,18 +520,86 @@ app.post("/setProfilePicture", (req,res) => {
               return;
             }
     
-            res.redirect("/profilePic");
+            res.redirect("/home");
           });
         }).catch(err => {
           console.log(err);
           res.send(err.type);
         });
-      })
+      });
     }
     else {
       res.send("Invalid file");
     }
   });
+});
+
+app.post("/selectProfilePicture", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+
+  if (!("id" in req.body)) {
+    res.send("Missing document id");
+    return;
+  }
+  const id = req.body.id;
+  
+  dbManager.db.collection("accounts").findOne({
+      "_id": req.session.user
+    }, async (err,userDoc) => {
+      if (err) {
+        console.log(err);
+        res.send(err.type);
+        return;
+      }
+      if (!userDoc) {
+        res.send("Invalid user");
+        return;
+      }
+
+      documents.useDocument(id).then(async () => {
+        // delete if will cause duplicates
+        if (userDoc.picture) {
+          try {
+            await documents.deleteDocument(userDoc.picture);
+          }
+          catch(err) {
+            console.log(err);
+            if (err.code > 0) { // codes less than 0 are non-essential errors
+              res.send(err.type);
+              return;
+            }
+          }
+        }
+
+        dbManager.db.collection("accounts").update({
+          "_id": req.session.user
+        }, {
+          $set: {
+            "picture": id
+          }
+        }, {}, (err,numUpdated) => {
+          if (err) {
+            console.log(err);
+            res.send(err.type);
+            return;
+          }
+          if (numUpdated == 0) {
+            res.send("Invalid user");
+            return;
+          }
+
+          res.send("");
+        });
+      }).catch(err => {
+        if (err.code > 0) { // less than 0 is non-critical
+          console.log(err);
+        }
+        res.send(err.type);
+      });
+    });
 });
 
 // expand on this later
@@ -851,6 +921,28 @@ app.get("/awards", (req,res) => {
     else res.send(docs);
   })
 });
+
+/* _______________
+  /               \
+  | jmp DOCS CODE |
+  \_______________/
+*/
+
+app.get("/document", (req,res) => {
+  if (!("id" in req.query)) {
+    res.sendFile(__dirname + "/public/graphics/missing.png");
+    return;
+  }
+  const id = req.query.id;
+
+  documents.getMainFileURI(id).then(data => {
+    res.sendFile(data);
+  }).catch(err => {
+    console.log(err);
+    res.sendFile(__dirname + "/public/graphics/missing.png");
+  });
+});
+
 
 /* _______________
   /               \

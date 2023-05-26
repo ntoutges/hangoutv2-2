@@ -59,18 +59,17 @@ function createImageDocument(oldpath, filetype, maxW=256, maxH=256) {
       const w = img.bitmap.width;
       const h = img.bitmap.height;
 
-      let width = maxW; // w * maxW / w  =  maxW
-      let height = h * maxW / w; // start with conversion based on width
+      let width = Math.min(w, maxW); // w * maxW / w  =  maxW
+      let height = h * width / w; // start with conversion based on width
       if (height > maxH) {
-        width = w * maxH / h; // change conversion to be based on height
-        height = maxH; // h * maxH / h  =  maxH
+        height = Math.min(h, maxH); // h * maxH / h  =  maxH
+        width = w * height / h; // change conversion to be based on height
       }
 
-      const newoldpath = `${saveFolderLocation}/staging/${genId("docs")}`;
+      const newoldpath = `${saveFolderLocation}/staging/${genId("docs")}.${filetype}`;
       img.resize(width, height).writeAsync(newoldpath).then(() => { // create new temp file storing resized image
         createDocument(newoldpath, filetype).then((newDoc) => {
           
-          console.log(oldpath)
           fs.unlink(oldpath, (err) => { // delete original temp file
             if (err) {
               reject({
@@ -97,6 +96,38 @@ function createImageDocument(oldpath, filetype, maxW=256, maxH=256) {
         "code": 104,
         "type": "Error reading image file"
       });
+    });
+  });
+}
+
+function useDocument(id) {
+  return new Promise((resolve, reject) => {
+    collection.update({
+      "_id": id
+    }, {
+      $inc: {
+        "uses": 1
+      }
+    }, {}, (err, updatedCount) => {
+      if (err) {
+        reject({
+          "err": err.toString(),
+          "code": 172,
+          "type": "Error updating use counter"
+        });
+        return;
+      }
+
+      if (updatedCount == 0) {
+        reject({
+          "err": "Document does not exist",
+          "code": -172,
+          "type": `document with id [${id}] does not exist`
+        });
+        return;
+      }
+
+      resolve();
     });
   });
 }
@@ -172,7 +203,7 @@ function deleteDocument(id) {
           "_id": id
         }, {
           $set: {
-            "uses": uses-1
+            "uses": doc.uses - 1
           }
         }, {}, (err,updatedCount) => {
           if (err) {
@@ -191,7 +222,7 @@ function deleteDocument(id) {
             });
             return;
           }
-          resolve(uses-1);
+          resolve(doc.uses-1);
         });
       }
     });
@@ -225,7 +256,33 @@ function getMainFileURI(id) {
   });
 }
 
+function getMainFileURIs(ids) {
+  return new Promise((resolve, reject) => {
+    collection.find({
+      "_id": {
+        $in: ids
+      }
+    }, (err, docs) => {
+      if (err) {
+        reject({
+          "err": err.toString(),
+          "code": 170,
+          "type": "Error finding documents",
+        });
+        return;
+      }
+
+      const data = {};
+      for (const doc of docs) { data[doc._id] = doc.main.path; }
+
+      resolve(data);
+    });
+  });
+}
+
 exports.createDocument = createDocument;
-exports.createImageDocument = createImageDocument
+exports.createImageDocument = createImageDocument;
+exports.useDocument = useDocument;
 exports.deleteDocument = deleteDocument;
 exports.getMainFileURI = getMainFileURI;
+exports.getMainFileURIs = getMainFileURIs;

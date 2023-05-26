@@ -9,6 +9,9 @@ const parentModule = new modules.ParentModule($("#module-parent-container"));
 const friendsModule = new modules.FriendsModule(true);
 var oldBio = $("#biography").value;
 
+var defaultProfiles;
+var menuFilled = false;
+
 fillProfile().then(() => {
   fillFriends();
   fillAwards();
@@ -187,6 +190,129 @@ function fillAwards() {
   // parentModule.appendModule(m[0],0,1)
   parentModule.appendModule(m[2],1,0)
 }
+
+get("../data/profiles.json", {}).then(([data, success]) => {
+  if (success != "success") {
+    console.log(success);
+    return;
+  }
+  if (!("defaults" in data)) {
+    console.log("Invalid data, missing defaults");
+    return;
+  }
+
+  defaultProfiles = data.defaults;
+}).catch(err => {
+  console.log(err);
+});
+
+$("#profile-picture-holder").addEventListener("click", openProfileModal);
+$("#profile-picture-select-modal").addEventListener("click", closeProfileModal);
+
+function openProfileModal() {
+  $("#profile-picture-select-modal").classList.add("actives");
+
+  if (!menuFilled) {
+    if (!defaultProfiles) { // wait until set
+      let interval = setInterval(() => {
+        clearInterval(interval);
+        fillMenu( constructProfileMenuItems( defaultProfiles ) );
+      }, 100);
+    }
+    else fillMenu( constructProfileMenuItems( defaultProfiles ) );
+  }
+}
+
+function closeProfileModal() {
+  $("#profile-picture-select-modal").classList.remove("actives");
+}
+
+function selectProfile(e, id) {
+  e.stopPropagation();
+
+  post("/selectProfilePicture", { id }).then(([errs,success]) => {
+    if (success != "success") {
+      console.log(success);
+      return;
+    }
+    if (errs) {
+      console.log(errs);
+      return;
+    }
+    $("#profile-picture").setAttribute("src", `/document?id=${id}`);
+    closeProfileModal();
+
+  }).catch(err => {
+    console.log(err);
+  })
+}
+
+function constructProfileMenuItems(ids) {
+  let items = [];
+  const upload = document.createElement("div");
+  upload.classList.add("rotary-menu-items");
+  upload.classList.add("upload-containers");
+  upload.innerHTML = `<form action="/setProfilePicture" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="upload-input">
+    <input type="submit" id="upload-submit" accept=".png, .jpeg, .jpg">
+  </form>`
+  upload.setAttribute("data-full-click", "0");
+
+  items.push(upload);
+
+  for (let id of ids) {
+    const img = document.createElement("img");
+    img.setAttribute("src", `/document?id=${id}`);
+    img.classList.add("rotary-menu-items");
+    img.setAttribute("data-id", id);
+    img.setAttribute("data-full-click", "1");
+
+    items.push(img);
+  }
+  return items;
+}
+
+function fillMenu(menuItems) {
+  $("#profile-picture-select-body").innerHTML = ""; // clear
+  const height = Math.tan(Math.PI / menuItems.length) * 100;
+  for (let i = 0; i < menuItems.length; i++) {
+    const child = document.createElement("div");
+    child.classList.add("profile-picture-selectors");
+    
+    child.style.height = `${height}%`;
+
+    const rot = 2 * Math.PI * i / menuItems.length;
+    child.style.transform = `translateY(-50%) rotate(${rot}rad)`;
+
+    const color = `0, ${i * 192 / menuItems.length + 64}, ${128 * i / menuItems.length + 128}`;
+    child.style.backgroundColor = `rgb(${color})`;
+
+    const deRotate = document.createElement("div");
+    deRotate.classList.add("menu-derotaters");
+    deRotate.style.transform = `rotate(${-rot}rad)`;
+
+    deRotate.append(menuItems[i]);
+    child.append(deRotate);
+    $("#profile-picture-select-body").append(child);
+
+    child.addEventListener("mouseenter", () => {
+      $("#profile-picture-select-modal").style.backgroundColor = `rgba(${color},0.9)`;
+      // $("#profile-picture").setAttribute("src", menuItems[i].getAttribute("src"));
+    });
+    child.addEventListener("mouseleave", () => {
+      $("#profile-picture-select-modal").style.backgroundColor = "";
+      // $("#profile-picture").setAttribute("src", `/getProfilePicture?user=${accountId}`);
+    });
+
+    if (menuItems[i].getAttribute("data-full-click") == "1") {
+      child.addEventListener( "click", function(e) { selectProfile(e, menuItems[i].getAttribute("data-id")); } );
+    }
+    else child.addEventListener( "click", e => { e.stopPropagation() });
+  }
+}
+
+
+
 
 // update biography
 socket.on("updateBio", (newBio) => {

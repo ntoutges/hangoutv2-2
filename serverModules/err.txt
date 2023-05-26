@@ -1,0 +1,2 @@
+last err code (inclusive): -173
+next available err code (inclusive): +/-174
