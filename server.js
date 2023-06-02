@@ -45,7 +45,7 @@ dbManager.init(__dirname + "/db").then(() => {
   transactions.init(dbManager.db.collection("transactions"));
   accounts.init(dbManager.db.collection("accounts"));
   ban.init(transactions, accounts, dbManager.db.collection("accounts"));
-  awards.init(dbManager.db.collection("awards") /*, metadata */);
+  awards.init(dbManager.db.collection("awards"), documents);
   ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"));
   documents.init(dbManager.db.collection("documents"), jimp, fs, `${__dirname}/documents`);
   // metadata.init(dbManager.db.collection("metadata"), dbManager).then(() => {
@@ -53,6 +53,15 @@ dbManager.init(__dirname + "/db").then(() => {
       getPhotoRollContents();
       console.log("app started");
 
+      // accounts.addPermission("test", "ban")
+      // accounts.removePermission("user", "ban")
+
+      // awards.createAward(
+      //   "Yet",
+      //   "testers",
+      //   "28pyrlEhMGtpTSFI",
+      //   "testing"
+      // )
       // documents.createImageDocument(__dirname + "/documents/staging/default.png", "png");
     });
   }).catch(err => {
@@ -98,7 +107,7 @@ app.get("/", (req,res) => {
     title: "Sign In",
     isLoggedIn: false,
     isSidebar: false,
-    adminLevel: req.session.admin,
+    permissions: req.session.perms,
     promoPhotoSrc: firstPhoto,
     id: null,
     accountId: null
@@ -107,11 +116,11 @@ app.get("/", (req,res) => {
 
 app.post("/signIn", (req,res) => {
   if (!("user" in req.body)) { // no username sent
-    res.send(false);
+    res.send("Invalid");
     return;
   }
   if (!("pass" in req.body) || req.body.pass.length == 0) { // no password sent
-    res.send(false);
+    res.send("Invalid");
     return;
   }
   doSignIn(req.body.user, req.body.pass, req,res);
@@ -119,24 +128,29 @@ app.post("/signIn", (req,res) => {
 
 function doSignIn(username, password, req,res) {
   accounts.verifyAccountIdentity(username, password).then((userDoc) => {
-    ban.checkBanStatus(userDoc.bans).then((isBanned) => {
-      if (isBanned) {
-        res.send("banned");
+    ban.checkBanStatus(userDoc.bans).then((restrictions) => { // these are permissions that have been taken away, aka restrictions
+      if ("login" in restrictions) {
+        res.send("Temp-Banned");
       }
       else {
         const sessionValues = accounts.getSessionValues(userDoc);
+        if (!("login" in sessionValues.perms)) { // user is essentially permanently banned from even logging in
+          res.send("Perm-Banned");
+          return;
+        }
+        
         for (const key in sessionValues) {
           req.session[key] = sessionValues[key];
         }
         accounts.addSession(username, req.session, req.sessionID);
-        res.send(true);
+        res.send("Valid");
       }
     }).catch(err => {
       console.log(err);
-      res.send(err.typer);
+      res.send(err.type);
     });
   }).catch((err) => {
-    if (err.code < 0) res.send(false); // non-critical error = incorrect credentials
+    if (err.code < 0) res.send("Invalid"); // non-critical error = incorrect credentials
     else res.send(err.type);
   });
 }
@@ -158,7 +172,7 @@ app.get("/signUp", (req,res) => {
     title: "Sign Up",
     isLoggedIn: false,
     isSidebar: false,
-    adminLevel: req.session.admin,
+    permissions: req.session.perms,
     promoPhotoSrc: firstPhoto,
     id: null,
     accountId: null
@@ -233,7 +247,7 @@ app.get("/home", (req,res) => {
         title: "Home",
         isLoggedIn: !!req.session.user,
         isSidebar: true,
-        adminLevel: req.session.admin,
+        permissions: req.session.perms,
         name: doc.name,
         bio: doc.bio ?? "",
         id: req.sessionID,
@@ -473,7 +487,11 @@ app.post("/setProfilePicture", (req,res) => {
       return;
     }
 
-    const fileType = isValid(files.file);
+    if (!files.file) {
+
+    }
+
+    const fileType = documents.fileIsValid(files.file.name);
     if (fileType) {
       dbManager.db.collection("accounts").findOne({
         "_id": req.session.user
@@ -602,19 +620,6 @@ app.post("/selectProfilePicture", (req,res) => {
     });
 });
 
-// expand on this later
-function isValid(file) {
-  if (!file) return "";
-  // const type = file.type.split("/").pop();
-  const type = file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase();
-  const validTypes = ["jpg", "jpeg", "png"];
-
-  const typeIndex = validTypes.indexOf(type);
-  if (typeIndex == -1) return "";
-
-  return validTypes[typeIndex];
-}
-
 /* ________________
   /                \
   | jmp POSTS CODE |
@@ -626,7 +631,7 @@ app.get("/posts", (req,res) => {
     title: "Posts",
     isLoggedIn: !!req.session.user,
     isSidebar: true,
-    adminLevel: req.session.admin,
+    permissions: req.session.perms,
     user: req.session.user,
     id: req.sessionID,
     accountId: req.session.user
@@ -824,7 +829,7 @@ app.get("/getPhoto/*", (req,res) => {
 */
 
 app.get("/ban", (req,res) => {
-  if (!req.session.user || req.session.admin == 0) {
+  if (!req.session.user || !("ban" in req.session.perms)) {
     res.redirect("/");
     return;
   }
@@ -833,14 +838,14 @@ app.get("/ban", (req,res) => {
     title: "Ban",
     isLoggedIn: true,
     isSidebar: true,
-    adminLevel: req.session.admin,
+    permissions: req.session.perms,
     id: req.sessionID,
     accountId: req.session.user
   });
 });
 
 app.post("/banUser", (req,res) => {
-  if (!req.session.user || req.session.admin == 0) {
+  if (!req.session.user || !("ban" in req.session.perms)) {
     res.sendStatus(403); // not an admin
     return;
   }
@@ -848,11 +853,15 @@ app.post("/banUser", (req,res) => {
     res.send("Missing user to ban");
     return;
   }
+  let types = ["login"]; // default
+  if ("types" in req.body) {
+    types = req.body.types.split(",");
+  } 
 
   const user = req.body.user;
   const duration = req.body.duration ?? 86400000; // stored in ms // default of 1 day
 
-  ban.ban(user, req.session.user, (new Date()).getTime() + duration).then(banId => {
+  ban.ban(user, req.session.user, (new Date()).getTime() + duration, types).then(banId => {
     accounts.getSessions(user).forEach(({ session, id }) => {
       sockets.emitTo(id, "ban", true);
       doLogout(session);
@@ -865,7 +874,7 @@ app.post("/banUser", (req,res) => {
 });
 
 app.post("/unbanUser", (req,res) => {
-  if (!req.session.user || req.session.admin == 0) {
+  if (!req.session.user || !("ban" in req.session.perms)) {
     res.sendStatus(403); // not an admin
     return;
   }
@@ -885,8 +894,38 @@ app.post("/unbanUser", (req,res) => {
   });
 });
 
+app.get("/banStatus", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+  if (!("banId" in req.query)) {
+    res.send("Missing id");
+    return;
+  }
+  
+  accounts.getAccount(req.session.user).then(doc => {
+    if (doc.perms.indexOf(req.query.banId) != -1 || ("login" in req.session.perms)) {
+      ban.checkBanStatus([req.query.banId]).then(restrictions => {
+        res.send(Object.keys(restrictions).join(","));
+      }).catch(err => { res.send(err.toString()); });
+    }
+    else { res.sendStatus(403); }
+  }).catch(err => {
+    console.log(err);
+    res.send(err.toString());
+  });
+})
+
+
+/* ________________
+  /                \
+  | jmp AWARD CODE |
+  \________________/
+*/
+
 app.get("/award", (req,res) => {
-  if (!req.session.user || req.session.admin == 0) {
+  if (!req.session.user || !("ban" in req.session.perms)) {
     res.redirect("/");
     return;
   }
@@ -894,7 +933,7 @@ app.get("/award", (req,res) => {
     title: "Award",
     isLoggedIn: true,
     isSidebar: true,
-    adminLevel: req.session.admin,
+    permissions: req.session.perms,
     id: req.sessionID,
     accountId: req.session.user
   });
@@ -919,6 +958,87 @@ app.get("/awards", (req,res) => {
   }, (err,docs) => {
     if (err) res.sendStatus(500);
     else res.send(docs);
+  });
+});
+
+app.get("/allAwards", (req,res) => {
+  dbManager.db.collection("awards").find({}, (err,docs) => {
+    if (err) res.sendStatus(500);
+    else res.send(docs);
+  })
+})
+
+app.post("/giveAward", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+  if (!("award" in req.session.perms)) {
+    res.sendStatus(403);
+    return;
+  }
+  if (!("user" in req.body)) {
+    res.send("Missing user id");
+    return;
+  }
+  if (!("award" in req.body)) {
+    res.send("Missing award id");
+    return;
+  }
+
+  dbManager.db.collection("accounts").update({
+    "_id": req.body.user
+  }, {
+    $addToSet: {
+      "awards": req.body.award
+    }
+  }, {}, (err, numUpdated) => {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+    if (numUpdated == 0) {
+      res.send("User doesn't exist");
+      return;
+    }
+    res.send("Valid");
+  })
+});
+
+app.post("/removeAward", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403);
+    return;
+  }
+  if (!("award" in req.session.perms)) {
+    res.sendStatus(403);
+    return;
+  }
+  if (!("user" in req.body)) {
+    res.send("Missing user id");
+    return;
+  }
+  if (!("award" in req.body)) {
+    res.send("Missing award id");
+    return;
+  }
+
+  dbManager.db.collection("accounts").update({
+    "_id": req.body.user
+  }, {
+    $pull: {
+      "awards": req.body.award
+    }
+  }, {}, (err, numUpdated) => {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+    if (numUpdated == 0) {
+      res.send("User doesn't exist");
+      return;
+    }
+    res.send("Valid");
   })
 });
 
@@ -938,7 +1058,7 @@ app.get("/document", (req,res) => {
   documents.getMainFileURI(id).then(data => {
     res.sendFile(data);
   }).catch(err => {
-    console.log(err);
+    if (err > 0) console.log(err); // don't worry about trivial problems, like "Document does not exist"
     res.sendFile(__dirname + "/public/graphics/missing.png");
   });
 });
@@ -950,16 +1070,6 @@ app.get("/document", (req,res) => {
   \_______________/
 */
 
-app.get("/profilePic", (req,res) => {
-  res.render("pages/tempProfile.ejs", {
-    title: "Home",
-    isLoggedIn: !!req.session.user,
-    isSidebar: true,
-    adminLevel: req.session.admin,
-    id: req.sessionID,
-    accountId: req.session.user,
-  });
-});
 
 
 

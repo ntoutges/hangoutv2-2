@@ -19,12 +19,14 @@ function search() {
       opt.innerText = ban;
       $("#ban-reasons").append(opt);
     }
+    updateType();
   })
 }
 
 $("#ban").addEventListener("click", () => {
   post("/banUser", {
-    user: $("#id").value
+    user: $("#id").value,
+    types: $("#type").value
   }).then(([data,success]) => {
     console.log(data,success);
     search();
@@ -39,3 +41,13 @@ $("#unban").addEventListener("click", () => {
     search();
   })
 })
+
+$("#ban-reasons").addEventListener("change", updateType);
+
+function updateType() {
+  get("/banStatus", {
+    banId: $("#ban-reasons").value
+  }).then(([data,success]) => {
+    $("#type").value = data;
+  }).catch(err => { console.log(err); });
+}

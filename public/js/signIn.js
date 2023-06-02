@@ -31,16 +31,24 @@ function submitCredentials() {
     "pass": password
   }).then(([data, success]) => {
     console.log(data, success)
-    if (success == "success" && data) {
-      if (data == "banned") {
-        displayWarning("username", "You have been banned");
-        displayWarning("password", "You have been banned");
+    if (success == "success") {
+      console.log(data)
+      switch (data) {
+        case "Temp-Banned":
+          displayWarning("username", "You have been banned");
+          displayWarning("password", "You have been banned");
+          break;
+        case "Perm-Banned":
+          displayWarning("username", "Your account is locked");
+          displayWarning("password", "Your account is locked");
+          break;
+        case "Invalid":
+          displayWarning("username", "invalid username or password");
+          displayWarning("password", "invalid username or password");
+          break;
+        default:
+          window.location.replace("/home");
       }
-      else window.location.replace("/home")
-    }
-    else if (!data) {
-      displayWarning("username", "invalid username or password");
-      displayWarning("password", "invalid username or password");
     }
     else {
       showError(success);

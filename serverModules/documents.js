@@ -280,9 +280,26 @@ function getMainFileURIs(ids) {
   });
 }
 
+function fileIsValid(file) {
+  if (!file) return "";
+  return fileNameIsValid(file.name);
+}
+
+function fileNameIsValid(fileName) {
+  const type = fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase();
+  const validTypes = ["jpg", "jpeg", "png"];
+
+  const typeIndex = validTypes.indexOf(type);
+  if (typeIndex == -1) return "";
+
+  return validTypes[typeIndex];
+}
+
 exports.createDocument = createDocument;
 exports.createImageDocument = createImageDocument;
 exports.useDocument = useDocument;
 exports.deleteDocument = deleteDocument;
 exports.getMainFileURI = getMainFileURI;
 exports.getMainFileURIs = getMainFileURIs;
+exports.fileIsValid = fileIsValid;
+exports.fileNameIsValid = fileNameIsValid;

@@ -8,16 +8,18 @@ function init(transactionsLib, accountsLib, accountCollection) {
   collection = accountCollection;
 }
 
-function ban(user, admin, expiration) {
+function ban(user, admin, expiration, restrictions=["login"]) {
   return new Promise((resolve,reject) => {
-    accounts.exists(user).then((exists) => {
-      if (!exists) {
+    accounts.getAccount(user).then((account) => {
+      if (!account) {
         reject({
           "err": "User does not exist",
           "code": -127,
           "type": `user with id [${id}] does not exist`,
         });
       }
+
+      restrictions = stringwiseAnd(restrictions, account.perms);
       transactions.createTransaction(
         [
           admin,
@@ -25,7 +27,8 @@ function ban(user, admin, expiration) {
         ],
         {
           "ban": user,
-          "expires": expiration
+          "expires": expiration,
+          "restr": restrictions
         },
         "banned"
       ).then(id => {
@@ -59,6 +62,23 @@ function ban(user, admin, expiration) {
       }).catch((err) => { reject(err); }); // propogate error
     }).catch((err) => { reject(err); }); // propogate error
   });
+}
+
+function stringwiseAnd(arr1=[], arr2=[]) {
+  const obj1 = {};
+  const combinedArr = [];
+  console.log(arr1, arr2)
+  for (const el of arr1) { obj1[el] = true; } // put contents of array into dictionary
+  console.log(obj1)
+  for (const el of arr2) {
+    if (obj1[el]) { // if element in dictionary, it exists in both arrays, and can be safely added
+      console.log(el)
+      combinedArr.push(el);
+      delete obj1[el]; // prevent duplicates
+    }
+  }
+  console.log(combinedArr)
+  return combinedArr;
 }
 
 function unban(id) {
@@ -102,7 +122,7 @@ function unban(id) {
 }
 
 // returns true if banned
-function checkBanStatus(bans) {
+function updateBanStatus(bans) {
   return new Promise((resolve,reject) => {
     const now = (new Date()).getTime();
     if (!bans || bans.length == 0) {
@@ -120,14 +140,35 @@ function checkBanStatus(bans) {
       }, 
       "banned"
     ).then((numRemoved) => {
-      resolve(numRemoved != bans.length); // not all bans have been removed if true
+      if (numRemoved == bans.length) { resolve({}); } // all bans removed // no restrictions
+      else {
+        checkBanStatus(bans).then(restrictions => {
+          resolve(restrictions);
+        }).catch(err => { reject(err); });
+      }
     }).catch((err) => {
       reject(err);
     });
   })
 }
 
+function checkBanStatus(bans) {
+  return new Promise((resolve, reject) => {
+    transactions.getTransactions(bans).then(docs => {
+      const restrictions = {}; // restrictions on what permissions are temporarily unavailable to the user
+      for (const doc of docs) {
+        for (const restr of doc.data.restr) {
+          restrictions[restr] = true;
+        }
+      }
+
+      resolve(restrictions);
+    }).catch(err => { reject(err); });
+  })
+}
+
 exports.init = init;
 exports.ban = ban;
 exports.unban = unban;
+exports.updateBanStatus = updateBanStatus;
 exports.checkBanStatus = checkBanStatus;

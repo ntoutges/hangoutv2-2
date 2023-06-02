@@ -4,10 +4,6 @@
     <img class="toolbar-logos" src="graphics/favicon.png">
     <div class="toolbar-descs">Home</div>
   </a>
-  <a href="/profilePic" class="toolbar-items">
-    <img class="toolbar-logos" src="graphics/favicon.png">
-    <div class="toolbar-descs">Profile Picture</div>
-  </a>
   <% } %>
   <a href="/posts" class="toolbar-items" id="posts-toolbar-item">
     <img class="toolbar-logos" src="graphics/favicon.png">
@@ -20,11 +16,12 @@
       </select>
     </div>
   </a>
-  <% if (isLoggedIn && adminLevel != 0) { %>
+  <% if ("ban" in permissions) { %>
   <a href="/ban" class="toolbar-items"> <!-- currently just a test -->
     <img class="toolbar-logos" src="graphics/favicon.png">
     <div class="toolbar-descs">Banninate</div>
   </a>
+  <% } if ("award" in permissions) { %>
   <a href="/award" class="toolbar-items"> <!-- currently just a test -->
     <img class="toolbar-logos" src="graphics/favicon.png">
     <div class="toolbar-descs">Awardinate</div>

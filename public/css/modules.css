@@ -234,7 +234,7 @@
 
   background-repeat: no-repeat;
   background-size: cover;
-  image-rendering: pixelated;
+  /* image-rendering: pixelated; */
 }
 
 .award-titles {

@@ -1,40 +1,81 @@
 var collection;
-// var metadata;
+var documents;
 
-function init(awardsCollection /*, metadataLib */) {
+function init(awardsCollection, docsLib) {
   collection = awardsCollection;
-  // metadata = metadataLib;
+  documents = docsLib;
 }
 
-function createAward(name, category, img, description="") {
+function createAward(name, category, docId, description="") {
   return new Promise((resolve,reject) => {
-    collection.insert({
-      name,
-      category,
-      "src": img,
-      description
-    }, (err,doc) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 122,
-          "type": "Error creating new award",
-        });
-        return;
-      }
-      resolve(doc);
-    });
+    const WHEN_DONE = 2;
+
+    documents.useDocument(docId).then(() => {
+      collection.insert({
+        name,
+        category,
+        "src": docId,
+        description
+      }, (err,doc) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 122,
+            "type": "Error creating new award",
+          });
+          return;
+        }
+        resolve(doc);
+      });
+    }).catch(err => { reject(err); });
   });
 }
 
-function editAward(id, img, description) {
+function editAward(id, docId, description) {
   return new Promise((resolve,reject) => {
+    collection.findOne({
+      "_id": id
+    }, (err, doc) => {
+      if (err) {
+        reject({
+          "err": err.toString(),
+          "code": 174,
+          "type": `Error searching for award with id [${id}]`
+        });
+        return;
+      }
+      if (!doc) {
+        reject({
+          "err": "Invalid id",
+          "code": -175,
+          "type": `Document with id [${id}] could not be found`
+        });
+        return;
+      }
+
+      const oldDoc = doc.src;
+      if (oldDoc == docId) { // nothing actually needs to be done
+        resolve();
+        return;
+      }
+
+      const WHEN_DONE = 3;
+      let done_counter = 0;
+
+      documents.useDocument(docId).then(() => {
+        if (++done_counter == WHEN_DONE) { resolve(); }
+      }).catch(err => { reject(err); });
+      documents.deleteDocument(oldDoc).then(() => {
+        if (++done_counter == WHEN_DONE) { resolve(); }
+      }).catch(err => { reject(err); });
+    });
+
     collection.update({
       "_id": id
     }, {
       $set: {
-        "src": img,
-        description
+        "src": docId,
+        "description": description
       }
     }, (err,numUpdated) => {
       if (err) {
@@ -53,7 +94,8 @@ function editAward(id, img, description) {
         });
         return;
       }
-      resolve();
+
+      if (++done_counter == WHEN_DONE) { resolve(); }
     });
   });
 }
@@ -86,7 +128,19 @@ function getAward(id) {
 
 function getAwards(category) {
   return new Promise((resolve,reject) => {
-    
+    collection.find({
+      "category": category
+    }, (err,awards) => {
+      if (awards) {
+        reject({
+          "err": err.toString(),
+          "code": 181,
+          "type": `Error trying to access award with id [${id}]`,
+        });
+        return;
+      }
+      resolve(awards);
+    })
   });
 }
 

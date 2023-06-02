@@ -1,6 +1,4 @@
 const bcrypt = require('bcrypt');
-const { remove } = require('./friends');
-const res = require('express/lib/response');
 
 var collection;
 const sessions = {};
@@ -8,6 +6,8 @@ const sessions = {};
 function init(userCollection) {
   collection = userCollection;
 }
+
+const DEFAULT_PERMISSIONS = ["login"]
 
 function verifyAccountIdentity(username, password) {
   return new Promise((resolve,reject) => {
@@ -76,7 +76,8 @@ function createAccount(username, password, saltRounds) {
         collection.insert({
           "_id": username,
           "name": username,
-          "pass": hashPassword
+          "pass": hashPassword,
+          "perms": DEFAULT_PERMISSIONS
         }, (err, doc) => {
           if (err) { // something bad happened?
             reject({
@@ -99,10 +100,15 @@ function createAccount(username, password, saltRounds) {
 }
 
 function getSessionValues(user) {
+  const permissions = {};
+  if ("perms" in user) {
+    for (let permission of user.perms) { permissions[permission] = true; } // convert db array into object
+  }
+  
   const values = {
     "user": user._id,
     "name": user.name ?? user._id, // use _id as fallback
-    "admin": user.admin ?? 0 // assumed no level of admin
+    "perms": permissions
   }
   return values;
 }
@@ -133,7 +139,7 @@ function getSessions(user) {
   return []; // no sessions to return
 }
 
-function exists(user) {
+function getAccount(user) {
   return new Promise((resolve,reject) => {
     collection.findOne({
       "_id": user
@@ -146,8 +152,80 @@ function exists(user) {
         });
         return;
       }
-      resolve(!!doc);
+
+      if (!doc) {
+        reject({
+          "err": "Invalid user id",
+          "code": -180,
+          "type": `unable to find user account with id [${username}]`,
+        });
+      }
+      resolve(doc);
     });
+  });
+}
+
+function exists(user) {
+  return new Promise((resolve,reject) => {
+    getAccount(user).then(doc => {
+      resolve(true);
+    }).catch(err => {
+      if (err.code < 0) resolve(false); // account doesn't exist
+      else reject(err); });
+  });
+}
+
+function addPermission(user, permission) {
+  return new Promise((resolve, reject) => {
+    collection.update({
+      "_id": user
+    }, {
+      $addToSet: {
+        "perms": permission
+      }
+    }, {}, (err, amountUpdated) => {
+      if (err) {
+        reject({
+          "err": err.toString(),
+          "code": 176,
+          "type": `Error trying to add permissions to user account with id [${username}]`,
+        });
+      }
+      if (amountUpdated == 0) {
+        reject({
+          "err": "User account does not exist",
+          "code": -177,
+          "type": `unable to find user with id [${username}] trying to add permissions`,
+        });
+      }
+    })
+  });
+}
+
+function removePermission(user, permission) {
+  return new Promise((resolve, reject) => {
+    collection.update({
+      "_id": user
+    }, {
+      $pull: {
+        "perms": permission
+      }
+    }, {}, (err, amountUpdated) => {
+      if (err) {
+        reject({
+          "err": err.toString(),
+          "code": 178,
+          "type": `Error trying to remove permissions of user account with id [${username}]`,
+        });
+      }
+      if (amountUpdated == 0) {
+        reject({
+          "err": "User account does not exist",
+          "code": -179,
+          "type": `unable to find user with id [${username}] trying to to remove permissions`,
+        });
+      }
+    })
   });
 }
 
@@ -155,7 +233,10 @@ exports.init = init;
 exports.verifyAccountIdentity = verifyAccountIdentity
 exports.createAccount = createAccount;
 exports.getSessionValues = getSessionValues;
+exports.getAccount = getAccount;
 exports.exists = exists;
 exports.addSession = addSession;
 exports.removeSession = removeSession;
 exports.getSessions = getSessions;
+exports.addPermission = addPermission;
+exports.removePermission = removePermission;

@@ -324,7 +324,7 @@ export class AwardsModule extends Module {
     const img = document.createElement("img");
     img.classList.add("award-images")
     img.setAttribute("title", awardData.description);
-    img.setAttribute("src", `/graphics/awards/${awardData.src}`);
+    img.setAttribute("src", `/document?id=${awardData.src}`);
 
     const title = document.createElement("div");
     title.classList.add("award-titles");

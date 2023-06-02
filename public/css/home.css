@@ -246,7 +246,8 @@
 
 #upload-input {
   font-family: inherit;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
+  width: 100%;
 }
 
 #upload-input:hover {
