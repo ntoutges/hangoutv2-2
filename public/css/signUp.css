@@ -35,3 +35,60 @@
 #submit {
   top: 302px;
 }
+
+/* reference: 
+
+  #sign-in-side {
+  width: 30vw;
+  height: 94vh;
+  min-width: 440px;
+  max-width: 650px;
+
+  position: absolute;
+  top: calc(3vh - 3px);
+  left: 3vh;
+  z-index: 1;
+
+  background-image: url(../graphics/tablecloth.jpg);
+  border: solid var(--main-border-color) 3px;
+  border-radius: 10px;
+}
+*/
+
+#view-sponsored {
+  width: 250px;
+  height: 94vh;
+  top: calc(3vh - 6px);
+  right: 3vh;
+
+  position: absolute;
+  padding: 3px;
+
+  background-color: cornsilk;
+  z-index: 1;
+
+  /* background-image: url(../graphics/tablecloth.jpg); */
+  border: solid var(--main-border-color) 3px;
+  border-radius: 10px;
+}
+
+.sponsored-rows {
+  padding: 2px;
+  display: block;
+  color: black;
+  text-decoration: none;
+}
+
+.sponsored-rows:nth-child(even) {
+  background-color: darkgrey;
+}
+
+.sponsored-rows:nth-child(odd) {
+  background-color: grey;
+}
+
+.sponsored-rows:hover {
+  cursor: pointer;
+  background-color: lightgreen;
+  padding: 4px;
+}

@@ -17,17 +17,22 @@
     </div>
   </a>
   <% if ("ban" in permissions) { %>
-  <a href="/ban" class="toolbar-items"> <!-- currently just a test -->
+  <a href="/ban" class="toolbar-items">
     <img class="toolbar-logos" src="graphics/favicon.png">
     <div class="toolbar-descs">Banninate</div>
   </a>
   <% } if ("award" in permissions) { %>
-  <a href="/award" class="toolbar-items"> <!-- currently just a test -->
+  <a href="/award" class="toolbar-items">
     <img class="toolbar-logos" src="graphics/favicon.png">
     <div class="toolbar-descs">Awardinate</div>
   </a>
+  <% } if ("sponsor" in permissions) { %>
+    <a href="/signUp" class="toolbar-items">
+      <img class="toolbar-logos" src="graphics/favicon.png">
+      <div class="toolbar-descs">Sponsor</div>
+    </a>
   <% } %>
-
+  
   <% if (isLoggedIn) { %>
   <a href="/signOut" class="toolbar-items" id="signOut">
     <img class="toolbar-logos" src="graphics/favicon.png">

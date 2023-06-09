@@ -1,6 +1,6 @@
 const $ = document.querySelector.bind(document);
 import * as req from "./modules/easyReq.js";
-
+import { Query, RevQuery } from "./modules/query.js";
 
 function init() { // prevents code from floating in space
   focusIn.call($("#username"), "username" ); // autofocus
@@ -15,6 +15,28 @@ function init() { // prevents code from floating in space
   $("#confirm").addEventListener("focusout", function() { focusOut.call(this, "confirm" ); });
   $("#confirm").addEventListener("keydown", submitViaEnter);
   $("#submit").addEventListener("click", submitCredentials);
+
+  req.get("/sponsored", {}).then(([data,success]) => {
+    if (success != "success" || data == "error") {
+      $("#view-sponsored").innerText = "Error, try again";
+      return;
+    }
+    if (data == "perms") {
+      $("#view-sponsored").innerText = "Invalid Permissions";
+      return;
+    }
+    
+    for (const doc of data) {
+      const row = document.createElement("a");
+      row.setAttribute("class", "sponsored-rows");
+
+      const query = new RevQuery({ "user": doc._id });
+      row.setAttribute("href", `/home?${query.toString()}`);
+      
+      row.innerText = doc._id;
+      $("#view-sponsored").append(row);
+    }
+  });
 }
 
 function submitCredentials() {
@@ -49,14 +71,19 @@ function submitCredentials() {
     console.log(data, success)
     if (success == "success" && data) {
       switch (data) {
-        case "username":
+        case "perms":
+          displayWarning("username", "Not allowed to create account")
+          displayWarning("password", "Not allowed to create account")
+          break;
+        case "user":
           displayWarning("username", "username already taken");
           break;
-        case "password":
+        case "pass":
           displayWarning("password", "invalid password");
           break;
         default:
-          window.location.replace("/home")
+          const query = new RevQuery({ user: username });
+          window.location.replace(`/home?${query.toString()}`);
       }
     }
     else {
@@ -137,7 +164,6 @@ function focusOut(idModifier) {
     this.classList.remove("actives");
     $(`#${idModifier}-underline`).classList.remove("actives");
     $(`#${idModifier}-identifier`).classList.remove("actives");
-    console.log(this.value)
     this.value = this.value.trim();
   }
 }

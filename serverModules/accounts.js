@@ -50,7 +50,7 @@ function verifyAccountIdentity(username, password) {
   })
 }
 
-function createAccount(username, password, saltRounds) {
+function createAccount(username, password, sponsor, saltRounds) {
   return new Promise((resolve,reject) => {
     collection.findOne({
       "_id": username
@@ -67,7 +67,7 @@ function createAccount(username, password, saltRounds) {
         reject({
           "err": "Document already exists",
           "code": -119, // non-critical -- username having been taken will not take down the server
-          "type": `document with id [${id}] already exist`,
+          "type": `document with id [${username}] already exist`,
         });
         return;
       }
@@ -77,6 +77,7 @@ function createAccount(username, password, saltRounds) {
           "_id": username,
           "name": username,
           "pass": hashPassword,
+          "sponsor": sponsor,
           "perms": DEFAULT_PERMISSIONS
         }, (err, doc) => {
           if (err) { // something bad happened?

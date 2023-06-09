@@ -160,18 +160,24 @@ function doSignIn(username, password, req,res) {
   | jmp SIGN UP CODE |
   \__________________/
 */
+// this also known as   | jmp sponsor code |
 
 app.get("/signUp", (req,res) => {
-  if (req.session.name) {
-    res.redirect("/home");
+  // if (req.session.name) {
+  //   res.redirect("/home");
+  //   return;
+  // }
+
+  if (!req.session.user || !("sponsor" in req.session.perms)) {
+    res.redirect("/");
     return;
   }
-  
+
   let firstPhoto = (photoRollContents.length > 0) ? photoRollContents[Math.floor(Math.random()*photoRollContents.length)] : ""; // need to decide what to do if PhotoRolLContents is empty
   res.render("pages/signUp.ejs", {
     title: "Sign Up",
-    isLoggedIn: false,
-    isSidebar: false,
+    isLoggedIn: true,
+    isSidebar: true,
     permissions: req.session.perms,
     promoPhotoSrc: firstPhoto,
     id: null,
@@ -180,6 +186,12 @@ app.get("/signUp", (req,res) => {
 });
 
 app.post("/createAccount", (req,res) => {
+  // lacks requisite permissions
+  if (!req.session.user || !("sponsor" in req.session.perms)) {
+    res.send("perms");
+    return;
+  }
+
   if (!("user" in req.body)) { // no username sent
     res.send("user");
     return;
@@ -194,12 +206,33 @@ app.post("/createAccount", (req,res) => {
   accounts.createAccount(
     username,
     password,
+    req.session.user,
     SALTING_ROUNDS
   ).then(() => {
-    doSignIn(username, password, req,res);
+    res.send("Valid")
+    // doSignIn(username, password, req,res);
   }).catch(err => {
     if (err == "user already exists") res.send("username");
     else res.sendStatus(500);
+  });
+});
+
+app.get("/sponsored", (req,res) => {
+  // not allowed to see (or unable to sponsor) accounts
+  if (!req.session.user || !("sponsor" in req.session.perms)) {
+    res.send("perms");
+    return;
+  }
+
+  dbManager.db.collection("accounts").find({
+    "sponsor": req.session.user
+  }, (err,docs) => {
+    if (err) {
+      res.send("error");
+      console.log(err);
+      return;
+    }
+    res.send(docs);
   });
 });
 
