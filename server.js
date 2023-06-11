@@ -21,6 +21,7 @@ const awards = require("./serverModules/awards.js")
 // const metadata = require("./serverModules/metadata.js");
 const ratings = require("./serverModules/ratings.js");
 const documents = require("./serverModules/documents.js");
+const { resolveSoa } = require('dns');
 
 const app = express();
 const http = require("http").Server(app);
@@ -180,8 +181,8 @@ app.get("/signUp", (req,res) => {
     isSidebar: true,
     permissions: req.session.perms,
     promoPhotoSrc: firstPhoto,
-    id: null,
-    accountId: null
+    id: req.sessionID,
+    accountId: req.session.user
   });
 });
 
@@ -234,6 +235,156 @@ app.get("/sponsored", (req,res) => {
     }
     res.send(docs);
   });
+});
+
+app.post("/addPermission", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403); // not signed in
+    return;
+  }
+  if (!("id" in req.body)) {
+    res.send("Missing id");
+    return;
+  }
+  if (!("perm" in req.body)) {
+    res.send("Missing permission");
+    return;
+  }
+  const id = req.body.id;
+  const perm = req.body.perm;
+
+  accounts.getAccount(req.session.user).then(userDoc => {
+    const permissions = userDoc.perms ?? [];
+    if (permissions.indexOf(perm) == -1) {
+      res.send("Invalid permission");
+      return;
+    }
+    accounts.addPermission(id, perm).then(() => {
+      res.send("ok");
+    }).catch(err => {
+      console.log(err);
+      res.send("error");
+    });
+    
+  }).catch(err => {
+    console.log(err);
+    res.send("error");
+  });
+});
+
+app.post("/removePermission", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403); // not signed in
+    return;
+  }
+  if (!("id" in req.body)) {
+    res.send("Missing id");
+    return;
+  }
+  if (!("perm" in req.body)) {
+    res.send("Missing permission");
+    return;
+  }
+  const id = req.body.id;
+  const perm = req.body.perm;
+
+  accounts.getAccount(id).then(userDoc => {
+    const permissions = userDoc.perms ?? [];
+    if (permissions.indexOf(perm) == -1) {
+      res.send("Invalid permission");
+      return;
+    }
+    accounts.removePermission(id, perm).then(() => {
+      res.send("ok");
+    }).catch(err => {
+      console.log(err);
+      res.send("error");
+    });
+    
+  }).catch(err => {
+    console.log(err);
+    res.send("error");
+  });
+});
+
+app.post("/banPermission", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403); // not signed in
+    return;
+  }
+  if (!("id" in req.body)) {
+    res.send("Missing id");
+    return;
+  }
+  if (!("perm" in req.body)) {
+    res.send("Missing permission");
+    return;
+  }
+  if (!("expiration" in req.body)) {
+    res.send("Missing expiration");
+    return;
+  }
+  
+  const id = req.body.id;
+  const perm = req.body.perm;
+  const expiration = req.body.expiration;
+
+  accounts.getAccount(id).then(userDoc => {
+    const permissions = userDoc.perms ?? [];
+    if (permissions.indexOf(perm) == -1) {
+      res.send("Invalid permission");
+      return;
+    }
+    // accounts.removePermission(id, perm).then(() => {
+    //   res.send("ok");
+    // }).catch(err => {
+    //   console.log(err);
+    //   res.send("error");
+    // });
+    ban.ban( id, req.session.user, expiration, [perm]).then(id => {
+      res.send("ok");
+      return;
+    }).catch(err => {
+      console.log(err);
+      res.send("error");
+    });
+    
+  }).catch(err => {
+    console.log(err);
+    res.send("error");
+  });
+});
+
+app.post("/unbanPermission", (req,res) => {
+  if (!req.session.user) {
+    res.sendStatus(403); // not signed in
+    return;
+  }
+  if (!("banId" in req.body)) {
+    res.send("Missing banId");
+    return;
+  }
+  
+  const id = req.body.banId;
+  ban.unban(id).then(() => {
+    res.send("ok");
+  }).catch(err => {
+    console.log(err);
+    res.send("error");
+  })
+
+
+  // TODO: use this to check if unban is legal (later)
+  // NOTE: THIS IS VERY IMPORANT TO ACTUALLY DO! -- banId info public
+
+  // transactions.getTransaction(id).then(doc => {
+  //   console.log(doc);
+
+  //   res.send("ok");
+  // }).catch(err => {
+  //   console.log(err);
+  //   res.send("error");
+  // })
 });
 
 
@@ -948,7 +1099,43 @@ app.get("/banStatus", (req,res) => {
     console.log(err);
     res.send(err.toString());
   });
-})
+});
+
+app.get("/bans", (req,res) => {
+  if (!("ids" in req.query)) {
+    res.send("Missing ids");
+    return;
+  }
+  // if (!Array.isArray(req.query.ids)) {
+  //   res.send("Invalid ids");
+  //   return;
+  // }
+
+  const ids = req.query.ids.split(",");
+  ban.checkBanStatus(ids).then(restrictions => {
+    res.send(restrictions);
+  }).catch(err => {
+    console.log(err);
+    res.send({});
+  });
+});
+
+app.get("/banInfo", (req,res) => {
+  if (!("id" in req.query)) {
+    res.send("Missing id");
+    return;
+  }
+
+  accounts.getAccount(req.query.id).then(doc => {
+    const bans = doc.bans ?? [];
+    ban.checkBanStatus(bans).then(restrictions => {
+      res.send(Object.keys(restrictions).join(","));
+    }).catch(err => { res.send(err.toString()); });
+  }).catch(err => {
+    console.log(err);
+    res.send(err.toString());
+  });
+});
 
 
 /* ________________
@@ -958,7 +1145,7 @@ app.get("/banStatus", (req,res) => {
 */
 
 app.get("/award", (req,res) => {
-  if (!req.session.user || !("ban" in req.session.perms)) {
+  if (!req.session.user || !("award" in req.session.perms)) {
     res.redirect("/");
     return;
   }

@@ -191,6 +191,7 @@ function addPermission(user, permission) {
           "code": 176,
           "type": `Error trying to add permissions to user account with id [${username}]`,
         });
+        return;
       }
       if (amountUpdated == 0) {
         reject({
@@ -198,7 +199,9 @@ function addPermission(user, permission) {
           "code": -177,
           "type": `unable to find user with id [${username}] trying to add permissions`,
         });
+        return;
       }
+      resolve();
     })
   });
 }
@@ -218,6 +221,7 @@ function removePermission(user, permission) {
           "code": 178,
           "type": `Error trying to remove permissions of user account with id [${username}]`,
         });
+        return;
       }
       if (amountUpdated == 0) {
         reject({
@@ -225,8 +229,10 @@ function removePermission(user, permission) {
           "code": -179,
           "type": `unable to find user with id [${username}] trying to to remove permissions`,
         });
+        return;
       }
-    })
+      resolve();
+    });
   });
 }
 

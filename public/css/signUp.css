@@ -70,6 +70,11 @@
   /* background-image: url(../graphics/tablecloth.jpg); */
   border: solid var(--main-border-color) 3px;
   border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+
+  
 }
 
 .sponsored-rows {
@@ -89,6 +94,45 @@
 
 .sponsored-rows:hover {
   cursor: pointer;
-  background-color: lightgreen;
+  background-color: lightgreen !important;
   padding: 4px;
+}
+
+.sponsored-rows.sponsored-rows.selected {
+  background-color: lightblue;
+  /* padding: 4px; */
+}
+
+.sponsored-flexboxes {
+  position: relative;
+}
+
+#accounts-container {
+  border-bottom: 3px dashed black;
+  flex-grow: 1;
+}
+
+#permissions-container {
+  height: 300px;
+}
+
+
+.permissions-submit {
+  display: block;
+}
+
+.permissions-containers {
+  border-top: dotted 2px black;
+  margin-top: 10px;
+}
+
+.permissions-containers:first-child {
+  margin-bottom: 0px;
+  border: none;
+}
+
+
+#unban-effects {
+  color: green;
+  text-decoration: underline;
 }

@@ -37,7 +37,39 @@
   </div> -->
 </aside>
 <aside id="view-sponsored">
-
+  <div id="accounts-container" class="sponsored-flexboxes"></div>
+  <div id="permissions-container" class="sponsored-flexboxes">
+    <div id="available-permissions-container" class="permissions-containers">
+      <label for="available-permissions">Add Permission:</label>
+      <select id="available-permissions">
+        <!-- <option>a</option> -->
+      </select>
+      <button id="submit-available-permissions" class="permissions-submit">Add</button>
+    </div>
+    <div id="removable-permissions-container" class="permissions-containers">
+      <label for="removable-permissions">Remove Permission:</label>
+      <select id="removable-permissions">
+        <!-- <option>c</option> -->
+      </select>
+      <button id="submit-removable-permissions" class="permissions-submit">Remove</button>
+    </div>
+    <div id="bannable-permissions-container" class="permissions-containers">
+      <label for="bannable-permissions">Ban:</label>
+      <select id="bannable-permissions">
+        <!-- <option>b</option> -->
+      </select>
+      <input id="ban-expiration-date" type="date" title="expiration">
+      <button id="submit-bannable-permissions" class="permissions-submit">Ban</button>
+    </div>
+    <div id="unbannable-permissions-container" class="permissions-containers">
+      <label for="unbannable-permissions">Unban:</label>
+      <select id="unbannable-permissions">
+        <!-- <option>b</option> -->
+      </select>
+      <div id="unban-effects"></div>
+      <button id="submit-unbannable-permissions" class="permissions-submit">Unban</button>
+    </div>
+  </div>
 </aside>
 
 <div id="promo-photos">

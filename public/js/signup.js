@@ -1,6 +1,9 @@
 const $ = document.querySelector.bind(document);
 import * as req from "./modules/easyReq.js";
-import { Query, RevQuery } from "./modules/query.js";
+import { RevQuery } from "./modules/query.js";
+
+var sponsorPermissions = [];
+var currentSponsored = null;
 
 function init() { // prevents code from floating in space
   focusIn.call($("#username"), "username" ); // autofocus
@@ -18,25 +21,53 @@ function init() { // prevents code from floating in space
 
   req.get("/sponsored", {}).then(([data,success]) => {
     if (success != "success" || data == "error") {
-      $("#view-sponsored").innerText = "Error, try again";
+      $("#accounts-container").innerText = "Error, try again";
       return;
     }
     if (data == "perms") {
-      $("#view-sponsored").innerText = "Invalid Permissions";
+      $("#accounts-container").innerText = "Invalid Permissions";
       return;
     }
     
+    let oldSelect = null;
     for (const doc of data) {
-      const row = document.createElement("a");
+      const row = document.createElement("div");
       row.setAttribute("class", "sponsored-rows");
 
-      const query = new RevQuery({ "user": doc._id });
-      row.setAttribute("href", `/home?${query.toString()}`);
+      // const query = new RevQuery({ "user": doc._id });
+      // row.setAttribute("href", `/home?${query.toString()}`);
       
+      row.addEventListener("click", function() {
+        if (oldSelect) oldSelect.classList.remove("selected");
+        oldSelect = this;
+        oldSelect.classList.add("selected");
+        
+        loadPermissions(doc._id);
+      });
+
       row.innerText = doc._id;
-      $("#view-sponsored").append(row);
+      $("#accounts-container").append(row);
     }
   });
+
+  req.get("/profile", {
+    id: accountId
+  }).then(([data,success]) => {
+    if (success != "success") {
+      console.log(success);
+      return;
+    }
+    if (!data) {
+      console.log("Unable to request account id");
+      return;
+    }
+
+    if ("perms" in data) {
+      sponsorPermissions = data.perms ?? [];
+    }
+  });
+
+  $("#ban-expiration-date").valueAsDate = new Date();
 }
 
 function submitCredentials() {
@@ -166,4 +197,131 @@ function focusOut(idModifier) {
     $(`#${idModifier}-identifier`).classList.remove("actives");
     this.value = this.value.trim();
   }
+}
+
+function loadPermissions(id) {
+  $("#available-permissions").innerHTML = "";
+  $("#removable-permissions").innerHTML = "";
+  $("#bannable-permissions").innerHTML = "";
+  $("#unbannable-permissions").innerHTML = "";
+
+  req.get("/profile", { id }).then(([data,success]) => {
+    if (success != "success") {
+      console.log(success);
+      return;
+    }
+    if (!data) {
+      console.log("Profile does not exist");
+      return;
+    }
+    
+    currentSponsored = id;
+    const permissions = (data.perms) ?? [];
+    for (const perm of permissions) {
+      const option1 = document.createElement("option");
+      option1.setAttribute("value", perm);
+      option1.innerText = perm;
+      const option2 = document.createElement("option");
+      option2.setAttribute("value", perm);
+      option2.innerText = perm;
+      $("#bannable-permissions").append(option1);
+      $("#removable-permissions").append(option2);
+
+    }
+    for (const perm of sponsorPermissions) {
+      // sponsored account doesn't already have permission
+      if (permissions.indexOf(perm) == -1) {  
+        const option3 = document.createElement("option");
+        option3.setAttribute("value", perm);
+        option3.innerText = perm;
+        $("#available-permissions").append(option3);
+      }
+    }
+
+    const banIds = data.bans ?? [];
+    for (const banId of banIds) {
+      const option4 = document.createElement("option");
+      option4.setAttribute("value", banId);
+      option4.innerText = banId;
+      $("#unbannable-permissions").append(option4);
+    }
+    if (banIds.length != 0) updateBanType();
+  });
+}
+
+$("#submit-available-permissions").addEventListener("click", () => {
+  const val = $("#available-permissions").value;
+  if (!val) return;
+
+  req.post("/addPermission", {
+    id: currentSponsored,
+    perm: val
+  }).then(([data,success]) => {
+    if (success != "success") {
+      console.log(success);
+      return;
+    }
+    loadPermissions(currentSponsored); // reload info
+  });
+});
+
+$("#submit-removable-permissions").addEventListener("click", () => {
+  const val = $("#removable-permissions").value;
+  if (!val) return;
+
+  req.post("/removePermission", {
+    id: currentSponsored,
+    perm: val
+  }).then(([data,success]) => {
+    if (success != "success") {
+      console.log(success);
+      return;
+    }
+    loadPermissions(currentSponsored); // reload info
+  });
+});
+
+$("#submit-bannable-permissions").addEventListener("click", () => {
+  const val = $("#bannable-permissions").value;
+  const expiration = $("#ban-expiration-date").valueAsDate.getTime();
+  if (!val) return;
+
+  req.post("/banPermission", {
+    id: currentSponsored,
+    perm: val,
+    expiration
+  }).then(([data,success]) => {
+    if (success != "success") {
+      console.log(success);
+      return;
+    }
+    loadPermissions(currentSponsored); // reload info
+  });
+});
+
+$("#submit-unbannable-permissions").addEventListener("click", () => {
+  const val = $("#unbannable-permissions").value;
+  if (!val) return;
+
+  req.post("/unbanPermission", {
+    banId: val
+  }).then(([data,success]) => {
+    if (success != "success") {
+      console.log(success);
+      return;
+    }
+    loadPermissions(currentSponsored); // reload info
+  });
+});
+
+
+
+$("#unbannable-permissions").addEventListener("change", updateBanType);
+
+function updateBanType() {
+  req.get("/banStatus", {
+    banId: $("#unbannable-permissions").value
+  }).then(([data,success]) => {
+    $("#unban-effects").innerText = data;
+  }).catch(err => { console.log(err); });
 }
