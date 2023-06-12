@@ -28,6 +28,15 @@ function init() { // prevents code from floating in space
       $("#accounts-container").innerText = "Invalid Permissions";
       return;
     }
+
+    function doSelect(newSelect, id) {
+      oldSelect = newSelect;
+      oldSelect.classList.add("selected");
+      const query = new RevQuery({ user: id });
+      $("#view-selected-sponsored").setAttribute("href", `/home?${query.toString()}`);
+
+      loadPermissions(id);
+    }
     
     let oldSelect = null;
     for (const doc of data) {
@@ -37,12 +46,12 @@ function init() { // prevents code from floating in space
       // const query = new RevQuery({ "user": doc._id });
       // row.setAttribute("href", `/home?${query.toString()}`);
       
+      // select first element
+      if (oldSelect == null) { doSelect(row, doc._id); }
+
       row.addEventListener("click", function() {
         if (oldSelect) oldSelect.classList.remove("selected");
-        oldSelect = this;
-        oldSelect.classList.add("selected");
-        
-        loadPermissions(doc._id);
+        doSelect(this, doc._id);
       });
 
       row.innerText = doc._id;
@@ -204,6 +213,7 @@ function loadPermissions(id) {
   $("#removable-permissions").innerHTML = "";
   $("#bannable-permissions").innerHTML = "";
   $("#unbannable-permissions").innerHTML = "";
+  $("#unban-effects").innerHTML = "";
 
   req.get("/profile", { id }).then(([data,success]) => {
     if (success != "success") {

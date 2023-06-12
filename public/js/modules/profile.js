@@ -4,6 +4,7 @@ export class Profile {
     this.name = ("name" in data) ? data.name : "";
     this.biography = ("bio" in data) ? data.bio : "";
     this.awards = ("awards" in data) ? data.awards : [];
+    this.sponsor = ("sponsor" in data) ? data.sponsor : ":root:";
     // this.password = ("pass" in data) ? data.pass : "";
     
     this.friends = {};
@@ -29,6 +30,7 @@ export class Profile {
       if (this.friends.requested.length != 0) obj.friends.requested = this.friends.requested;
     }
     if (this.awards.length != 0) obj.awards = this.awards;
+    if (this.sponsor != ":root:") obj.sponsor = this.sponsor;
     return obj;
   }
 }

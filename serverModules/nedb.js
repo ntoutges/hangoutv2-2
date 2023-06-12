@@ -38,3 +38,28 @@ exports.db = db;
 exports.init = init;
 exports.addCollection = addCollection;
 exports.setAutocompactionInterval = setAutocompactionInterval;
+
+
+function findOne(col, query, callback) { col.findOne(query, callback); }
+function find(col, query, callback) { col.find(query, callback); }
+function findSortSkipLimit(col, query, sort, skip, limit, callback) {
+  col.find(query).sort(sort).skip(skip).limit(limit).exec(callback);
+}
+function update(col, query, update, callback) { col.update(query, update, callback); }
+function insert(col, doc, callback) { col.insert(doc, (err,data) => { callback(err, data._id); }); }
+function remove(col, query, callback) { col.remove(query, {}, callback); }
+
+// exports.findOne = findOne;
+// exports.find = find;
+// exports.findSortSkipLimit = findSortSkipLimit;
+// exports.insert = insert;
+// exports.remove = remove;
+
+exports.api = {
+  findOne,
+  find,
+  findSortSkipLimit,
+  update,
+  insert,
+  remove
+}

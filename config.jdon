@@ -1,0 +1,7 @@
+// note: JDON = [J]ava [D]umb [O]bject [N]otation
+
+// this sets the picture received by a client who has not yet set their profile picture
+default-profile-picture: documents\public\1686524383700-1.jpg
+
+// this is of type ("mongodb" | "nedb")
+database-type: mongodb

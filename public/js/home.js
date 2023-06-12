@@ -3,6 +3,7 @@ import { get, post } from "./modules/easyReq.js";
 import * as modules from "./modules/homeModule.js";
 import { Profile } from "./modules/profile.js"
 import { showError } from "./modules/errorable.js";
+import { RevQuery } from "./modules/query.js";
 
 var profile;
 const parentModule = new modules.ParentModule($("#module-parent-container"));
@@ -15,6 +16,7 @@ var menuFilled = false;
 fillProfile().then(() => {
   fillFriends();
   fillAwards();
+  fillSponsor();
 });
 
 const UPDATE_BIOGRAPHY_TIMEOUT = 1000;
@@ -179,6 +181,21 @@ function fillAwards() {
   // awards.add("test2", "award8!");
   // awards.add("test2", "award8!");
   // awards.set();
+}
+
+function fillSponsor() {
+  $("#display-name-info").innerText = profile.sponsor;
+  $("#display-name-info").classList.remove("loadings");
+  
+  // special styling to root sponsoreds
+  if (profile.sponsor == ":root:") {
+    $("#display-name-info").classList.add("roots");
+  }
+  // default styling
+  else {
+    const query = new RevQuery({ "user": profile.sponsor });
+    $("#display-name-info").setAttribute("href", `/home?${query.toString()}`);
+  }
 }
 
 {

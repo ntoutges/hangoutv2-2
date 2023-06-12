@@ -1,102 +1,111 @@
 const bcrypt = require('bcrypt');
 
 var collection;
+var api;
 const sessions = {};
 
-function init(userCollection) {
+function init(userCollection, dbAPI) {
   collection = userCollection;
+  api = dbAPI;
 }
 
 const DEFAULT_PERMISSIONS = ["login"]
 
 function verifyAccountIdentity(username, password) {
   return new Promise((resolve,reject) => {
-    collection.findOne({
-      "_id": username
-    }, (err, doc) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 114,
-          "type": `Error trying to access user account with id [${username}]`,
-        });
-        return;
-      }
-      if (!doc) {
-        reject({
-          "err": "username",
-          "code": -115,
-          "type": `user with id [${id}] does not exist`,
-        });
-        return;
-      }
-      let passwordHash = doc.pass;
-      bcrypt.compare(password, passwordHash, function(err, matches) {
+    api.findOne(
+      collection, {
+        "_id": username
+      }, (err, doc) => {
         if (err) {
           reject({
             "err": err.toString(),
-            "code": 116,
-            "type": "Error when checking password",
+            "code": 182,
+            "type": `Error trying to access user account with id [${username}]`,
           });
+          return;
         }
-        if (matches) resolve(doc); // password correct
-        else reject({
-          "err": "password",
-          "code": -117,
-          "type": `invalid password`,
+        if (!doc) {
+          reject({
+            "err": "username",
+            "code": -115,
+            "type": `user with id [${username}] does not exist`,
+          });
+          return;
+        }
+        let passwordHash = doc.pass;
+        bcrypt.compare(password, passwordHash, function(err, matches) {
+          if (err) {
+            reject({
+              "err": err.toString(),
+              "code": 116,
+              "type": "Error when checking password",
+            });
+          }
+          if (matches) resolve(doc); // password correct
+          else reject({
+            "err": "password",
+            "code": -117,
+            "type": `invalid password`,
+          });
         });
-      });
-    });
-  })
+      }
+    )
+  });
 }
 
 function createAccount(username, password, sponsor, saltRounds) {
   return new Promise((resolve,reject) => {
-    collection.findOne({
-      "_id": username
-    }, (err,doc) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 118,
-          "type": `Error searching for account with id [${username}]`,
+    api.findOne(
+      collection, {
+        "_id": username
+      }, (err,doc) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 118,
+            "type": `Error searching for account with id [${username}]`,
+          });
+          return;
+        }
+        if (doc) { // user already exists
+          reject({
+            "err": "Document already exists",
+            "code": -119, // non-critical -- username having been taken will not take down the server
+            "type": `document with id [${username}] already exist`,
+          });
+          return;
+        }
+        
+        bcrypt.hash(password, saltRounds).then(hashPassword => {
+          api.insert(
+            collection, {
+              "_id": username,
+              "name": username,
+              "pass": hashPassword,
+              "sponsor": sponsor,
+              "bans": [],
+              "perms": DEFAULT_PERMISSIONS
+            }, (err, docId) => {
+              if (err) { // something bad happened?
+                reject({
+                  "err": err.toString(),
+                  "code": 120,
+                  "type": `Error creating new account`,
+                });
+              }
+              else resolve();
+            }
+          );
+        }).catch(err => {
+          reject({
+            "err": err.toString(),
+            "code": 121,
+            "type": "Error generating password hash",
+          });
         });
-        return;
       }
-      if (doc) { // user already exists
-        reject({
-          "err": "Document already exists",
-          "code": -119, // non-critical -- username having been taken will not take down the server
-          "type": `document with id [${username}] already exist`,
-        });
-        return;
-      }
-      
-      bcrypt.hash(password, saltRounds).then(hashPassword => {
-        collection.insert({
-          "_id": username,
-          "name": username,
-          "pass": hashPassword,
-          "sponsor": sponsor,
-          "perms": DEFAULT_PERMISSIONS
-        }, (err, doc) => {
-          if (err) { // something bad happened?
-            reject({
-              "err": err.toString(),
-              "code": 120,
-              "type": `Error creating new account`,
-            });
-          }
-          else resolve();
-        });
-      }).catch(err => {
-        reject({
-          "err": err.toString(),
-          "code": 121,
-          "type": "Error generating password hash",
-        });
-      });
-    });
+    );
   });
 }
 
@@ -142,27 +151,29 @@ function getSessions(user) {
 
 function getAccount(user) {
   return new Promise((resolve,reject) => {
-    collection.findOne({
-      "_id": user
-    }, (err,doc) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 114,
-          "type": `Error trying to access user account with id [${username}]`,
-        });
-        return;
+    api.findOne(
+      collection, {
+        "_id": user
+      }, (err,doc) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 114,
+            "type": `Error trying to access user account with id [${username}]`,
+          });
+          return;
+        }
+  
+        if (!doc) {
+          reject({
+            "err": "Invalid user id",
+            "code": -180,
+            "type": `unable to find user account with id [${username}]`,
+          });
+        }
+        resolve(doc);
       }
-
-      if (!doc) {
-        reject({
-          "err": "Invalid user id",
-          "code": -180,
-          "type": `unable to find user account with id [${username}]`,
-        });
-      }
-      resolve(doc);
-    });
+    )
   });
 }
 
@@ -178,61 +189,65 @@ function exists(user) {
 
 function addPermission(user, permission) {
   return new Promise((resolve, reject) => {
-    collection.update({
-      "_id": user
-    }, {
-      $addToSet: {
-        "perms": permission
+    api.update(
+      collection, {
+        "_id": user
+      }, {
+        $addToSet: {
+          "perms": permission
+        }
+      }, (err, amountUpdated) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 176,
+            "type": `Error trying to add permissions to user account with id [${username}]`,
+          });
+          return;
+        }
+        if (amountUpdated == 0) {
+          reject({
+            "err": "User account does not exist",
+            "code": -177,
+            "type": `unable to find user with id [${username}] trying to add permissions`,
+          });
+          return;
+        }
+        resolve();
       }
-    }, {}, (err, amountUpdated) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 176,
-          "type": `Error trying to add permissions to user account with id [${username}]`,
-        });
-        return;
-      }
-      if (amountUpdated == 0) {
-        reject({
-          "err": "User account does not exist",
-          "code": -177,
-          "type": `unable to find user with id [${username}] trying to add permissions`,
-        });
-        return;
-      }
-      resolve();
-    })
+    )
   });
 }
 
 function removePermission(user, permission) {
   return new Promise((resolve, reject) => {
-    collection.update({
-      "_id": user
-    }, {
-      $pull: {
-        "perms": permission
+    api.update(
+      collection, {
+        "_id": user
+      }, {
+        $pull: {
+          "perms": permission
+        }
+      }, (err, amountUpdated) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 178,
+            "type": `Error trying to remove permissions of user account with id [${username}]`,
+          });
+          return;
+        }
+        if (amountUpdated == 0) {
+          reject({
+            "err": "User account does not exist",
+            "code": -179,
+            "type": `unable to find user with id [${username}] trying to to remove permissions`,
+          });
+          return;
+        }
+        resolve();
       }
-    }, {}, (err, amountUpdated) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 178,
-          "type": `Error trying to remove permissions of user account with id [${username}]`,
-        });
-        return;
-      }
-      if (amountUpdated == 0) {
-        reject({
-          "err": "User account does not exist",
-          "code": -179,
-          "type": `unable to find user with id [${username}] trying to to remove permissions`,
-        });
-        return;
-      }
-      resolve();
-    });
+    );
   });
 }
 

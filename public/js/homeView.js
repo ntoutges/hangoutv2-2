@@ -3,6 +3,7 @@ import { get, post } from "./modules/easyReq.js";
 import * as modules from "./modules/homeModule.js";
 import { Profile } from "./modules/profile.js"
 import { showError } from "./modules/errorable.js";
+import { RevQuery } from "./modules/query.js";
 
 // change styling to make it more obvious when viewing, versus when in own account
 $("#display-name").classList.add("viewing");
@@ -14,6 +15,7 @@ const friendRequestModule = new modules.FriendsRequestModule("loading");
 
 fillProfile().then(() => {
   fillFriends();
+  fillSponsor();
 });
 
 $("#biography").setAttribute("disabled", "1"); // prevent biography from being changed by viewer
@@ -64,6 +66,21 @@ function fillFriends() {
         })
       })
     });
+  }
+}
+
+function fillSponsor() {
+  $("#display-name-info").innerText = profile.sponsor;
+  $("#display-name-info").classList.remove("loadings");
+  
+  // special styling to root sponsoreds
+  if (profile.sponsor == ":root:") {
+    $("#display-name-info").classList.add("roots");
+  }
+  // default styling
+  else {
+    const query = new RevQuery({ "user": profile.sponsor });
+    $("#display-name-info").setAttribute("href", `/home?${query.toString()}`);
   }
 }
 

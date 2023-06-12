@@ -6,22 +6,22 @@ const formidable = require('formidable');
 const socketio = require('socket.io');
 const jimp = require("jimp");
 const fs = require('fs');
+const JDON = require("./serverModules/jdon.js");
 
 const board = require("./serverModules/board.js");
 
 require('dotenv').config(); // give access to .env file
 
-const dbManager = require("./serverModules/db.js");
+const nedbManager = require("./serverModules/nedb.js");
+const mongodbManager = require("./serverModules/mongodb.js");
 const sockets = require("./serverModules/socketManager.js");
 const friends = require("./serverModules/friends.js");
 const transactions = require("./serverModules/transactions.js");
 const accounts = require("./serverModules/accounts.js");
 const ban = require("./serverModules/ban.js");
 const awards = require("./serverModules/awards.js")
-// const metadata = require("./serverModules/metadata.js");
 const ratings = require("./serverModules/ratings.js");
 const documents = require("./serverModules/documents.js");
-const { resolveSoa } = require('dns');
 
 const app = express();
 const http = require("http").Server(app);
@@ -38,50 +38,59 @@ app.use( session({
 }) );
 
 const SALTING_ROUNDS = 10;
+var config;
 
-dbManager.init(__dirname + "/db").then(() => {
-  board.init(dbManager.db);
+config = JDON.toJSON(
+  fs.readFileSync(
+    __dirname + "/config.jdon",
+    {
+      "encoding": "utf8",
+      "flag": "r"
+    }
+  ),
+);
+
+var dbManagerInit;
+var dbManager;
+if (config["database-type"] == "nedb") {
+  dbManager = nedbManager;
+  dbManagerInit = dbManager.init(__dirname + "/db");
+  dbManager.setAutocompactionInterval(172800000);
+  dbManager.addCollection("accounts");
+  dbManager.addCollection("posts");
+  dbManager.addCollection("channels");
+  dbManager.addCollection("transactions");
+  dbManager.addCollection("awards");
+  dbManager.addCollection("ratings");
+  dbManager.addCollection("documents");
+}
+else if (config["database-type"] == "mongodb") {
+  dbManager = mongodbManager;
+  dbManagerInit = mongodbManager.init(
+    `mongodb+srv://mrcode123:${process.env.mongoPassword}@cluster0.ncf6vii.mongodb.net/?retryWrites=true&w=majority`
+  );
+}
+else {
+  throw new Error("Invalid database-type in config.jdon");
+}
+
+dbManagerInit.then(() => {
+  // board.init(dbManager.db);
   sockets.init(http);
-  friends.init(transactions, dbManager.db.collection("accounts"));
-  transactions.init(dbManager.db.collection("transactions"));
-  accounts.init(dbManager.db.collection("accounts"));
-  ban.init(transactions, accounts, dbManager.db.collection("accounts"));
-  awards.init(dbManager.db.collection("awards"), documents);
-  ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"));
-  documents.init(dbManager.db.collection("documents"), jimp, fs, `${__dirname}/documents`);
-  // metadata.init(dbManager.db.collection("metadata"), dbManager).then(() => {
-    http.listen(process.env.PORT || 52975, function () {
-      getPhotoRollContents();
-      console.log("app started");
-
-      // accounts.addPermission("test", "ban")
-      // accounts.removePermission("user", "ban")
-
-      // awards.createAward(
-      //   "Yet",
-      //   "testers",
-      //   "28pyrlEhMGtpTSFI",
-      //   "testing"
-      // )
-      // documents.createImageDocument(__dirname + "/documents/staging/default.png", "png");
-    });
-  }).catch(err => {
-    console.log(err);
+  friends.init(transactions, dbManager.db.collection("accounts"), dbManager.api);
+  transactions.init(dbManager.db.collection("transactions"), dbManager.api);
+  accounts.init(dbManager.db.collection("accounts"), dbManager.api);
+  ban.init(transactions, accounts, dbManager.db.collection("accounts"), dbManager.api);
+  awards.init(dbManager.db.collection("awards"), documents, dbManager.api);
+  ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"), dbManager.api);
+  documents.init(dbManager.db.collection("documents"), jimp, fs, `${__dirname}/documents`, dbManager.api);
+  http.listen(process.env.PORT || 52975, () => {
+    getPhotoRollContents();
+    console.log("app started");
   });
-
-  dbManager.setAutocompactionInterval(172800000);  
-// }).catch((err) => {
-//   console.log("An error occured starting the server: ", err)
-// })
-
-dbManager.addCollection("accounts");
-dbManager.addCollection("posts");
-dbManager.addCollection("channels");
-dbManager.addCollection("transactions");
-dbManager.addCollection("awards");
-// dbManager.addCollection("metadata");
-dbManager.addCollection("ratings");
-dbManager.addCollection("documents");
+}).catch(err => {
+  console.log(err);
+});
 
 var photoRollContents = [];
 function getPhotoRollContents() {
@@ -151,6 +160,7 @@ function doSignIn(username, password, req,res) {
       res.send(err.type);
     });
   }).catch((err) => {
+    console.log(err)
     if (err.code < 0) res.send("Invalid"); // non-critical error = incorrect credentials
     else res.send(err.type);
   });
@@ -225,16 +235,18 @@ app.get("/sponsored", (req,res) => {
     return;
   }
 
-  dbManager.db.collection("accounts").find({
-    "sponsor": req.session.user
-  }, (err,docs) => {
-    if (err) {
-      res.send("error");
-      console.log(err);
-      return;
+  dbManager.api.find(
+    dbManager.db.collection("accounts"), {
+      "sponsor": req.session.user
+    }, (err,docs) => {
+      if (err) {
+        res.send("error");
+        console.log(err);
+        return;
+      }
+      res.send(docs);
     }
-    res.send(docs);
-  });
+  );
 });
 
 app.post("/addPermission", (req,res) => {
@@ -366,25 +378,28 @@ app.post("/unbanPermission", (req,res) => {
   }
   
   const id = req.body.banId;
-  ban.unban(id).then(() => {
-    res.send("ok");
+  transactions.getTransaction(id).then(doc => { // make sure person doing unbanning is also the one who banned permission initially
+    const banner = doc.parties[0];
+    if (!banner) {
+      res.send("error");
+      console.log("no parties");
+      return;
+    }
+    if (banner != req.session.user) {
+      res.send("invalid permissions");
+      return;
+    }
+
+    ban.unban(id).then(() => {
+      res.send("ok");
+    }).catch(err => {
+      console.log(err);
+      res.send("error");
+    })
   }).catch(err => {
     console.log(err);
-    res.send("error");
+    // res.send("error");
   })
-
-
-  // TODO: use this to check if unban is legal (later)
-  // NOTE: THIS IS VERY IMPORANT TO ACTUALLY DO! -- banId info public
-
-  // transactions.getTransaction(id).then(doc => {
-  //   console.log(doc);
-
-  //   res.send("ok");
-  // }).catch(err => {
-  //   console.log(err);
-  //   res.send("error");
-  // })
 });
 
 
@@ -419,28 +434,30 @@ app.get("/home", (req,res) => {
     return;
   }
 
-  dbManager.db.collection("accounts").findOne({
-    "_id": userId
-  }, (err, doc) => {
-    if (err || !doc) {
-      res.send("An error occured");
+  dbManager.api.findOne(
+    dbManager.db.collection("accounts"), {
+      "_id": userId
+    }, (err,doc) => {
+      if (err || !doc) {
+        res.send("An error occured");
+      }
+      else {
+        sockets.moveToRoom(req.sessionID, `home-${userId}`);
+        res.render("pages/home.ejs", {
+          title: "Home",
+          isLoggedIn: !!req.session.user,
+          isSidebar: true,
+          permissions: req.session.perms ?? {},
+          name: doc.name,
+          bio: doc.bio ?? "",
+          id: req.sessionID,
+          accountId: req.session.user,
+          viewingAccountId: userId,
+          homeJS: (userId == req.session.user) ? "home.js" : "homeView.js"
+        });
+      }
     }
-    else {
-      sockets.moveToRoom(req.sessionID, `home-${userId}`);
-      res.render("pages/home.ejs", {
-        title: "Home",
-        isLoggedIn: !!req.session.user,
-        isSidebar: true,
-        permissions: req.session.perms,
-        name: doc.name,
-        bio: doc.bio ?? "",
-        id: req.sessionID,
-        accountId: req.session.user,
-        viewingAccountId: userId,
-        homeJS: (userId == req.session.user) ? "home.js" : "homeView.js"
-      });
-    }
-  });
+  );
 });
 
 app.post("/updateBio", (req,res) => {
@@ -452,20 +469,22 @@ app.post("/updateBio", (req,res) => {
   const MAX_BIO_LENGTH = 500;
 
   let bio = (req.body.bio ?? "").toString().substring(0, MAX_BIO_LENGTH); // bio must ALWAYS be a string // limit bio to 500 characters
-  dbManager.db.collection("accounts").update({
-    "name": req.session.name
-  }, {
-    $set: {
-      "bio": bio
+  dbManager.api.update(
+    dbManager.db.collection("accounts"), {
+      "name": req.session.name
+    }, {
+      $set: {
+        "bio": bio
+      }
+    }, (err, updatedCount) => {
+      if (err || updatedCount != 1)
+        res.send(false);
+      else {
+        res.send(true);
+        sockets.emitToRoom("updateBio", bio, `home-${req.session.user}`);
+      }
     }
-  }, (err, updatedCount) => {
-    if (err || updatedCount != 1)
-      res.send(false);
-    else {
-      res.send(true);
-      sockets.emitToRoom("updateBio", bio, `home-${req.session.user}`);
-    }
-  });
+  );
 });
 
 app.get("/profile", (req,res) => {
@@ -475,15 +494,17 @@ app.get("/profile", (req,res) => {
     return;
   }
 
-  dbManager.db.collection("accounts").findOne({
-    "_id": id
-  }, (err,data) => {
-    if (err || !data) { res.send({}); }
-    else {
-      data.pass = "";
-      res.send(data);
+  dbManager.api.findOne(
+    dbManager.db.collection("accounts"), {
+      "_id": id
+    }, (err,data) => {
+      if (err || !data) { res.send({}); }
+      else {
+        data.pass = "";
+        res.send(data);
+      }
     }
-  });
+  );
 });
 
 app.post("/requestFriend", (req,res) => {
@@ -590,14 +611,17 @@ app.get("/transactions", (req,res) => {
     return;
   }
   const transactions = req.query.transactions.split(",");
-  dbManager.db.collection("transactions").find({
-    _id: {
-      $in: transactions
+
+  dbManager.api.find(
+    dbManager.db.collection("transactions"), {
+      _id: {
+        $in: transactions
+      }
+    }, (err,docs) => {
+      if (err) res.sendStatus(500);
+      else res.send(docs);
     }
-  }, (err,docs) => {
-    if (err) res.sendStatus(500);
-    else res.send(docs);
-  })
+  );
 });
 
 app.get("/userRelations", (req,res) => {
@@ -625,31 +649,33 @@ app.get("/getProfilePicture", (req,res) => {
     return;
   }
 
-  dbManager.db.collection("accounts").findOne({
-    "_id": user
-  }, (err,document) => {
-    if (err) {
-      console.log(err);
-      res.send("err");
-      return;
-    }
-    if (!document) {
-      res.send("Invalid user");
-      return;
-    }
-
-    if ("picture" in document) {
-      documents.getMainFileURI(document.picture).then((uri) => {
-        res.sendFile(uri);
-      }).catch(err => {
+  dbManager.api.findOne(
+    dbManager.db.collection("accounts"), {
+      "_id": user
+    }, (err,document) => {
+      if (err) {
         console.log(err);
-        res.sendFile(__dirname + "/documents/default.jpg");
-      })
+        res.send("err");
+        return;
+      }
+      if (!document) {
+        res.send("Invalid user");
+        return;
+      }
+      
+      if ("picture" in document) {
+        documents.getMainFileURI(document.picture).then((uri) => {
+          res.sendFile(uri);
+        }).catch(err => {
+          console.log(err);
+          res.sendFile(__dirname + + "/" + config["default-profile-picture"]);
+        })
+      }
+      else {
+        res.sendFile(__dirname + "/" + config["default-profile-picture"]);
+      }
     }
-    else {
-      res.sendFile(__dirname + "/documents/default.jpg");
-    }
-  });
+  );
 });
 
 app.post("/setProfilePicture", (req,res) => {
@@ -675,60 +701,64 @@ app.post("/setProfilePicture", (req,res) => {
 
     }
 
-    const fileType = documents.fileIsValid(files.file.name);
+    const fileType = documents.fileIsValid(files.file);
     if (fileType) {
-      dbManager.db.collection("accounts").findOne({
-        "_id": req.session.user
-      }, async (err,userDoc) => {
-        if (err) {
-          console.log(err);
-          res.send(err.type);
-          return;
-        }
-        if (!userDoc) {
-          res.send("Invalid user");
-          return;
-        }
-
-        // delete if will cause duplicates
-        if (userDoc.picture) {
-          try {
-            await documents.deleteDocument(userDoc.picture);
-          }
-          catch(err) {
+      dbManager.api.findOne(
+        dbManager.db.collection("accounts"), {
+          "_id": req.session.user
+        }, async (err,userDoc) => {
+          if (err) {
             console.log(err);
-            if (err.code > 0) { // codes less than 0 are non-essential errors
-              res.send(err.type);
-              return;
+            res.send(err.type);
+            return;
+          }
+          if (!userDoc) {
+            res.send("Invalid user");
+            return;
+          }
+  
+          // delete if will cause duplicates
+          if (userDoc.picture) {
+            try {
+              await documents.deleteDocument(userDoc.picture);
+            }
+            catch(err) {
+              console.log(err);
+              if (err.code > 0) { // codes less than 0 are non-essential errors
+                res.send(err.type);
+                return;
+              }
             }
           }
-        }
-
-        documents.createImageDocument(files.file.path, fileType).then(doc => {
-          dbManager.db.collection("accounts").update({
-            "_id": req.session.user
-          }, {
-            $set: {
-              "picture": doc._id
-            }
-          }, {}, (err,numUpdated) => {
-            if (err) {
-              console.log(err);
-              res.send(err.type);
-              return;
-            }
-            if (numUpdated == 0) {
-              res.send("Invalid user");
-              return;
-            }
-    
-            res.redirect("/home");
+  
+          documents.createImageDocument(files.file.path, fileType).then(docId => {
+            dbManager.api.update(
+              dbManager.db.collection("accounts"), {
+                "_id": req.session.user
+              }, {
+                $set: {
+                  "picture": docId
+                }
+              }, (err,numUpdated) => {
+                if (err) {
+                  console.log(err);
+                  res.send(err.type);
+                  return;
+                }
+                if (numUpdated == 0) {
+                  res.send("Invalid user");
+                  return;
+                }
+        
+                res.redirect("/home");
+              }
+            );
+          }).catch(err => {
+            console.log(err);
+            res.send(err.type);
           });
-        }).catch(err => {
-          console.log(err);
-          res.send(err.type);
-        });
-      });
+        }
+      );
     }
     else {
       res.send("Invalid file");
@@ -748,7 +778,8 @@ app.post("/selectProfilePicture", (req,res) => {
   }
   const id = req.body.id;
   
-  dbManager.db.collection("accounts").findOne({
+  dbManager.api.findOne(
+    dbManager.db.collection("accounts"), {
       "_id": req.session.user
     }, async (err,userDoc) => {
       if (err) {
@@ -776,25 +807,27 @@ app.post("/selectProfilePicture", (req,res) => {
           }
         }
 
-        dbManager.db.collection("accounts").update({
-          "_id": req.session.user
-        }, {
-          $set: {
-            "picture": id
+        dbManager.api.update(
+          dbManager.db.collection("accounts"), {
+            "_id": req.session.user
+          }, {
+            $set: {
+              "picture": id
+            }
+          }, (err,numUpdated) => {
+            if (err) {
+              console.log(err);
+              res.send(err.type);
+              return;
+            }
+            if (numUpdated == 0) {
+              res.send("Invalid user");
+              return;
+            }
+  
+            res.send("");
           }
-        }, {}, (err,numUpdated) => {
-          if (err) {
-            console.log(err);
-            res.send(err.type);
-            return;
-          }
-          if (numUpdated == 0) {
-            res.send("Invalid user");
-            return;
-          }
-
-          res.send("");
-        });
+        );
       }).catch(err => {
         if (err.code > 0) { // less than 0 is non-critical
           console.log(err);
@@ -811,14 +844,15 @@ app.post("/selectProfilePicture", (req,res) => {
 */
 
 app.get("/posts", (req,res) => {
+  console
   res.render("pages/posts.ejs", {
     title: "Posts",
     isLoggedIn: !!req.session.user,
     isSidebar: true,
-    permissions: req.session.perms,
+    permissions: req.session.perms ?? {},
     user: req.session.user,
     id: req.sessionID,
-    accountId: req.session.user
+    accountId: req.session.user,
   });
   let channel = req.query.channel ?? "main";
   sockets.moveToRoom(req.sessionID, `posts-${channel}`);
@@ -853,48 +887,55 @@ app.post("/createPost", (req,res) => {
     return;
   }
 
-  dbManager.db.collection("channels").findOne({
-    "_id": channel
-  }).exec((err, channelData) => {
-    if (err) { // something bad happened...
-      res.sendStatus(500);
-      return;
-    }
-    if (!channelData) { // the channel does not exist
-      res.sendStatus(404);
-      return;
-    }
-    const document = {
-      "title": title,
-      "content": content,
-      "published": (new Date()).getTime(),
-      "user": req.session.user,
-      "channel": channel
-    }
-  
-    dbManager.db.collection("posts").insert(document, (err, finalDoc) => {
-      if (err) {
+  dbManager.api.findOne(
+    dbManager.db.collection("channels"), {
+      "_id": channel
+    }, (err, channelData) => {
+      if (err) { // something bad happened...
         res.sendStatus(500);
         return;
       }
-      res.send({"msg":"Valid", "body":document});
-      sockets.emitToRoom("newDocs", finalDoc._id, `posts-${channel}`);
-
-      dbManager.db.collection("channels").update({
-        "_id": channel
-      }, {
-        $push: {
-          "posts": finalDoc._id
-        },
-        $set: {
-          "activity": document.published
+      if (!channelData) { // the channel does not exist
+        res.sendStatus(404);
+        return;
+      }
+      const document = {
+        "title": title,
+        "content": content,
+        "published": (new Date()).getTime(),
+        "user": req.session.user,
+        "channel": channel
+      }
+    
+      dbManager.api.insert(
+        dbManager.db.collection("posts"),
+        document,
+        (err, finalDocId) => {
+          if (err) {
+            res.sendStatus(500);
+            return;
+          }
+          res.send({"msg":"Valid", "body":document});
+          sockets.emitToRoom("newDocs", finalDocId, `posts-${channel}`);
+    
+          dbManager.api.update(
+            dbManager.db.collection("channels"), {
+              "_id": channel
+            }, {
+              $push: {
+                "posts": finalDocId
+              },
+              $set: {
+                "activity": document.published
+              }
+            }, (err) => {
+              if (err) console.log("ERROR:", err);
+            }
+          );
         }
-      }, (err) => {
-        if (err) console.log("ERROR:", err);
-      });
-    });
-  });
-
+      );
+    }
+  );
 });
 
 app.get("/getPosts", (req,res) => {
@@ -902,14 +943,17 @@ app.get("/getPosts", (req,res) => {
   const limit = parseInt(req.query.limit || 10);
   const channel = req.query.channel ?? "main";
 
-  dbManager.db.collection("posts").find({
-    channel
-  }).sort({
-    "published": -1
-  }).skip(index).limit(limit).exec((err, docs) => {
-    if (err) res.sendStatus(500);
-    res.send(docs);
-  });
+  dbManager.api.findSortSkipLimit(
+    dbManager.db.collection("posts"),
+    { channel },
+    { "published": -1 },
+    index,
+    limit,
+    (err, docs) => {
+      if (err) res.sendStatus(500);
+      res.send(docs);
+    }
+  );
 });
 
 app.get("/getPost", (req,res) => {
@@ -918,15 +962,18 @@ app.get("/getPost", (req,res) => {
     res.send({});
     return;
   }
-  dbManager.db.collection("posts").findOne({
-    _id: id
-  }).exec((err, data) => {
-    if (err) {
-      res.send({});
-      return;
+
+  dbManager.api.findOne(
+    dbManager.db.collection("posts"), {
+      "_id": id
+    }, (err, data) => {
+      if (err) {
+        res.send({});
+        return;
+      }
+      res.send(data);
     }
-    res.send(data);
-  });
+  );
 });
 
 app.post("/ratePost", (req,res) => {
@@ -1022,9 +1069,9 @@ app.get("/ban", (req,res) => {
     title: "Ban",
     isLoggedIn: true,
     isSidebar: true,
-    permissions: req.session.perms,
+    permissions: req.session.perms ?? {},
     id: req.sessionID,
-    accountId: req.session.user
+    accountId: req.session.user,
   });
 });
 
@@ -1171,22 +1218,27 @@ app.get("/awards", (req,res) => {
 
   const awards = req.query.awards.split(",");
 
-  dbManager.db.collection("awards").find({
-    _id: {
-      $in: awards
+  dbManager.api.find(
+    dbManager.db.collection("awards"), {
+      _id: {
+        $in: awards
+      }
+    }, (err,docs) => {
+      if (err) res.sendStatus(500);
+      else res.send(docs);
     }
-  }, (err,docs) => {
-    if (err) res.sendStatus(500);
-    else res.send(docs);
-  });
+  );
 });
 
 app.get("/allAwards", (req,res) => {
-  dbManager.db.collection("awards").find({}, (err,docs) => {
-    if (err) res.sendStatus(500);
-    else res.send(docs);
-  })
-})
+  dbManager.api.find(
+    dbManager.db.collection("awards"), {},
+    (err,docs) => {
+      if (err) res.sendStatus(500);
+      else res.send(docs);
+    }
+  );
+});
 
 app.post("/giveAward", (req,res) => {
   if (!req.session.user) {
@@ -1206,23 +1258,25 @@ app.post("/giveAward", (req,res) => {
     return;
   }
 
-  dbManager.db.collection("accounts").update({
-    "_id": req.body.user
-  }, {
-    $addToSet: {
-      "awards": req.body.award
+  dbManager.api.update(
+    dbManager.db.collection("accounts"), {
+      "_id": req.body.user
+    }, {
+      $addToSet: {
+        "awards": req.body.award
+      }
+    }, (err, numUpdated) => {
+      if (err) {
+        res.sendStatus(500);
+        return;
+      }
+      if (numUpdated == 0) {
+        res.send("User doesn't exist");
+        return;
+      }
+      res.send("Valid");
     }
-  }, {}, (err, numUpdated) => {
-    if (err) {
-      res.sendStatus(500);
-      return;
-    }
-    if (numUpdated == 0) {
-      res.send("User doesn't exist");
-      return;
-    }
-    res.send("Valid");
-  })
+  );
 });
 
 app.post("/removeAward", (req,res) => {
@@ -1243,23 +1297,25 @@ app.post("/removeAward", (req,res) => {
     return;
   }
 
-  dbManager.db.collection("accounts").update({
-    "_id": req.body.user
-  }, {
-    $pull: {
-      "awards": req.body.award
+  dbManager.api.update(
+    dbManager.db.collection("accounts"), {
+      "_id": req.body.user
+    }, {
+      $pull: {
+        "awards": req.body.award
+      }
+    }, (err, numUpdated) => {
+      if (err) {
+        res.sendStatus(500);
+        return;
+      }
+      if (numUpdated == 0) {
+        res.send("User doesn't exist");
+        return;
+      }
+      res.send("Valid");
     }
-  }, {}, (err, numUpdated) => {
-    if (err) {
-      res.sendStatus(500);
-      return;
-    }
-    if (numUpdated == 0) {
-      res.send("User doesn't exist");
-      return;
-    }
-    res.send("Valid");
-  })
+  );
 });
 
 /* _______________

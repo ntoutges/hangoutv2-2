@@ -1,9 +1,11 @@
 var transactions = null;
 var collection = null;
+var api;
 
-function init(transactionsLib, friendsCollection) {
+function init(transactionsLib, friendsCollection, dbAPI) {
   transactions = transactionsLib;
   collection = friendsCollection;
+  api = dbAPI;
 }
 
 function accept(transactionId, userId) {
@@ -53,62 +55,66 @@ function remove(userId, friendId) {
   return new Promise((resolve,reject) => {
     let activeProcesses = 2;
     let didError = false;
-    collection.update({
-      "_id": userId
-    }, {
-      $pull: {
-        "friends.confirmed": friendId
-      }
-    }, (err, numUpdated) => {
-      if (err || numUpdated == 0) {
-        if (didError) return; // don't call reject more than once
-        if (err) {
-          reject({
-            "err": err.toString(),
-            "code": 137,
-            "type": `Error updating user [${userId}]`
-          });
+    api.update(
+      collection, {
+        "_id": userId
+      }, {
+        $pull: {
+          "friends.confirmed": friendId
         }
-        else { // numUpdated = 0
-          reject({
-            "err": "Invalid user id",
-            "code": -138,
-            "type": `Error updating user [${userId}]`
-          });
+      }, (err, numUpdated) => {
+        if (err || numUpdated == 0) {
+          if (didError) return; // don't call reject more than once
+          if (err) {
+            reject({
+              "err": err.toString(),
+              "code": 137,
+              "type": `Error updating user [${userId}]`
+            });
+          }
+          else { // numUpdated = 0
+            reject({
+              "err": "Invalid user id",
+              "code": -138,
+              "type": `Error updating user [${userId}]`
+            });
+          }
+          didError = true;
         }
-        didError = true;
+        activeProcesses--;
+        if (activeProcesses == 0) resolve();
       }
-      activeProcesses--;
-      if (activeProcesses == 0) resolve();
-    });
-    collection.update({
-      "_id": friendId
-    }, {
-      $pull: {
-        "friends.confirmed": userId
-      }
-    }, (err, numUpdated) => {
-      if (err || numUpdated == 0) {
-        if (didError) return; // don't call reject more than once
-        if (err) {
-          reject({
-            "err": err.toString(),
-            "code": 139,
-            "type": `Error updating user [${friendId}]`
-          });
+    );
+    api.update(
+      collection, {
+        "_id": friendId
+      }, {
+        $pull: {
+          "friends.confirmed": userId
         }
-        else { // numUpdated = 0
-          reject({
-            "err": "Invalid user id",
-            "code": -140,
-            "type": `Error updating user [${friendId}]`
-          });
+      }, (err, numUpdated) => {
+        if (err || numUpdated == 0) {
+          if (didError) return; // don't call reject more than once
+          if (err) {
+            reject({
+              "err": err.toString(),
+              "code": 139,
+              "type": `Error updating user [${friendId}]`
+            });
+          }
+          else { // numUpdated = 0
+            reject({
+              "err": "Invalid user id",
+              "code": -140,
+              "type": `Error updating user [${friendId}]`
+            });
+          }
+          didError = true;
         }
-        didError = true;
+        activeProcesses--;
+        if (activeProcesses == 0) resolve();
       }
-      activeProcesses--;
-      if (activeProcesses == 0) resolve();
-    });
+    );
   })
 }
 
@@ -209,54 +215,60 @@ function updateFriends(transactionId, userId, updateDataConstruction, resolveTra
       
       let didError = false;
       let activeProcesses = 2 + resolveTransaction;
-      collection.update({
-        "_id": userId
-      }, userUserInstruction, (err, numUpdated) => {
-        if (err || numUpdated == 0) {
-          if (didError) return; // don't call reject more than once
-          if (err) {
-            reject({
-              "err": err.toString(),
-              "code": 143,
-              "type": `Error trying to update user id [${userId}]`
-            });
+      
+      api.update(
+        collection, {
+          "_id": userId
+        }, userUserInstruction, (err, numUpdated) => {
+          if (err || numUpdated == 0) {
+            if (didError) return; // don't call reject more than once
+            if (err) {
+              reject({
+                "err": err.toString(),
+                "code": 143,
+                "type": `Error trying to update user id [${userId}]`
+              });
+            }
+            else { // numUpdated = 0
+              reject({
+                "err": "Invalid User Id",
+                "code": -144,
+                "type": `unable to update user [${id}]`
+              });
+            }
+            didError = true;
           }
-          else { // numUpdated = 0
-            reject({
-              "err": "Invalid User Id",
-              "code": -144,
-              "type": `unable to update user [${id}]`
-            });
-          }
-          didError = true;
+          activeProcesses--;
+          if (activeProcesses == 0) resolve(friendId);
         }
-        activeProcesses--;
-        if (activeProcesses == 0) resolve(friendId);
-      });
-      collection.update({
-        "_id": friendId
-      }, friendUserInstruction, (err, numUpdated) => {
-        if (err || numUpdated == 0) {
-          if (didError) return; // don't call reject more than once
-          if (err) {
-            reject({
-              "err": err.toString(),
-              "code": 145,
-              "type": `Error trying to update user id [${friendId}]`
-            });
+      );
+      api.update(
+        collection, {
+          "_id": friendId
+        }, friendUserInstruction, (err, numUpdated) => {
+          if (err || numUpdated == 0) {
+            if (didError) return; // don't call reject more than once
+            if (err) {
+              reject({
+                "err": err.toString(),
+                "code": 145,
+                "type": `Error trying to update user id [${friendId}]`
+              });
+            }
+            else { // numUpdated = 0
+              reject({
+                "err": "Invalid User Id",
+                "code": -146,
+                "type": `unable to update user [${friendId}]`
+              });
+            }
+            didError = true;
           }
-          else { // numUpdated = 0
-            reject({
-              "err": "Invalid User Id",
-              "code": -146,
-              "type": `unable to update user [${friendId}]`
-            });
-          }
-          didError = true;
+          activeProcesses--;
+          if (activeProcesses == 0) resolve(friendId);
         }
-        activeProcesses--;
-        if (activeProcesses == 0) resolve(friendId);
-      });
+      );
+      
       if (resolveTransaction) {
         transactions.resolveTransaction(transactionId).then(() => {
           activeProcesses--;
@@ -268,6 +280,7 @@ function updateFriends(transactionId, userId, updateDataConstruction, resolveTra
 }
 
 function replaceInstructions(str, data) {
+  if (typeof str != "string") return str; // [str] is an ObjectId, so don't try to modify it
   for (let i in data) {
     str = str.replace(new RegExp(i, "g"), data[i]);
   }
@@ -277,25 +290,27 @@ function replaceInstructions(str, data) {
 // can return "friends" | "requested" | "unrelated"
 function getFriendStatus(userA, userB) {
   return new Promise((res,rej) => {
-    collection.findOne({
-      "_id": userA
-    }, (err,userData) => {
-      if (err) rej(err);
-      else if (!userData) rej("Invalid user id");
-      else if ("friends" in userData && "confirmed" in userData.friends && userData.friends.confirmed.includes(userB)) res("friends");
-      else if ("friends" in userData && "requested" in userData.friends) { // userData.friends.requested => transactionIds
-        transactions.getTransactions(userData.friends.requested).then((transactions) => {
-          for (const transaction of transactions) {
-            if (transaction.parties.includes(userB)) { // request has been sent, but not yet confirmed
-              res("requested");
-              return;
+    api.findOne(
+      collection, {
+        "_id": userA
+      }, (err,userData) => {
+        if (err) rej(err);
+        else if (!userData) rej("Invalid user id");
+        else if ("friends" in userData && "confirmed" in userData.friends && userData.friends.confirmed.includes(userB)) res("friends");
+        else if ("friends" in userData && "requested" in userData.friends) { // userData.friends.requested => transactionIds
+          transactions.getTransactions(userData.friends.requested).then((transactions) => {
+            for (const transaction of transactions) {
+              if (transaction.parties.includes(userB)) { // request has been sent, but not yet confirmed
+                res("requested");
+                return;
+              }
             }
-          }
-          res("unrelated");
-        }).catch(rej);
+            res("unrelated");
+          }).catch(rej);
+        }
+        else res("unrelated");
       }
-      else res("unrelated");
-    });
+    );
   });
 }
 

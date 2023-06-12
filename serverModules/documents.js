@@ -4,13 +4,14 @@ var collection;
 var jimp;
 var fs;
 var saveFolderLocation;
+var api;
 
-
-exports.init = function init(documentsCollection, jimpLib, fsLib, saveFolder) {
+exports.init = function init(documentsCollection, jimpLib, fsLib, saveFolder, dbAPI) {
   collection = documentsCollection;
   jimp = jimpLib;
   fs = fsLib;
   saveFolderLocation = saveFolder;
+  api = dbAPI;
 }
 
 function createDocument(oldpath, filetype) {
@@ -27,29 +28,32 @@ function createDocument(oldpath, filetype) {
       "alts": [] // to be used in extensions, such as pictures with different LODs
     };
 
-    collection.insert(docData, (err, newDoc) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 100,
-          "type": "Error creating new doc-document"
-        });
-        return;
-      }
-
-      fs.rename(oldpath, newpath, err => {
+    api.insert(
+      collection,
+      docData, (err, newDocId) => {
         if (err) {
           reject({
             "err": err.toString(),
-            "code": 101,
-            "type": "Error moving file from staging to public file"
+            "code": 100,
+            "type": "Error creating new doc-document"
           });
           return;
         }
-
-        resolve(newDoc);
-      });
-    });
+  
+        fs.rename(oldpath, newpath, err => {
+          if (err) {
+            reject({
+              "err": err.toString(),
+              "code": 101,
+              "type": "Error moving file from staging to public file"
+            });
+            return;
+          }
+  
+          resolve(newDocId);
+        });
+      }
+    );
   });
 }
 
@@ -68,7 +72,7 @@ function createImageDocument(oldpath, filetype, maxW=256, maxH=256) {
 
       const newoldpath = `${saveFolderLocation}/staging/${genId("docs")}.${filetype}`;
       img.resize(width, height).writeAsync(newoldpath).then(() => { // create new temp file storing resized image
-        createDocument(newoldpath, filetype).then((newDoc) => {
+        createDocument(newoldpath, filetype).then((newDocId) => {
           
           fs.unlink(oldpath, (err) => { // delete original temp file
             if (err) {
@@ -79,7 +83,7 @@ function createImageDocument(oldpath, filetype, maxW=256, maxH=256) {
               });
               return;
             }
-            resolve(newDoc);
+            resolve(newDocId);
           });
 
         }).catch(err => { reject(err); }); // propogate
@@ -102,181 +106,193 @@ function createImageDocument(oldpath, filetype, maxW=256, maxH=256) {
 
 function useDocument(id) {
   return new Promise((resolve, reject) => {
-    collection.update({
-      "_id": id
-    }, {
-      $inc: {
-        "uses": 1
+    api.update(
+      collection, {
+        "_id": id
+      }, {
+        $inc: {
+          "uses": 1
+        }
+      }, (err, updatedCount) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 172,
+            "type": "Error updating use counter"
+          });
+          return;
+        }
+  
+        if (updatedCount == 0) {
+          reject({
+            "err": "Document does not exist",
+            "code": -172,
+            "type": `document with id [${id}] does not exist`
+          });
+          return;
+        }
+  
+        resolve();
       }
-    }, {}, (err, updatedCount) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 172,
-          "type": "Error updating use counter"
-        });
-        return;
-      }
-
-      if (updatedCount == 0) {
-        reject({
-          "err": "Document does not exist",
-          "code": -172,
-          "type": `document with id [${id}] does not exist`
-        });
-        return;
-      }
-
-      resolve();
-    });
+    );
   });
 }
 
 function deleteDocument(id) {
   return new Promise((resolve, reject) => {
-    collection.findOne({
-      "_id": id
-    }, (err, doc) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 105, // negative error code indicates non-blocking err
-          "type": `Error trying to read document _id: [${id}]`,
-        });
-        return;
+    api.findOne(
+      collection, {
+        "_id": id
+      }, (err, doc) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 105, // negative error code indicates non-blocking err
+            "type": `Error trying to read document _id: [${id}]`,
+          });
+          return;
+        }
+        if (!doc) {
+          reject({
+            "err": "Document does not exist",
+            "code": -106, // negative error code indicates non-blocking err
+            "type": `document with _id [${id}] does not exist`,
+          });
+          return;
+        }
+  
+        const WHEN_FINISHED = 2;
+        let finishedCounter = 0;
+  
+        if (doc.uses == 1) {
+          api.remove(
+            collection, {
+              "_id": id
+            }, (err, numRemoved) => {
+              if (err) {
+                reject({
+                  "err": err.toString(),
+                  "code": 107,
+                  "type": `Error trying to delete document _id: [${id}]`,
+                });
+                return;
+              }
+              if (numRemoved != 1) {
+                reject({
+                  "err": "Failed to remove document",
+                  "code": -108,
+                  "type": `no documents exist with _id [${id}]`,
+                });
+                return;
+              }
+    
+              if (++finishedCounter == WHEN_FINISHED) {
+                resolve();
+              }
+            }
+          );
+  
+          fs.unlink(doc.main.path, (err) => {
+            if (err) {
+              reject({
+                "err": err.toString(),
+                "code": 109,
+                "type": `Error deleting ${doc.main.path}`,
+              });
+              return;
+            }
+  
+            if (++finishedCounter == WHEN_FINISHED) {
+              resolve();
+            }
+          });
+        }
+        else {
+          api.update(
+            collection, {
+              "_id": id
+            }, {
+              $set: {
+                "uses": doc.uses - 1
+              }
+            }, (err,updatedCount) => {
+              if (err) {
+                reject({
+                  "err": err.toString(),
+                  "code": 110,
+                  "type": `Error updating [uses] on document with _id: [${id}]`,
+                });
+                return;
+              }
+              if (updatedCount != 1) {
+                reject({
+                  "err": "Unable to update document",
+                  "code": -111,
+                  "type": `no documents exist with _id: [${id}]`,
+                });
+                return;
+              }
+              resolve(doc.uses-1);
+            }
+          );
+        }
       }
-      if (!doc) {
-        reject({
-          "err": "Document does not exist",
-          "code": -106, // negative error code indicates non-blocking err
-          "type": `document with _id [${id}] does not exist`,
-        });
-        return;
-      }
-
-      const WHEN_FINISHED = 2;
-      let finishedCounter = 0;
-
-      if (doc.uses == 1) {
-        collection.remove({
-          "_id": id
-        }, {}, (err, numRemoved) => {
-          if (err) {
-            reject({
-              "err": err.toString(),
-              "code": 107,
-              "type": `Error trying to delete document _id: [${id}]`,
-            });
-            return;
-          }
-          if (numRemoved != 1) {
-            reject({
-              "err": "Failed to remove document",
-              "code": -108,
-              "type": `no documents exist with _id [${id}]`,
-            });
-            return;
-          }
-
-          if (++finishedCounter == WHEN_FINISHED) {
-            resolve();
-          }
-        });
-
-        fs.unlink(doc.main.path, (err) => {
-          if (err) {
-            reject({
-              "err": err.toString(),
-              "code": 109,
-              "type": `Error deleting ${doc.main.path}`,
-            });
-            return;
-          }
-
-          if (++finishedCounter == WHEN_FINISHED) {
-            resolve();
-          }
-        });
-      }
-      else {
-        collection.update({
-          "_id": id
-        }, {
-          $set: {
-            "uses": doc.uses - 1
-          }
-        }, {}, (err,updatedCount) => {
-          if (err) {
-            reject({
-              "err": err.toString(),
-              "code": 110,
-              "type": `Error updating [uses] on document with _id: [${id}]`,
-            });
-            return;
-          }
-          if (updatedCount != 1) {
-            reject({
-              "err": "Unable to update document",
-              "code": -111,
-              "type": `no documents exist with _id: [${id}]`,
-            });
-            return;
-          }
-          resolve(doc.uses-1);
-        });
-      }
-    });
+    )
   });
 }
 
 function getMainFileURI(id) {
   return new Promise((resolve, reject) => {
-    collection.findOne({
-      "_id": id
-    }, (err, doc) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 112,
-          "type": `Error finding document with id [${id}]`,
-        });
-        return;
+    api.findOne(
+      collection, {
+        "_id": id
+      }, (err, doc) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 112,
+            "type": `Error finding document with id [${id}]`,
+          });
+          return;
+        }
+        if (!doc) {
+          reject({
+            "err": "Document does not exist",
+            "code": -113,
+            "type": `document with id [${id}] does not exist`,
+          });
+          return;
+        }
+  
+        resolve(doc.main.path);
       }
-      if (!doc) {
-        reject({
-          "err": "Document does not exist",
-          "code": -113,
-          "type": `document with id [${id}] does not exist`,
-        });
-        return;
-      }
-
-      resolve(doc.main.path);
-    });
+    );
   });
 }
 
 function getMainFileURIs(ids) {
   return new Promise((resolve, reject) => {
-    collection.find({
-      "_id": {
-        $in: ids
+    api.find(
+      collection, {
+        "_id": {
+          $in: ids
+        }
+      }, (err, docs) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 170,
+            "type": "Error finding documents",
+          });
+          return;
+        }
+  
+        const data = {};
+        for (const doc of docs) { data[doc._id] = doc.main.path; }
+  
+        resolve(data);
       }
-    }, (err, docs) => {
-      if (err) {
-        reject({
-          "err": err.toString(),
-          "code": 170,
-          "type": "Error finding documents",
-        });
-        return;
-      }
-
-      const data = {};
-      for (const doc of docs) { data[doc._id] = doc.main.path; }
-
-      resolve(data);
-    });
+    );
   });
 }
 
@@ -285,8 +301,8 @@ function fileIsValid(file) {
   return fileNameIsValid(file.name);
 }
 
-function fileNameIsValid(fileName) {
-  const type = fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase();
+function fileNameIsValid(filename) {
+  const type = filename.substring(filename.lastIndexOf(".")+1).toLowerCase();
   const validTypes = ["jpg", "jpeg", "png"];
 
   const typeIndex = validTypes.indexOf(type);

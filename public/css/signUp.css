@@ -131,8 +131,16 @@
   border: none;
 }
 
-
 #unban-effects {
   color: green;
   text-decoration: underline;
+}
+
+#view-selected-sponsored {
+  position: absolute;
+  bottom: 0px;
+
+  display: block;
+  width: 100%;
+  text-align: center;
 }
