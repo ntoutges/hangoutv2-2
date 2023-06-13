@@ -3,8 +3,15 @@
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/modules.css">
 <script>
-  const viewingAccountId = "<%=viewingAccountId%>"
+  const viewingAccountId = "<%=viewingAccountId%>";
+  var canUploadImage = false;
 </script>
+
+<% if ("upload" in permissions) { %>
+  <script>
+    var canUploadImage = true;
+  </script>
+<% } %>
 
 <%- contentFor("main") %>
 <div id="home-flexbox">

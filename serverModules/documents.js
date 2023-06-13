@@ -4,13 +4,15 @@ var collection;
 var jimp;
 var fs;
 var saveFolderLocation;
+var dirNameLocation
 var api;
 
-exports.init = function init(documentsCollection, jimpLib, fsLib, saveFolder, dbAPI) {
+exports.init = function init(documentsCollection, jimpLib, fsLib, dirname, saveFolder, dbAPI) {
   collection = documentsCollection;
   jimp = jimpLib;
   fs = fsLib;
   saveFolderLocation = saveFolder;
+  dirNameLocation = dirname;
   api = dbAPI;
 }
 
@@ -264,7 +266,7 @@ function getMainFileURI(id) {
           return;
         }
   
-        resolve(doc.main.path);
+        resolve(dirNameLocation + "/" + doc.main.path);
       }
     );
   });
@@ -288,7 +290,7 @@ function getMainFileURIs(ids) {
         }
   
         const data = {};
-        for (const doc of docs) { data[doc._id] = doc.main.path; }
+        for (const doc of docs) { data[doc._id] = dirNameLocation + "/" + doc.main.path; }
   
         resolve(data);
       }

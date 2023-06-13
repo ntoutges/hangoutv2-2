@@ -266,16 +266,18 @@ function selectProfile(e, id) {
 
 function constructProfileMenuItems(ids) {
   let items = [];
-  const upload = document.createElement("div");
-  upload.classList.add("rotary-menu-items");
-  upload.classList.add("upload-containers");
-  upload.innerHTML = `<form action="/setProfilePicture" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" id="upload-input">
-    <input type="submit" id="upload-submit" accept=".png, .jpeg, .jpg">
-  </form>`
-  upload.setAttribute("data-full-click", "0");
 
-  items.push(upload);
+  if (canUploadImage) {
+    const upload = document.createElement("div");
+    upload.classList.add("rotary-menu-items");
+    upload.classList.add("upload-containers");
+    upload.innerHTML = `<form action="/setProfilePicture" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" id="upload-input">
+      <input type="submit" id="upload-submit" accept=".png, .jpeg, .jpg">
+    </form>`
+    upload.setAttribute("data-full-click", "0");
+    items.push(upload);
+  }
 
   for (let id of ids) {
     const img = document.createElement("img");
