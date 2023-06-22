@@ -85,19 +85,71 @@ dbManagerInit.then(() => {
   ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"), dbManager.api);
   documents.init(dbManager.db.collection("documents"), jimp, fs, __dirname, "documents", dbManager.api);
   http.listen(process.env.PORT || 52975, () => {
-    getPhotoRollContents();
+    // getPhotoRollContents();
+    constructPhotoRollSequence();
     console.log("app started");
+
+    
+    // documents.createImageDocument(__dirname + "/documents/staging/pi_pie_8.jpg", "jpg", 1080, 1920).then().catch(err => {
+    //   console.log(err);
+    // });
   });
 }).catch(err => {
   console.log(err);
 });
 
+// function getPhotoRollContents() {
+  //   fs.readdir(__dirname + "/photo-roll/", {}, (err, files) => {
+    //     if (err) { console.log(err); }
+    //     else { photoRollContents = files; }
+    //   });
+// }
+
 var photoRollContents = [];
-function getPhotoRollContents() {
-  fs.readdir(__dirname + "/photo-roll/", {}, (err, files) => {
-    if (err) { console.log(err); }
-    else { photoRollContents = files; }
-  });
+function constructPhotoRollSequence() {
+  let rawSequence = [];
+  try {
+    const roll = fs.readFileSync(__dirname + "/public/data/roll.json", {
+      "encoding": "utf8",
+      "flag": "r"
+    });
+    rawSequence = JSON.parse(roll).rawSequence ?? [];
+  }
+  catch (err) {
+    console.log(err);
+    console.log("Stage 1 - Could not construct PhotoRollSequence");
+    return;
+  }
+  documents.getMainFileURIs( rawSequence ).then(docs => {
+    const sequence = [];
+    for (let id in docs) {
+      let relativeURI = docs[id];
+      let lastSplitter = Math.max(relativeURI.lastIndexOf("/"), relativeURI.lastIndexOf("\\"));
+      if (lastSplitter != -1) relativeURI = relativeURI.substring(lastSplitter+1);
+      sequence.push(relativeURI);
+    }
+
+    const fileData = {
+      rawSequence,
+      sequence
+    };
+    try {
+      fs.writeFileSync(__dirname + "/public/data/roll.json", JSON.stringify(fileData), {
+        encoding: "UTF8"
+      });
+    }
+    catch (err) {
+      console.log(err);
+      console.log("Stage 3 - Could not construct PhotoRollSequence");
+      return;
+    }
+    console.log("Successfully constructed photo roll sequence");
+    // photoRollContents = sequence;
+    photoRollContents = rawSequence;
+  }).catch(err => {
+    console.log(err);
+    console.log("Stage 2 - Could not construct PhotoRollSequence");
+  })
 }
 
 /* __________________
@@ -118,7 +170,7 @@ app.get("/", (req,res) => {
     isLoggedIn: false,
     isSidebar: false,
     permissions: req.session.perms,
-    promoPhotoSrc: firstPhoto,
+    promoPhotoId: firstPhoto,
     id: null,
     accountId: null
   });
@@ -698,7 +750,9 @@ app.post("/setProfilePicture", (req,res) => {
     }
 
     if (!files.file) {
-
+      console.log("no file"); // do something here
+      res.send("Must upload a file");
+      return;
     }
 
     const fileType = documents.fileIsValid(files.file);
@@ -709,6 +763,7 @@ app.post("/setProfilePicture", (req,res) => {
         }, async (err,userDoc) => {
           if (err) {
             console.log(err);
+            console.log(err)
             res.send(err.type);
             return;
           }
@@ -731,6 +786,7 @@ app.post("/setProfilePicture", (req,res) => {
             }
           }
   
+          console.log(files.file.path)
           documents.createImageDocument(files.file.path, fileType).then(docId => {
             dbManager.api.update(
               dbManager.db.collection("accounts"), {
@@ -1042,9 +1098,9 @@ app.get("/ratedPosts", (req,res) => {
   \_____________________/
 */
 
-app.get("/getPhotoRoll", (req,res) => {
-  res.send(photoRollContents);
-});
+// app.get("/getPhotoRoll", (req,res) => {
+//   res.send(photoRollContents);
+// });
 
 app.get("/getPhoto/*", (req,res) => {
   let pathname = req._parsedOriginalUrl.pathname;

@@ -4,4 +4,4 @@
 default-profile-picture: documents\public\1686524383700-1.jpg
 
 // this is of type ("mongodb" | "nedb")
-database-type: mongodb
+database-type: nedb

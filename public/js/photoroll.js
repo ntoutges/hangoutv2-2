@@ -1,5 +1,8 @@
 const $ = document.querySelector.bind(document);
 import * as req from "./modules/easyReq.js";
+import { Query, RevQuery } from "./modules/query.js";
+
+var sequence = [];
 
 const INTERVAL_DURATION = 8000; // measured in ms
 const TRANSITION_DURATION = 3500; // measured in ms
@@ -9,28 +12,51 @@ var pictureKey = [];
 var lastPictures = [];
 var MIN_REPEAT_CYCLES = 0;
 
-function initPhotoRoll() {
-  req.get("/getPhotoRoll", {}).then(([data, success]) => {
-    if (success == success)
-    pictureKey = data;
-    MIN_REPEAT_CYCLES = Math.floor(pictureKey.length / 2);
-    
-    try { // prevent error in this inconsequential code from stopping entire photo roll
-      const initialSrc = /[^/]+$/.exec($("#photo-a").getAttribute("src"))[0]; // src that loads in with EJS
-      const initialIndex = pictureKey.indexOf(initialSrc);
-      if (initialSrc != -1) lastPictures.push(initialIndex);
-    }
-    catch(err) { console.log(err); }
-    
-    
-    preloadNextSlide();
+async function initPhotoRoll() {
+  const response = await fetch("../data/roll.json");
+  pictureKey = (await response.json()).rawSequence;
 
-    if (pictureKey.length > 1) // don't swap if only one (or zero) photo(s)
-      setTimeout(() => {
-        swapSlides();
-        setInterval(swapSlides, INTERVAL_DURATION);
-      }, INTERVAL_DURATION - TRANSITION_DURATION);
-  });
+  MIN_REPEAT_CYCLES = Math.floor(pictureKey.length / 2);
+
+  try { // prevent error in this inconsequential code from stopping entire photo roll
+    const initialSrc = /\?.*/.exec($("#photo-a").getAttribute("src"))[0]; // src that loads in with EJS
+    const initialId = (new Query(initialSrc)).props.id;
+    const initialIndex = pictureKey.indexOf(initialId);
+    if (initialSrc != -1) lastPictures.push(initialIndex);
+  }
+  catch(err) { console.log(err); }
+  
+  
+  preloadNextSlide();
+
+  if (pictureKey.length > 1) { // don't swap if only one (or zero) photo(s)
+    setTimeout(() => {
+      swapSlides();
+      setInterval(swapSlides, INTERVAL_DURATION);
+    }, INTERVAL_DURATION - TRANSITION_DURATION);
+  }
+
+  // req.get("/getPhotoRoll", {}).then(([data, success]) => {
+  //   if (success == success)
+  //   pictureKey = data;
+  //   MIN_REPEAT_CYCLES = Math.floor(pictureKey.length / 2);
+    
+  //   try { // prevent error in this inconsequential code from stopping entire photo roll
+  //     const initialSrc = /[^/]+$/.exec($("#photo-a").getAttribute("src"))[0]; // src that loads in with EJS
+  //     const initialIndex = pictureKey.indexOf(initialSrc);
+  //     if (initialSrc != -1) lastPictures.push(initialIndex);
+  //   }
+  //   catch(err) { console.log(err); }
+    
+    
+  //   preloadNextSlide();
+
+  //   if (pictureKey.length > 1) // don't swap if only one (or zero) photo(s)
+  //     setTimeout(() => {
+  //       swapSlides();
+  //       setInterval(swapSlides, INTERVAL_DURATION);
+  //     }, INTERVAL_DURATION - TRANSITION_DURATION);
+  // });
 }
 initPhotoRoll();
 
@@ -61,7 +87,7 @@ function preloadNextSlide() {
   pictureCounter = getNextPicture();
   let src = pictureKey[pictureCounter];
   let newPhoto = document.createElement("img");
-  newPhoto.setAttribute("src", `/getPhoto/${src}`);
+  newPhoto.setAttribute("src", `/document?id=${src}`);
   newPhoto.setAttribute("id", "photo-b");
   newPhoto.setAttribute("draggable", "false");
   newPhoto.classList.add("photos");

@@ -13,6 +13,7 @@ exports.init = function(uri) {
 
   return new Promise(async (resolve,reject) => {
     try {
+      console.log("Connecting to Mongo...")
       await client.connect();
       const db = await client.db("HangoutV2-2");
       exports.db = db;
