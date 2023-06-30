@@ -41,6 +41,12 @@ function find(col, query, callback) {
     .catch((err) => { callback(err, null); });
 }
 
+function findWProjection(col, query, projection, callback) {
+  col.find(query, projection, callback).toArray()
+    .then(data => { callback(null, data); })
+    .catch(err => { callback(err, null); });
+}
+
 function findSortSkipLimit(col, query, sort, skip, limit, callback) {
   col.find(query).sort(sort).skip(skip).limit(limit).toArray()
     .then((data) => { callback(null, data); })
@@ -96,6 +102,7 @@ function generateId(length=16) {
 exports.api = {
   findOne,
   find,
+  findWProjection,
   findSortSkipLimit,
   update,
   insert,

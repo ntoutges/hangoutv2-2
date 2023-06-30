@@ -24,6 +24,7 @@ const ban = require("./serverModules/ban.js");
 const awards = require("./serverModules/awards.js")
 const ratings = require("./serverModules/ratings.js");
 const documents = require("./serverModules/documents.js");
+const sync = require("./serverModules/sync.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -82,20 +83,20 @@ dbManagerInit.then(() => {
   sockets.init(http);
   friends.init(transactions, dbManager.db.collection("accounts"), dbManager.api);
   transactions.init(dbManager.db.collection("transactions"), dbManager.api);
-  accounts.init(dbManager.db.collection("accounts"), dbManager.api);
+  accounts.init(dbManager.db.collection("accounts"), dbManager.api, config);
   ban.init(transactions, accounts, dbManager.db.collection("accounts"), dbManager.api);
   awards.init(dbManager.db.collection("awards"), documents, dbManager.api);
   ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"), dbManager.api);
   documents.init(dbManager.db.collection("documents"), jimp, fs, __dirname, "documents", dbManager.api);
+  sync.init(":root:", accounts, config);
   http.listen(process.env.PORT || 52975, () => {
     // getPhotoRollContents();
     constructPhotoRollSequence();
     console.log("app started");
 
-    
-    // documents.createImageDocument(__dirname + "/documents/staging/pi_pie_8.jpg", "jpg", 1080, 1920).then().catch(err => {
-    //   console.log(err);
-    // });
+
+    // run once every day
+    // sync.doContinuousSync(1000 * 60 * 60 * 24); // commented out to stop errors from being offline
   });
 
   initFunctions({
@@ -110,7 +111,8 @@ dbManagerInit.then(() => {
     documents,
     dbManager,
     config,
-    formidable
+    formidable,
+    "dirname": __dirname
   });
 
 }).catch(err => {

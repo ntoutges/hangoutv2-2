@@ -3,7 +3,16 @@
 salting-rounds: 10 // basic security stuff
 
 // this sets the picture received by a client who has not yet set their profile picture
-default-profile-picture: documents\public\1686524383700-1.jpg
+default-profile-picture: documents/public/1685079322620-1.png
 
 // this is of type ("mongodb" | "nedb")
 database-type: nedb
+
+// sync.js params
+root-account: :root:
+default-perms: login // csv
+default-password: %u1%n%l // <username>1<number><username.length>
+default-username: mrcode.%i
+
+students-api-uri: https://www.mrcodeswildride.com/api/students
+students-api-key: _id

@@ -42,6 +42,7 @@ exports.setAutocompactionInterval = setAutocompactionInterval;
 
 function findOne(col, query, callback) { col.findOne(query, callback); }
 function find(col, query, callback) { col.find(query, callback); }
+function findWProjection(col, query, projection, callback) { col.find(query, projection, callback); }
 function findSortSkipLimit(col, query, sort, skip, limit, callback) {
   col.find(query).sort(sort).skip(skip).limit(limit).exec(callback);
 }
@@ -58,6 +59,7 @@ function remove(col, query, callback) { col.remove(query, {}, callback); }
 exports.api = {
   findOne,
   find,
+  findWProjection,
   findSortSkipLimit,
   update,
   insert,

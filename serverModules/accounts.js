@@ -2,11 +2,13 @@ const bcrypt = require('bcrypt');
 
 var collection;
 var api;
+var config;
 const sessions = {};
 
-function init(userCollection, dbAPI) {
+function init(userCollection, dbAPI, lConfig) {
   collection = userCollection;
   api = dbAPI;
+  config = lConfig;
 }
 
 const DEFAULT_PERMISSIONS = ["login"]
@@ -54,7 +56,9 @@ function verifyAccountIdentity(username, password) {
   });
 }
 
-function createAccount(username, password, sponsor, saltRounds) {
+function createAccount(username, password, sponsor, name=null) {
+  if (name == null) name = username;
+
   return new Promise((resolve,reject) => {
     api.findOne(
       collection, {
@@ -77,11 +81,11 @@ function createAccount(username, password, sponsor, saltRounds) {
           return;
         }
         
-        bcrypt.hash(password, saltRounds).then(hashPassword => {
+        bcrypt.hash(password, parseInt(config["salting-rounds"])).then(hashPassword => {
           api.insert(
             collection, {
               "_id": username,
-              "name": username,
+              "name": name,
               "pass": hashPassword,
               "sponsor": sponsor,
               "bans": [],
@@ -173,7 +177,44 @@ function getAccount(user) {
         }
         resolve(doc);
       }
-    )
+    );
+  });
+}
+
+// returns user ids who do not exist in the database
+function getNonAccounts(users) {
+  return new Promise((resolve,reject) => {
+    api.findWProjection(
+      collection, {}, {
+        "_id": 1, // only return _id field
+        "name": 1 // need to have a second field due to _id being weird
+      }, (err, docs) => {
+        if (err) {
+          reject({
+            "err": err.toString(),
+            "code": 185,
+            "type": `Error finding user accounts not already created`,
+          });
+          return;
+        }
+        
+        // create dictionary to easily check if id exists
+        const ids = {};
+        for (let doc of docs) {
+          ids[doc._id] = true;
+        }
+
+        // collect users that don't exist to return later
+        const nonAccounts = [];
+        for (const userId of users) {
+          if (!(userId in ids)) { // user doesn't yet exist
+            nonAccounts.push(userId);
+          }
+        }
+
+        resolve(nonAccounts);
+      }
+    );
   });
 }
 
@@ -256,6 +297,7 @@ exports.verifyAccountIdentity = verifyAccountIdentity
 exports.createAccount = createAccount;
 exports.getSessionValues = getSessionValues;
 exports.getAccount = getAccount;
+exports.getNonAccounts = getNonAccounts;
 exports.exists = exists;
 exports.addSession = addSession;
 exports.removeSession = removeSession;
