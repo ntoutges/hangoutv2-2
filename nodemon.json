@@ -1,0 +1,10 @@
+{
+  "verbose": false,
+  "ignore": ["public/"],
+  "watch": [
+    "server.js",
+    "serverModules/",
+    "server-funcs/"
+  ],
+  "exec": "node server.js"
+}

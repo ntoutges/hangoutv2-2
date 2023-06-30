@@ -110,7 +110,8 @@ dbManagerInit.then(() => {
     documents,
     dbManager,
     config,
-    formidable
+    formidable,
+    "dirname": __dirname
   });
 
 }).catch(err => {
