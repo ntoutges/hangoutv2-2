@@ -68,7 +68,7 @@ exports.postCreateAccount = (req,res) => {
     username,
     password,
     req.session.user,
-    gConfig["salting-rounds"]
+    parseInt(gConfig["salting-rounds"])
   ).then(() => {
     res.send("Valid")
     // doSignIn(username, password, req,res);

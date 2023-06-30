@@ -192,10 +192,10 @@ function fillSponsor() {
     $("#display-name-info").classList.add("roots");
   }
   // default styling
-  else {
+  // else {
     const query = new RevQuery({ "user": profile.sponsor });
     $("#display-name-info").setAttribute("href", `/home?${query.toString()}`);
-  }
+  // }
 }
 
 {

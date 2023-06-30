@@ -108,6 +108,9 @@
 }
 
 #accounts-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+
   border-bottom: 3px dashed black;
   flex-grow: 1;
 }

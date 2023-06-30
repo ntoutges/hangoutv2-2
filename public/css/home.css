@@ -119,7 +119,7 @@
 }
 
 #display-name-info.roots:hover {
-  cursor: not-allowed;
+  /* cursor: not-allowed; */
 }
 
 #display-name-info.loadings::after {

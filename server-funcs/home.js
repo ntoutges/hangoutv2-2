@@ -6,6 +6,7 @@ var gDocuments;
 var gFriends;
 var gConfig;
 var gFormidable
+var gDirname;
 
 exports.init = ({
   dbManager,
@@ -13,7 +14,8 @@ exports.init = ({
   documents,
   friends,
   config,
-  formidable
+  formidable,
+  dirname
 }) => {
   gDbManager = dbManager;
   gSockets = sockets;
@@ -21,6 +23,7 @@ exports.init = ({
   gFriends = friends;
   gConfig = config;
   gFormidable = formidable;
+  gDirname = dirname;
 }
 
 exports.getHome = (req,res) => {
@@ -266,11 +269,11 @@ exports.getGetProfilePicture = (req,res) => {
           res.sendFile(uri);
         }).catch(err => {
           console.log(err);
-          res.sendFile(__dirname + + "/" + gConfig["default-profile-picture"]);
+          res.sendFile(gDirname + + "/" + gConfig["default-profile-picture"]);
         })
       }
       else {
-        res.sendFile(__dirname + "/" + gConfig["default-profile-picture"]);
+        res.sendFile(gDirname + "/" + gConfig["default-profile-picture"]);
       }
     }
   );
@@ -285,7 +288,7 @@ exports.postSetProfilePicture = (req,res) => {
   const form = gFormidable({
     multiples: false,
     maxFileSize: 26214400, // set max file size for images in bytes (25 x 1024 x 1024) // 25 MB
-    uploadDir: __dirname + "/documents/staging"
+    uploadDir: gDirname + "/documents/staging"
   });
 
   form.parse(req, (err, fields, files) => {

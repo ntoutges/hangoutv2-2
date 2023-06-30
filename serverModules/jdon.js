@@ -1,7 +1,7 @@
 function toJSON(jdonStr) {
   const json = {};
   for (const line of jdonStr.replace(/\r/g, "").split("\n")) {
-    const commentInfo = line.match(/ *\/\/.*/); // comment structure -> "<spaces>//<.>"
+    const commentInfo = line.match(/((^)|( +))\/\/.*/); // comment structure -> "<spaces>//<.>"
     const commentIndex = commentInfo ? commentInfo.index : -1;
     if (commentIndex == 0) { continue; } // whole line comment, skippable
 
