@@ -2,12 +2,14 @@ var collection;
 var transactions;
 var accounts;
 var api;
+var logger;
 
-function init(transactionsLib, accountsLib, accountCollection, dbAPI) {
+function init(transactionsLib, accountsLib, accountCollection, dbAPI, lLogger) {
   transactions = transactionsLib;
   accounts = accountsLib;
   collection = accountCollection;
   api = dbAPI;
+  logger = lLogger;
 }
 
 function ban(user, admin, expiration, restrictions=["login"]) {
@@ -58,11 +60,11 @@ function ban(user, admin, expiration, restrictions=["login"]) {
               });
               return;
             }
+            logger.log(`[${user}] has been restricted from [${restrictions.join(",")}] by [${admin}] until ${expiration}`);
             resolve(id);
           }
         );
-
-        resolve(id);
+        // resolve(id);
       }).catch((err) => { reject(err); }); // propogate error
     }).catch((err) => { reject(err); }); // propogate error
   });
@@ -115,7 +117,10 @@ function unban(id) {
                 "type": `unable to update account with id [${id}]`,
               });
             }
-            else resolve(transaction.data.ban);
+            else {
+              logger.log(`[${transaction.data.ban}] has been unrestricted from [${transaction.data.restr.join(",")}] by [${transaction.parties[0]}]`);
+              resolve(transaction.data.ban);
+            }
           }
         )
       }).catch(err => { reject(err); });  

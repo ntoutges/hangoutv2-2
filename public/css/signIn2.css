@@ -1,0 +1,41 @@
+#sign-in-container {
+  width: calc(100% - 66px);
+  height: 190px;
+  padding: 10px;
+  
+  position: relative;
+  top: 80px;
+  left: 20px;
+  background-color: white;
+  
+  border: solid var(--main-border-color) 4px;
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+#credentials-container {
+  position: absolute;
+  top: 0px;
+  left: 41px;
+  width: calc(100% - 41px);
+  height: 210px;
+  background-color: #eaeaea;
+}
+
+#guest-browse {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding: 5px;
+  user-select: none;
+}
+
+#sign-in-title {
+  margin: 200px 0px 0px -15px;
+  width: 210px;
+}
+
+#submit {
+  top: 142px;
+}

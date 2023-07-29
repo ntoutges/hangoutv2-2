@@ -163,7 +163,7 @@ function getAccount(user) {
           reject({
             "err": err.toString(),
             "code": 114,
-            "type": `Error trying to access user account with id [${username}]`,
+            "type": `Error trying to access user account with id [${user}]`,
           });
           return;
         }
@@ -172,7 +172,7 @@ function getAccount(user) {
           reject({
             "err": "Invalid user id",
             "code": -180,
-            "type": `unable to find user account with id [${username}]`,
+            "type": `unable to find user account with id [${user}]`,
           });
         }
         resolve(doc);
@@ -242,7 +242,7 @@ function addPermission(user, permission) {
           reject({
             "err": err.toString(),
             "code": 176,
-            "type": `Error trying to add permissions to user account with id [${username}]`,
+            "type": `Error trying to add permissions to user account with id [${user}]`,
           });
           return;
         }
@@ -250,7 +250,7 @@ function addPermission(user, permission) {
           reject({
             "err": "User account does not exist",
             "code": -177,
-            "type": `unable to find user with id [${username}] trying to add permissions`,
+            "type": `unable to find user with id [${user}] trying to add permissions`,
           });
           return;
         }
@@ -274,7 +274,7 @@ function removePermission(user, permission) {
           reject({
             "err": err.toString(),
             "code": 178,
-            "type": `Error trying to remove permissions of user account with id [${username}]`,
+            "type": `Error trying to remove permissions of user account with id [${user}]`,
           });
           return;
         }
@@ -282,7 +282,7 @@ function removePermission(user, permission) {
           reject({
             "err": "User account does not exist",
             "code": -179,
-            "type": `unable to find user with id [${username}] trying to to remove permissions`,
+            "type": `unable to find user with id [${user}] trying to to remove permissions`,
           });
           return;
         }

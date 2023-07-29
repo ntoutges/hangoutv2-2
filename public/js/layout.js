@@ -37,10 +37,19 @@ import { showMessage } from "./modules/errorable.js";
 socket.on("ban", (isBanned) => {
   console.log(isBanned)
   if (isBanned) {
-    showError({
+    showMessage({
       title: "Ban",
-      body: "You have been banned"
+      body: "You have been banned",
+    }).then(() => {
+      window.location.reload();
     });
-    window.location.reload();
+  }
+  else {
+    showMessage({
+      title: "Unban",
+      body: "Some permissions have been restored",
+    }).then(() => {
+      window.location.reload();
+    });
   }
 });

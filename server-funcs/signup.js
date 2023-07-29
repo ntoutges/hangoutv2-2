@@ -6,6 +6,8 @@ var gBan;
 var gTransactions;
 var gPhotoRollContents;
 var gConfig;
+var gEnv;
+var gLogger;
 
 exports.init = ({
   dbManager,
@@ -13,7 +15,9 @@ exports.init = ({
   ban,
   transactions,
   photoRollContents,
-  config
+  config,
+  env,
+  logger
 }) => {
   gDbManager = dbManager;
   gAccounts = accounts;
@@ -21,6 +25,8 @@ exports.init = ({
   gTransactions = transactions;
   gPhotoRollContents = photoRollContents;
   gConfig = config;
+  gEnv = env;
+  gLogger = logger;
 }
 
 exports.getSignUp = (req,res) => {
@@ -68,13 +74,37 @@ exports.postCreateAccount = (req,res) => {
     username,
     password,
     req.session.user,
-    parseInt(gConfig["salting-rounds"])
+    +gConfig["salting-rounds"]
   ).then(() => {
-    res.send("Valid")
+    gLogger.log(`[${req.session.user}] has sponsored account [${username}]`);
+    res.send("Valid");
     // doSignIn(username, password, req,res);
   }).catch(err => {
     if (err == "user already exists") res.send("username");
     else res.sendStatus(500);
+  });
+}
+
+// call this at startup to create :root: account if not yet made
+exports.createRoot = () => {
+  return new Promise((resolve,reject) => {
+    gAccounts.exists(":root:").then(exists => {
+      if (!exists) { // create :root: account
+        gAccounts.createAccount(":root:", gEnv.rootPassword, ":root:", "Hangout GOD").then(() => {
+          const perms = gConfig["all-perms"].split(",");
+          
+          // very strange, the promise returns before the account is actually made. This function must be run twice to recreate a root account.
+          let permAddedCounter = 0;
+          for (const perm of perms) {
+            gAccounts.addPermission(":root:", perm).then(() => {
+              permAddedCounter++;
+              if (permAddedCounter == perms.length) resolve(true); // done with all promises
+            }).catch(err => { reject(err); });
+          }
+        }).catch(err => { reject(err); });
+      }
+      else { resolve(false); }
+    }).catch(err => { reject(err); });
   });
 }
 
@@ -91,7 +121,7 @@ exports.getSponsored = (req,res) => {
     }, (err,docs) => {
       if (err) {
         res.send("error");
-        console.log(err);
+        gLogger.log(err);
         return;
       }
       res.send(docs);
@@ -124,12 +154,12 @@ exports.postAddPermissions = (req,res) => {
     gAccounts.addPermission(id, perm).then(() => {
       res.send("ok");
     }).catch(err => {
-      console.log(err);
+      gLogger.log(err);
       res.send("error");
     });
     
   }).catch(err => {
-    console.log(err);
+    gLogger.log(err);
     res.send("error");
   });
 }
@@ -159,12 +189,12 @@ exports.postRemovePermission = (req,res) => {
     gAccounts.removePermission(id, perm).then(() => {
       res.send("ok");
     }).catch(err => {
-      console.log(err);
+      gLogger.log(err);
       res.send("error");
     });
     
   }).catch(err => {
-    console.log(err);
+    gLogger.log(err);
     res.send("error");
   });
 }
@@ -200,19 +230,19 @@ exports.postBanPermission = (req,res) => {
     // accounts.removePermission(id, perm).then(() => {
     //   res.send("ok");
     // }).catch(err => {
-    //   console.log(err);
+    //   gLogger.log(err);
     //   res.send("error");
     // });
     gBan.ban( id, req.session.user, expiration, [perm]).then(id => {
       res.send("ok");
       return;
     }).catch(err => {
-      console.log(err);
+      gLogger.log(err);
       res.send("error");
     });
     
   }).catch(err => {
-    console.log(err);
+    gLogger.log(err);
     res.send("error");
   });
 }
@@ -232,7 +262,7 @@ exports.postUnbanPermission = (req,res) => {
     const banner = doc.parties[0];
     if (!banner) {
       res.send("error");
-      console.log("no parties");
+      gLogger.log("no parties");
       return;
     }
     if (banner != req.session.user) {
@@ -243,11 +273,11 @@ exports.postUnbanPermission = (req,res) => {
     gBan.unban(id).then(() => {
       res.send("ok");
     }).catch(err => {
-      console.log(err);
+      gLogger.log(err);
       res.send("error");
     })
   }).catch(err => {
-    console.log(err);
+    gLogger.log(err);
     // res.send("error");
   })
 }

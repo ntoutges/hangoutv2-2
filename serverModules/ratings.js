@@ -19,7 +19,7 @@ exports.saveRating = function saveRating(
   else userRating = 0;
 
   return new Promise((resolve,reject) => {
-    findOne(
+    api.findOne(
       ratingsCollection, {
         _id: postId
       }, (err, ratingDoc) => {
@@ -231,7 +231,9 @@ function hasRated(
     api.find(
       ratingsCollection, {
         "likes": {
-          $elemMatch: userId
+          $elemMatch: {
+            $eq: userId
+          }
         },
         "_id": {
           $in: posts
@@ -257,7 +259,9 @@ function hasRated(
     api.find(
       ratingsCollection, {
         "dislikes": {
-          $elemMatch: userId
+          $elemMatch: {
+            $eq: userId
+          }
         },
         "_id": {
           $in: posts

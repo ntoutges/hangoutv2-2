@@ -7,6 +7,7 @@ var gFriends;
 var gConfig;
 var gFormidable
 var gDirname;
+var gLogger;
 
 exports.init = ({
   dbManager,
@@ -15,7 +16,8 @@ exports.init = ({
   friends,
   config,
   formidable,
-  dirname
+  dirname,
+  logger
 }) => {
   gDbManager = dbManager;
   gSockets = sockets;
@@ -24,6 +26,7 @@ exports.init = ({
   gConfig = config;
   gFormidable = formidable;
   gDirname = dirname;
+  gLogger = logger;
 }
 
 exports.getHome = (req,res) => {
@@ -43,6 +46,11 @@ exports.getHome = (req,res) => {
         res.send("An error occured");
       }
       else {
+        let bio = doc.bio ?? "";
+        if (bio.length == 0 && (!req.session.user || req.session.user != userId)) { // not looking at your own profile, and bio is empty
+          bio = gConfig.noBio;
+        }
+
         gSockets.moveToRoom(req.sessionID, `home-${userId}`);
         res.render("pages/home.ejs", {
           title: "Home",
@@ -50,7 +58,7 @@ exports.getHome = (req,res) => {
           isSidebar: true,
           permissions: req.session.perms ?? {},
           name: doc.name,
-          bio: doc.bio ?? "",
+          bio,
           id: req.sessionID,
           accountId: req.session.user,
           viewingAccountId: userId,
@@ -136,7 +144,7 @@ exports.postRequestFriend = (req,res) => {
       },
       `home-${req.body.friend}`);
   }).catch((err) => {
-    console.log(err)
+    gLogger.log(err)
     res.sendStatus(500);
   });
 }
@@ -159,7 +167,7 @@ exports.postRemoveFriend = (req,res) => {
     gSockets.emitToRoom("removeFriend", req.session.friend, `home-${req.session.user}`);
     gSockets.emitToRoom("removeFriend", req.session.user, `home-${req.body.friend}`);
   }).catch((err) => {
-    console.log(err)
+    gLogger.log(err)
     res.send(err);
   });
 }
@@ -234,7 +242,7 @@ exports.getUserRelations = (req,res) => {
     
     res.send(relation);
   }).catch((err) => {
-    console.log(err)
+    gLogger.log(err)
     res.sendStatus(400)
   });
 }
@@ -255,7 +263,7 @@ exports.getGetProfilePicture = (req,res) => {
       "_id": user
     }, (err,document) => {
       if (err) {
-        console.log(err);
+        gLogger.log(err);
         res.send("err");
         return;
       }
@@ -268,7 +276,7 @@ exports.getGetProfilePicture = (req,res) => {
         gDocuments.getMainFileURI(document.picture).then((uri) => {
           res.sendFile(uri);
         }).catch(err => {
-          console.log(err);
+          gLogger.log(err);
           res.sendFile(gDirname + + "/" + gConfig["default-profile-picture"]);
         })
       }
@@ -293,13 +301,13 @@ exports.postSetProfilePicture = (req,res) => {
 
   form.parse(req, (err, fields, files) => {
     if (err) {
-      console.log(err);
+      gLogger.log(err);
       res.send(err.type);
       return;
     }
 
     if (!files.file) {
-      console.log("no file"); // do something here
+      gLogger.log("no file"); // do something here
       res.send("Must upload a file");
       return;
     }
@@ -311,8 +319,8 @@ exports.postSetProfilePicture = (req,res) => {
           "_id": req.session.user
         }, async (err,userDoc) => {
           if (err) {
-            console.log(err);
-            console.log(err)
+            gLogger.log(err);
+            gLogger.log(err)
             res.send(err.type);
             return;
           }
@@ -327,7 +335,7 @@ exports.postSetProfilePicture = (req,res) => {
               await gDocuments.deleteDocument(userDoc.picture);
             }
             catch(err) {
-              console.log(err);
+              gLogger.log(err);
               if (err.code > 0) { // codes less than 0 are non-essential errors
                 res.send(err.type);
                 return;
@@ -335,7 +343,7 @@ exports.postSetProfilePicture = (req,res) => {
             }
           }
   
-          console.log(files.file.path)
+          gLogger.log(files.file.path)
           gDocuments.createImageDocument(files.file.path, fileType).then(docId => {
             gDbManager.api.update(
               gDbManager.db.collection("accounts"), {
@@ -346,7 +354,7 @@ exports.postSetProfilePicture = (req,res) => {
                 }
               }, (err,numUpdated) => {
                 if (err) {
-                  console.log(err);
+                  gLogger.log(err);
                   res.send(err.type);
                   return;
                 }
@@ -359,7 +367,7 @@ exports.postSetProfilePicture = (req,res) => {
               }
             );
           }).catch(err => {
-            console.log(err);
+            gLogger.log(err);
             res.send(err.type);
           });
         }
@@ -388,7 +396,7 @@ exports.postSelectProfilePicture = (req,res) => {
       "_id": req.session.user
     }, async (err,userDoc) => {
       if (err) {
-        console.log(err);
+        gLogger.log(err);
         res.send(err.type);
         return;
       }
@@ -404,7 +412,7 @@ exports.postSelectProfilePicture = (req,res) => {
             await gDocuments.deleteDocument(userDoc.picture);
           }
           catch(err) {
-            console.log(err);
+            gLogger.log(err);
             if (err.code > 0) { // codes less than 0 are non-essential errors
               res.send(err.type);
               return;
@@ -421,7 +429,7 @@ exports.postSelectProfilePicture = (req,res) => {
             }
           }, (err,numUpdated) => {
             if (err) {
-              console.log(err);
+              gLogger.log(err);
               res.send(err.type);
               return;
             }
@@ -435,7 +443,7 @@ exports.postSelectProfilePicture = (req,res) => {
         );
       }).catch(err => {
         if (err.code > 0) { // less than 0 is non-critical
-          console.log(err);
+          gLogger.log(err);
         }
         res.send(err.type);
       });

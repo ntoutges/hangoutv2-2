@@ -15,16 +15,17 @@ require('dotenv').config(); // give access to .env file
 const { functions, initFunctions } = require("./server-funcs/server-funcs.js");
 
 const nedbManager = require("./serverModules/nedb.js");
-const mongodbManager = require("./serverModules/mongodb.js");
-const sockets = require("./serverModules/socketManager.js");
-const friends = require("./serverModules/friends.js");
-const transactions = require("./serverModules/transactions.js");
-const accounts = require("./serverModules/accounts.js");
-const ban = require("./serverModules/ban.js");
-const awards = require("./serverModules/awards.js")
-const ratings = require("./serverModules/ratings.js");
-const documents = require("./serverModules/documents.js");
-const sync = require("./serverModules/sync.js");
+const mongodbManager =  require("./serverModules/mongodb.js");
+const sockets =     require("./serverModules/socketManager.js");
+const friends =     require("./serverModules/friends.js");
+const transactions= require("./serverModules/transactions.js");
+const accounts =    require("./serverModules/accounts.js");
+const ban =         require("./serverModules/ban.js");
+const awards =      require("./serverModules/awards.js")
+const ratings =     require("./serverModules/ratings.js");
+const documents =   require("./serverModules/documents.js");
+const sync =        require("./serverModules/sync.js");
+const logger =      require("./serverModules/logger.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -56,67 +57,81 @@ config = JDON.toJSON(
 
 var dbManagerInit;
 var dbManager;
-if (config["database-type"] == "nedb") {
-  dbManager = nedbManager;
-  dbManagerInit = dbManager.init(__dirname + "/db");
-  dbManager.setAutocompactionInterval(172800000);
-  dbManager.addCollection("accounts");
-  dbManager.addCollection("posts");
-  dbManager.addCollection("channels");
-  dbManager.addCollection("transactions");
-  dbManager.addCollection("awards");
-  dbManager.addCollection("ratings");
-  dbManager.addCollection("documents");
-}
-else if (config["database-type"] == "mongodb") {
-  dbManager = mongodbManager;
-  dbManagerInit = mongodbManager.init(
-    `mongodb+srv://mrcode123:${process.env.mongoPassword}@cluster0.ncf6vii.mongodb.net/?retryWrites=true&w=majority`
-  );
-}
-else {
-  throw new Error("Invalid database-type in config.jdon");
-}
 
-dbManagerInit.then(() => {
-  // board.init(dbManager.db);
-  sockets.init(http);
-  friends.init(transactions, dbManager.db.collection("accounts"), dbManager.api);
-  transactions.init(dbManager.db.collection("transactions"), dbManager.api);
-  accounts.init(dbManager.db.collection("accounts"), dbManager.api, config);
-  ban.init(transactions, accounts, dbManager.db.collection("accounts"), dbManager.api);
-  awards.init(dbManager.db.collection("awards"), documents, dbManager.api);
-  ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"), dbManager.api);
-  documents.init(dbManager.db.collection("documents"), jimp, fs, __dirname, "documents", dbManager.api);
-  sync.init(":root:", accounts, config);
-  http.listen(process.env.PORT || 52975, () => {
-    // getPhotoRollContents();
-    constructPhotoRollSequence();
-    console.log("app started");
+logger.init(fs, __dirname + "/logs", "logs.txt", "logs.html", "lastlog.txt", () => {
+  if (config["database-type"] == "nedb") {
+    dbManager = nedbManager;
+    dbManagerInit = dbManager.init(__dirname + "/db");
+    dbManager.setAutocompactionInterval(172800000);
+    dbManager.addCollection("accounts");
+    dbManager.addCollection("posts");
+    dbManager.addCollection("channels");
+    dbManager.addCollection("transactions");
+    dbManager.addCollection("awards");
+    dbManager.addCollection("ratings");
+    dbManager.addCollection("documents");
+  }
+  else if (config["database-type"] == "mongodb") {
+    dbManager = mongodbManager;
+    dbManagerInit = mongodbManager.init(
+      `mongodb+srv://mrcode123:${process.env.mongoPassword}@cluster0.ncf6vii.mongodb.net/?retryWrites=true&w=majority`,
+      logger
+    );
+  }
+  else {
+    throw new Error("Invalid database-type in config.jdon");
+  }
 
+  dbManagerInit.then(() => {
+    // board.init(dbManager.db);
+    sockets.init(http);
+    friends.init(transactions, dbManager.db.collection("accounts"), dbManager.api);
+    transactions.init(dbManager.db.collection("transactions"), dbManager.api);
+    accounts.init(dbManager.db.collection("accounts"), dbManager.api, config);
+    ban.init(transactions, accounts, dbManager.db.collection("accounts"), dbManager.api, logger);
+    awards.init(dbManager.db.collection("awards"), documents, dbManager.api);
+    ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"), dbManager.api);
+    documents.init(dbManager.db.collection("documents"), jimp, fs, __dirname, "documents", dbManager.api);
+    sync.init(":root:", accounts, config, process.env, logger);
+    http.listen(process.env.PORT || 52975, () => {
+      // getPhotoRollContents();
+      constructPhotoRollSequence();
+      logger.log("app started!");
 
-    // run once every day
-    // sync.doContinuousSync(1000 * 60 * 60 * 24); // commented out to stop errors from being offline
+      functions.signup.createRoot().then(newRoot => {
+        if (newRoot) {
+          logger.log("Created :root: account!");
+        }
+      }).catch(err => {
+        logger.log(err);
+      });
+
+      // run once every day
+      sync.doContinuousSync(1000 * 60 * 60 * 24); // commented out to stop errors from being offline
+    });
+
+    initFunctions({
+      photoRollContents,
+      sockets,
+      friends,
+      transactions,
+      accounts,
+      ban,
+      awards,
+      ratings,
+      sync,
+      documents,
+      dbManager,
+      config,
+      logger,
+      "env": process.env,
+      formidable,
+      "dirname": __dirname
+    });
+
+  }).catch(err => {
+    console.log(err);
   });
-
-  initFunctions({
-    photoRollContents,
-    sockets,
-    friends,
-    transactions,
-    accounts,
-    ban,
-    awards,
-    ratings,
-    documents,
-    dbManager,
-    config,
-    formidable,
-    "dirname": __dirname
-  });
-
-}).catch(err => {
-  console.log(err);
 });
 
 // function getPhotoRollContents() {
@@ -137,8 +152,8 @@ function constructPhotoRollSequence() {
     rawSequence = JSON.parse(roll).rawSequence ?? [];
   }
   catch (err) {
-    console.log(err);
-    console.log("Stage 1 - Could not construct PhotoRollSequence");
+    logger.log(err);
+    logger.log("Stage 1 - Could not construct PhotoRollSequence");
     return;
   }
   documents.getMainFileURIs( rawSequence ).then(docs => {
@@ -160,19 +175,19 @@ function constructPhotoRollSequence() {
       });
     }
     catch (err) {
-      console.log(err);
-      console.log("Stage 3 - Could not construct PhotoRollSequence");
+      logger.log(err);
+      logger.log("Stage 3 - Could not construct PhotoRollSequence");
       return;
     }
-    console.log("Successfully constructed photo roll sequence");
+    logger.log("Successfully constructed photo roll sequence");
     // photoRollContents = sequence;
     photoRollContents.splice(0); // clear
     for (const item of rawSequence) {
       photoRollContents.push(item);
     }
   }).catch(err => {
-    console.log(err);
-    console.log("Stage 2 - Could not construct PhotoRollSequence");
+    logger.log(err);
+    logger.log("Stage 2 - Could not construct PhotoRollSequence");
   })
 }
 
@@ -182,9 +197,34 @@ function constructPhotoRollSequence() {
   \__________________/
 */
 
-app.get("/", functions.signin.getSignIn);
-app.post("/signIn", functions.signin.postSignIn);
+app.get("/", (req,res) => {
+  if (req.session.name) {
+    res.redirect("/home");
+    return;
+  }
+  
+  let firstPhoto = (photoRollContents.length > 0) ? photoRollContents[Math.floor(Math.random()*photoRollContents.length)] : ""; // need to decide what to do if PhotoRolLContents is empty
+  res.render("pages/signIn2.ejs", {
+    title: "Sign In",
+    isLoggedIn: false,
+    isSidebar: false,
+    permissions: req.session.perms,
+    promoPhotoId: firstPhoto,
+    id: null,
+    accountId: null
+  });
+});
 
+app.post("/signin", functions.signin.postStudentSignIn);
+
+/* ____________________
+  /                    \
+  | jmp SIGN IN 2 CODE |
+  \____________________/
+*/
+
+app.get("/signin2", functions.signin.getSignIn);
+app.post("/signIn2", functions.signin.postSignIn);
 
 /* __________________
   /                  \

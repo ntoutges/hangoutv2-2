@@ -1,7 +1,7 @@
 <%- contentFor ('head') %>
-<script src="js/signIn.js" defer type="module"></script>
+<script src="js/signIn2.js" defer type="module"></script>
 <script src="js/photoroll.js" defer type="module"></script>
-<link rel="stylesheet" href="css/signIn.css">
+<link rel="stylesheet" href="css/signIn2.css">
 <link rel="stylesheet" href="css/credentials-core.css">
 
 <%- contentFor ('main') %>
@@ -15,19 +15,19 @@
         <div id="username-underline" class="credential-underlines"></div>
         <div id="username-warning" class="credential-warnings"></div>
       </div>
-      <div id="password-holder" class="credential-holders">
+      <!-- <div id="password-holder" class="credential-holders">
         <label class="credentials-identifiers" id="password-identifier">password</label>
         <input id="password" class="log-in-inputs" type="password">
         <div id="password-underline" class="credential-underlines"></div>
         <div id="password-warning" class="credential-warnings"></div>
-      </div>
+      </div> -->
       <button id="submit">Sign In</button>
       <a href="/posts" id="guest-browse">Browse as guest</a>
     </div>
   </div>
   <div id="create-account-container">
     <div id="create-account-container-text">
-      <a href="/">Have a Mr. Code account? Click here!</a>
+      <a href="/signin2">Have a custom account? Click here!</a>
     </div>
   </div>
 </aside>

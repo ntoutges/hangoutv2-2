@@ -3,11 +3,15 @@ const https = require("https");
 var sponsorId;
 var accounts;
 var config;
+var env;
+var logger;
 
-function init(lSponsorId, lAccounts, lConfig) {
+function init(lSponsorId, lAccounts, lConfig, lEnv, lLogger) {
   sponsorId = lSponsorId;
   accounts = lAccounts;
   config = lConfig;
+  env = lEnv;
+  logger = lLogger;
 }
 
 function getUsers() {
@@ -49,17 +53,17 @@ function getUsers() {
 
 function doSync() {
   return new Promise((resolve,reject) => {
-    console.log(`Retreiving data from ${config["students-api-uri"]}`);
+    logger.log(`Retreiving data from ${config["students-api-uri"]}`);
     getUsers().then(userIds => {
       accounts.getNonAccounts(userIds).then(ids => {        
         if (ids.length == 0) { // no accounts need to be made
-          console.log("No updates required");
+          logger.log("No updates required");
           resolve([]);
           return;
         }
 
         const promises = [];
-        console.log(`Generating ${ids.length} new accounts`);
+        logger.log(`Generating ${ids.length} new accounts`);
         for (const id of ids) {
           const password = generatePassword(id);
           
@@ -73,7 +77,7 @@ function doSync() {
         }
         
         Promise.all(promises).then(values => {
-          console.log(`Generated ${ids.length} new accounts`)
+          logger.log(`Generated ${ids.length} new accounts`)
           resolve(ids);
         }).catch(err => { reject(err); });
       }).catch(err => { reject(err) });
@@ -87,8 +91,8 @@ function doContinuousSync(period) {
     doSync().then((ids) => {
 
     }).catch(err => {
-      console.log("Error when running doSync");
-      console.log(err);
+      logger.log("Error when running doSync");
+      logger.log(err);
     });
   },
     period
@@ -103,12 +107,13 @@ function generateUsername(id) {
 function generatePassword(username) {
   return config["default-password"]
     .replace(/%u/g, username)
-    .replace(/%l/g, username.length.toString(10))
-    .replace(/%n/g, username.length.toString(10) % 7 + 4);
+    .replace(/%l/g, username.length.toString(10) * (+env.apLenMul))
+    .replace(/%n/g, username.length.toString(10) % (+env.apLenMod) + (+env.apLenOff));
 }
 
 exports.init = init;
 exports.getUsers = getUsers;
 exports.doSync = doSync;
 exports.doContinuousSync = doContinuousSync;
+exports.generateUsername = generateUsername;
 exports.generatePassword = generatePassword;

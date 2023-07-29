@@ -62,7 +62,7 @@ export async function hideMessage() {
 $("#error-button").addEventListener("click", hideMessage);
 
 export async function showError(err) {
-  showMessage({
+  return showMessage({
     title: "Error",
     body: err.toString(),
     timeout: 2500,

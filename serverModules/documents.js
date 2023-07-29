@@ -61,7 +61,6 @@ function createDocument(oldpath, filetype) {
 
 function createImageDocument(oldpath, filetype, maxW=256, maxH=256) {
   return new Promise((resolve, reject) => {
-    console.log(oldpath)
     jimp.read(oldpath).then(img => {
       const w = img.bitmap.width;
       const h = img.bitmap.height;

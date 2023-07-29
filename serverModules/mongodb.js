@@ -1,8 +1,10 @@
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
 var client;
+var logger;
 
-exports.init = function(uri) {
+exports.init = function(uri, lLogger) {
+  logger = lLogger;
   client = new MongoClient(uri, {
     serverApi: {
       version: ServerApiVersion.v1,
@@ -13,13 +15,13 @@ exports.init = function(uri) {
 
   return new Promise(async (resolve,reject) => {
     try {
-      console.log("Connecting to Mongo...")
+      logger.log("Connecting to Mongo...")
       await client.connect();
       const db = await client.db("HangoutV2-2");
       exports.db = db;
 
       await db.command({ ping:1 });
-      console.log("Successfully connected to MongoDB");
+      logger.log("Successfully connected to MongoDB");
       resolve();
     }
     catch (err) {

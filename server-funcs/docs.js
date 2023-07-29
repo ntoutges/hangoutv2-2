@@ -2,13 +2,16 @@
 
 var gDocuments;
 var gDirname;
+var gLogger;
 
 exports.init = ({
   documents,
-  dirname
+  dirname,
+  logger
 }) => {
   gDocuments = documents;
   gDirname = dirname;
+  gLogger = logger;
 }
 
 exports.getDocument = (req,res) => {
@@ -21,7 +24,7 @@ exports.getDocument = (req,res) => {
   gDocuments.getMainFileURI(id).then(data => {
     res.sendFile(data);
   }).catch(err => {
-    if (err > 0) console.log(err); // don't worry about trivial problems, like "Document does not exist"
+    if (err > 0) gLogger.log(err); // don't worry about trivial problems, like "Document does not exist"
     res.sendFile(gDirname + "/public/graphics/missing.png");
   });
 }

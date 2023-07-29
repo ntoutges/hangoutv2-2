@@ -7,28 +7,25 @@ function init() { // prevents code from floating in space
 
   $("#username").addEventListener("focusin", function() { focusIn.call(this, "username" ); });
   $("#username").addEventListener("focusout", function() { focusOut.call(this, "username" ); });
-  $("#username").addEventListener("keydown", goToPassword);
-  $("#password").addEventListener("focusin", function() { focusIn.call(this, "password" ); });
-  $("#password").addEventListener("focusout", function() { focusOut.call(this, "password" ); });
-  $("#password").addEventListener("keydown", submitViaEnter);
+  $("#username").addEventListener("keydown", submitViaEnter);
   $("#submit").addEventListener("click", submitCredentials);
 }
 
 function submitCredentials() {
   let username = $("#username").value;
-  let password = $("#password").value;
+  // let password = $("#password").value;
   
   hideWarning("username");
-  hideWarning("password");
+  // hideWarning("password");
 
   if (username.trim().length == 0) { // username cannot be empty, but password can
     displayWarning("username", "invalid username");
     return;
   }
 
-  req.post("/signIn2", {
-    'user': username,
-    "pass": password
+  req.post("/signIn", {
+    'user': username
+    // "pass": password
   }).then(([data, success]) => {
     console.log(data, success)
     if (success == "success") {
@@ -83,18 +80,19 @@ function hideWarning(idModifier) {
   );
 }
 
-function goToPassword(e) {
-  if (e.keyCode == 13) // enter pressed
-    $("#password").focus();
-  else if (isCharCode(e.keyCode))
-    hideWarning("username");
-}
+// function goToPassword(e) {
+//   if (e.keyCode == 13) // enter pressed
+//     $("#password").focus();
+//   else if (isCharCode(e.keyCode))
+//     hideWarning("username");
+// }
 
 function submitViaEnter(e) {
   if (e.keyCode == 13) // enter pressed
     submitCredentials();
   else if (isCharCode(e.keyCode))
-    hideWarning("password");
+    // hideWarning("password");
+    hideWarning("username");
 }
 
 function isCharCode(keyCode) {

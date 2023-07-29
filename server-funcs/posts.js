@@ -3,15 +3,18 @@
 var gDbManager;
 var gSockets;
 var gRatings;
+var gLogger;
 
 exports.init = ({
   dbManager,
   sockets,
-  ratings
+  ratings,
+  logger
 }) => {
   gDbManager = dbManager;
   gSockets = sockets;
   gRatings = ratings;
+  gLogger = logger;
 }
 
 exports.getPosts = (req,res) => {
@@ -99,7 +102,7 @@ exports.postCreatePost = (req,res) => {
                 "activity": document.published
               }
             }, (err) => {
-              if (err) console.log("ERROR:", err);
+              if (err) gLogger.log("ERROR:", err);
             }
           );
         }
@@ -176,6 +179,7 @@ exports.postRatePost = (req,res) => {
     );
     res.send(true);
   }).catch(err => {
+    gLogger.log(err.toString());
     res.send(err.toString());
   })
 }
@@ -201,6 +205,7 @@ exports.getRatedPosts = (req,res) => {
   ).then((ids) => {
     res.send(ids);
   }).catch(err => {
+    gLogger.log(err);
     res.send(false);
   });
 }

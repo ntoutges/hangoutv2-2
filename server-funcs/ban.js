@@ -5,15 +5,18 @@ const { doLogout } = require("./signout");
 var gBan;
 var gSockets;
 var gAccounts;
+var gLogger;
 
 exports.init = ({
   ban,
   sockets,
-  accounts
+  accounts,
+  logger
 }) => {
   gBan = ban;
   gSockets = sockets;
   gAccounts = accounts;
+  gLogger = logger;
 }
 
 exports.getBan = (req,res) => {
@@ -50,13 +53,14 @@ exports.postBanUser = (req,res) => {
   const duration = req.body.duration ?? 86400000; // stored in ms // default of 1 day
 
   gBan.ban(user, req.session.user, (new Date()).getTime() + duration, types).then(banId => {
+    gLogger.log(`[${user}] has been banned by [${req.session.user}]`);
     gAccounts.getSessions(user).forEach(({ session, id }) => {
       gSockets.emitTo(id, "ban", true);
-      doLogout(session);
+      if (types.indexOf("login") != -1) doLogout(session); // "login" included in ban
     });
     res.send({ id: banId });
   }).catch(err => {
-    console.log(err)
+    gLogger.log(err)
     res.send({ err });
   });
 }
@@ -72,10 +76,9 @@ exports.postUnbanUser = (req,res) => {
   }
 
   gBan.unban(req.body.banId).then((user) => {
-    // shouldn't really be logged in, so this would be useless
-    // accounts.getSessions(user).forEach((session) => {
-    //   sockets.emitTo(session.id, "ban", false);
-    // });
+    gAccounts.getSessions(user).forEach((session) => {
+      gSockets.emitTo(session.id, "ban", false);
+    });
     res.send({});
   }).catch(err => {
     res.send({ err });
@@ -100,7 +103,7 @@ exports.getBanStatus = (req,res) => {
     }
     else { res.sendStatus(403); }
   }).catch(err => {
-    console.log(err);
+    gLogger.log(err);
     res.send(err.toString());
   });
 }
@@ -119,7 +122,7 @@ exports.getBans = (req,res) => {
   gBan.checkBanStatus(ids).then(restrictions => {
     res.send(restrictions);
   }).catch(err => {
-    console.log(err);
+    gLogger.log(err);
     res.send({});
   });
 }
@@ -136,7 +139,7 @@ exports.getBanInfo = (req,res) => {
       res.send(Object.keys(restrictions).join(","));
     }).catch(err => { res.send(err.toString()); });
   }).catch(err => {
-    console.log(err);
+    gLogger.log(err);
     res.send(err.toString());
   });
 }

@@ -1,11 +1,14 @@
 //@ts-check
 
 var gAccounts;
+var gLogger;
 
 exports.init = ({
-  accounts
+  accounts,
+  logger
 }) => {
   gAccounts = accounts;
+  gLogger = logger;
 }
 
 exports.getSignOut = (req,res) => {
@@ -14,6 +17,7 @@ exports.getSignOut = (req,res) => {
 }
 
 function doLogout(session) {
+  gLogger.log(`[${session.user}] has logged out`)
   gAccounts.removeSession(session.user, session);
   session.destroy();
 }

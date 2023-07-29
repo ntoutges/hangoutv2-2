@@ -6,13 +6,19 @@ salting-rounds: 10 // basic security stuff
 default-profile-picture: documents/public/1685079322620-1.png
 
 // this is of type ("mongodb" | "nedb")
-database-type: nedb
+database-type: mongodb
 
 // sync.js params
 root-account: :root:
 default-perms: login // csv
-default-password: %u1%n%l // <username>1<number><username.length>
-default-username: mrcode.%i
+all-perms: ban,login,award,sponsor,upload
+
+default-password: %u1%n%l5%u%l // <username>1<number><username.length>
+default-username: mrcode/%i
 
 students-api-uri: https://www.mrcodeswildride.com/api/students
 students-api-key: _id
+
+
+// defaults
+noBio: This account has no biography.

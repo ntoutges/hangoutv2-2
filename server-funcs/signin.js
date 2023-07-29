@@ -3,15 +3,21 @@
 var gPhotoRollContents;
 var gAccounts;
 var gBan;
+var gSync;
+var gLogger;
 
 exports.init = ({
   photoRollContents,
   accounts,
-  ban
+  ban,
+  sync,
+  logger
 }) => {
   gPhotoRollContents = photoRollContents;
   gAccounts = accounts;
   gBan = ban;
+  gSync = sync;
+  gLogger = logger;
 }
 
 exports.getSignIn = (req,res) => {
@@ -44,6 +50,16 @@ exports.postSignIn = (req,res) => {
   doSignIn(req.body.user, req.body.pass, req,res);
 }
 
+exports.postStudentSignIn = (req,res) => {
+  if (!("user" in req.body)) { // no username sent
+    res.send("Invalid");
+    return;
+  }
+  const username = gSync.generateUsername(req.body.user);
+  const password = gSync.generatePassword(username);
+  doSignIn(username, password, req,res);
+}
+
 function doSignIn(username, password, req,res) {
   gAccounts.verifyAccountIdentity(username, password).then((userDoc) => {
     gBan.checkBanStatus(userDoc.bans).then((restrictions) => { // these are permissions that have been taken away, aka restrictions
@@ -60,15 +76,16 @@ function doSignIn(username, password, req,res) {
         for (const key in sessionValues) {
           req.session[key] = sessionValues[key];
         }
+        gLogger.log(`[${username}] has logged in`)
         gAccounts.addSession(username, req.session, req.sessionID);
         res.send("Valid");
       }
     }).catch(err => {
-      console.log(err);
+      gLogger.log(err);
       res.send(err.type);
     });
   }).catch((err) => {
-    console.log(err)
+    gLogger.log(err)
     if (err.code < 0) res.send("Invalid"); // non-critical error = incorrect credentials
     else res.send(err.type);
   });
