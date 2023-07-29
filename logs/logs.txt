@@ -305,3 +305,25 @@
 12:43:59.775:  [mrcode/nicholast] has logged in
 12:44:15.024:  [mrcode/nicholast] has logged out
 12:44:26.161:  [:root:] has logged in
+12:47:19.597:  Connecting to Mongo...
+12:47:20.374:  Successfully connected to MongoDB
+12:47:20.387:  app started!
+12:47:20.388:  Retreiving data from https://www.mrcodeswildride.com/api/students
+12:47:20.442:  Successfully constructed photo roll sequence
+12:47:21.091:  No updates required
+12:52:17.915:  Connecting to Mongo...
+12:57:05.821:  Connecting to Mongo...
+12:57:06.686:  Successfully connected to MongoDB
+12:57:06.698:  app started!
+12:57:06.700:  Retreiving data from https://www.mrcodeswildride.com/api/students
+12:57:06.761:  Successfully constructed photo roll sequence
+12:57:07.570:  No updates required
+12:58:16.874:  {"err":"password","code":-117,"type":"invalid password"}
+12:58:30.801:  Connecting to Mongo...
+12:58:31.595:  Successfully connected to MongoDB
+12:58:31.604:  app started!
+12:58:31.605:  Retreiving data from https://www.mrcodeswildride.com/api/students
+12:58:31.661:  Successfully constructed photo roll sequence
+12:58:32.335:  No updates required
+12:58:34.215:  [mrcode/nicholast] has logged in
+12:58:36.439:  [mrcode/nicholast] has logged out

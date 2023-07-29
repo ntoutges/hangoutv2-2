@@ -1,1 +1,0 @@
-{"parties":["test2","test"],"data":{"from":"test2"},"type":"friendRequest","init":1685557759562,"_id":"TONjwFEtR6f1YXBb"}

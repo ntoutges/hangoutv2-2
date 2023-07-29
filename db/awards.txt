@@ -1,3 +1,0 @@
-{"name":"Yet","category":"testers","src":"28pyrlEhMGtpTSFI","description":"testing","_id":"IuxQ0LVHdMvsLluv"}
-{"src":"cork.png","description":"A test award","name":"Award!","category":"testers","_id":"cB8vPSCU90JF7ylZ"}
-{"name":"Another","category":"testers","src":"q52GGGlRou0OWkim","description":"testing the new system","_id":"wFipCnX5jHZWxcHv"}
