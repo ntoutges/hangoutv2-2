@@ -26,6 +26,7 @@ const ratings =     require("./serverModules/ratings.js");
 const documents =   require("./serverModules/documents.js");
 const sync =        require("./serverModules/sync.js");
 const logger =      require("./serverModules/logger.js");
+const channels =    require("./serverModules/channels.js");
 
 const app = express();
 const http = require("http").Server(app);
@@ -43,9 +44,7 @@ app.use( session({
 
 app.use( express.static(__dirname + '/public') );
 
-var config;
-
-config = JDON.toJSON(
+const config = JDON.toJSON(
   fs.readFileSync(
     __dirname + "/config.jdon",
     {
@@ -63,18 +62,17 @@ logger.init(fs, __dirname + "/logs", "logs.txt", "logs.html", "lastlog.txt", () 
     dbManager = nedbManager;
     dbManagerInit = dbManager.init(__dirname + "/db");
     dbManager.setAutocompactionInterval(172800000);
-    dbManager.addCollection("accounts");
-    dbManager.addCollection("posts");
-    dbManager.addCollection("channels");
-    dbManager.addCollection("transactions");
-    dbManager.addCollection("awards");
-    dbManager.addCollection("ratings");
-    dbManager.addCollection("documents");
+    
+    const collections = config["db-collections"].split(",");
+    for (const name of collections) {
+      dbManager.addCollection(name);
+    }
   }
   else if (config["database-type"] == "mongodb") {
     dbManager = mongodbManager;
     dbManagerInit = mongodbManager.init(
-      `mongodb+srv://mrcode123:${process.env.mongoPassword}@cluster0.ncf6vii.mongodb.net/?retryWrites=true&w=majority`,
+      `mongodb+srv://${process.env.mongoUser}:${process.env.mongoPassword}@cluster0.ncf6vii.mongodb.net/?retryWrites=true&w=majority`,
+      config["db-name"],
       logger
     );
   }
@@ -92,7 +90,7 @@ logger.init(fs, __dirname + "/logs", "logs.txt", "logs.html", "lastlog.txt", () 
     awards.init(dbManager.db.collection("awards"), documents, dbManager.api);
     ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"), dbManager.api);
     documents.init(dbManager.db.collection("documents"), jimp, fs, __dirname, "documents", dbManager.api);
-    sync.init(":root:", accounts, config, process.env, logger);
+    sync.init(accounts, config, process.env, logger);
     http.listen(process.env.PORT || 52975, () => {
       // getPhotoRollContents();
       constructPhotoRollSequence();

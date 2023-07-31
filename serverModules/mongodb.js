@@ -3,7 +3,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 var client;
 var logger;
 
-exports.init = function(uri, lLogger) {
+exports.init = function(uri, dbName, lLogger) {
   logger = lLogger;
   client = new MongoClient(uri, {
     serverApi: {
@@ -17,7 +17,7 @@ exports.init = function(uri, lLogger) {
     try {
       logger.log("Connecting to Mongo...")
       await client.connect();
-      const db = await client.db("HangoutV2-2");
+      const db = await client.db(dbName);
       exports.db = db;
 
       await db.command({ ping:1 });
@@ -29,6 +29,10 @@ exports.init = function(uri, lLogger) {
       reject(err);
     }
   });
+}
+
+exports.close = () => {
+  return client.close();
 }
 
 function findOne(col, query, callback) {
@@ -44,7 +48,7 @@ function find(col, query, callback) {
 }
 
 function findWProjection(col, query, projection, callback) {
-  col.find(query, projection, callback).toArray()
+  col.find(query, callback).project(projection).toArray()
     .then(data => { callback(null, data); })
     .catch(err => { callback(err, null); });
 }
@@ -90,7 +94,7 @@ async function insert(col, doc, callback) {
 
 function remove(col, query, callback) {
   col.deleteMany(query)
-    .then((data) => { callback(null, data); })
+    .then((data) => { callback(null, data.deletedCount); })
     .catch((err) => { callback(err, null); });
 }
 

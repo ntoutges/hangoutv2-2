@@ -327,3 +327,2449 @@
 12:58:32.335:  No updates required
 12:58:34.215:  [mrcode/nicholast] has logged in
 12:58:36.439:  [mrcode/nicholast] has logged out
+13:02:16.918:  Connecting to Mongo...
+13:02:17.750:  Successfully connected to MongoDB
+13:02:17.760:  app started!
+13:02:17.763:  Retreiving data from https://www.mrcodeswildride.com/api/students
+13:02:17.844:  Successfully constructed photo roll sequence
+13:02:18.458:  No updates required
+13:02:21.289:  [mrcode/nicholast] has logged in
+
+-- 7/31/2023 --
+07:57:41.830:  Connecting to Mongo...
+
+-- 7/31/2023 --
+07:57:42.634:  Successfully connected to MongoDB
+07:57:56.013:  Connecting to Mongo...
+07:57:56.667:  Successfully connected to MongoDB
+07:58:42.201:  Connecting to Mongo...
+07:58:42.971:  Successfully connected to MongoDB
+07:59:03.333:  Connecting to Mongo...
+07:59:04.072:  Successfully connected to MongoDB
+07:59:13.729:  Connecting to Mongo...
+07:59:14.348:  Successfully connected to MongoDB
+07:59:51.803:  Connecting to Mongo...
+07:59:52.575:  Successfully connected to MongoDB
+08:00:10.187:  Connecting to Mongo...
+08:00:10.873:  Successfully connected to MongoDB
+08:00:25.113:  Connecting to Mongo...
+08:00:25.815:  Successfully connected to MongoDB
+08:01:20.406:  Connecting to Mongo...
+08:01:47.086:  Connecting to Mongo...
+08:02:04.848:  Connecting to Mongo...
+08:03:31.519:  Connecting to Mongo...
+08:03:32.677:  Successfully connected to MongoDB
+08:03:51.323:  Connecting to Mongo...
+08:03:52.454:  Successfully connected to MongoDB
+08:04:25.967:  Connecting to Mongo...
+08:04:27.069:  Successfully connected to MongoDB
+08:04:42.654:  Connecting to Mongo...
+08:04:43.801:  Successfully connected to MongoDB
+08:07:36.812:  Connecting to Mongo...
+08:07:37.972:  Successfully connected to MongoDB
+08:08:39.479:  Connecting to Mongo...
+08:08:40.651:  Successfully connected to MongoDB
+08:09:04.169:  Connecting to Mongo...
+08:09:05.244:  Successfully connected to MongoDB
+08:09:34.342:  Connecting to Mongo...
+08:09:35.444:  Successfully connected to MongoDB
+08:10:34.338:  Connecting to Mongo...
+08:11:49.744:  Connecting to Mongo...
+08:11:50.882:  Successfully connected to MongoDB
+08:14:59.423:  Connecting to Mongo...
+08:15:00.618:  Successfully connected to MongoDB
+08:15:06.083:  Connecting to Mongo...
+08:15:07.143:  Successfully connected to MongoDB
+08:16:55.515:  Connecting to Mongo...
+08:17:15.514:  Connecting to Mongo...
+08:17:16.601:  Successfully connected to MongoDB
+08:18:33.040:  Connecting to Mongo...
+08:18:33.800:  Successfully connected to MongoDB
+08:19:50.326:  Connecting to Mongo...
+08:19:51.480:  Successfully connected to MongoDB
+08:20:43.099:  Connecting to Mongo...
+08:22:00.758:  Connecting to Mongo...
+08:22:01.946:  Successfully connected to MongoDB
+08:22:10.562:  Connecting to Mongo...
+08:22:11.662:  Successfully connected to MongoDB
+08:23:18.748:  Connecting to Mongo...
+08:23:19.917:  Successfully connected to MongoDB
+08:32:53.680:  Connecting to Mongo...
+08:32:54.804:  Successfully connected to MongoDB
+08:33:23.552:  Connecting to Mongo...
+08:33:24.630:  Successfully connected to MongoDB
+08:33:40.890:  Connecting to Mongo...
+08:33:41.977:  Successfully connected to MongoDB
+08:34:07.665:  Connecting to Mongo...
+08:34:08.442:  Successfully connected to MongoDB
+08:34:08.450:  app started!
+08:34:08.452:  Retreiving data from https://www.mrcodeswildride.com/api/students
+08:34:08.510:  Successfully constructed photo roll sequence
+08:34:09.340:  No updates required
+08:34:16.975:  [mrcode/nicholast] has logged in
+08:34:37.734:  [mrcode/nicholast] has logged out
+08:35:01.675:  Connecting to Mongo...
+08:35:02.861:  Successfully connected to MongoDB
+08:35:17.481:  Connecting to Mongo...
+08:35:18.538:  Successfully connected to MongoDB
+08:35:35.985:  Connecting to Mongo...
+08:35:37.108:  Successfully connected to MongoDB
+08:41:29.350:  Connecting to Mongo...
+08:41:29.342:  Connecting to Mongo...
+08:41:30.137:  Successfully connected to MongoDB
+08:41:30.435:  Successfully connected to MongoDB
+08:41:53.266:  Connecting to Mongo...
+08:41:53.275:  Connecting to Mongo...
+08:41:53.896:  Successfully connected to MongoDB
+08:41:54.287:  Successfully connected to MongoDB
+08:42:37.032:  Connecting to Mongo...
+08:42:37.043:  Connecting to Mongo...
+08:42:37.857:  Successfully connected to MongoDB
+08:42:38.076:  Successfully connected to MongoDB
+08:44:19.250:  Connecting to Mongo...
+08:44:19.259:  Connecting to Mongo...
+08:44:19.964:  Successfully connected to MongoDB
+08:44:20.476:  Successfully connected to MongoDB
+08:45:00.929:  Connecting to Mongo...
+08:45:00.935:  Connecting to Mongo...
+08:45:01.576:  Successfully connected to MongoDB
+09:13:30.726:  Connecting to Mongo...
+09:13:56.887:  Connecting to Mongo...
+09:13:57.982:  Successfully connected to MongoDB
+09:14:09.366:  Connecting to Mongo...
+
+-- 7/31/2023 --
+09:14:49.757:  Connecting to Mongo...
+
+-- 7/31/2023 --
+09:14:50.935:  Successfully connected to MongoDB
+09:15:07.019:  Connecting to Mongo...
+09:15:08.083:  Successfully connected to MongoDB
+09:16:28.606:  Connecting to Mongo...
+09:16:29.783:  Successfully connected to MongoDB
+09:17:31.756:  Connecting to Mongo...
+09:17:32.995:  Successfully connected to MongoDB
+09:17:59.341:  Connecting to Mongo...
+09:18:00.403:  Successfully connected to MongoDB
+09:19:13.070:  Connecting to Mongo...
+09:19:14.294:  Successfully connected to MongoDB
+09:20:02.814:  Connecting to Mongo...
+09:20:03.909:  Successfully connected to MongoDB
+09:20:23.536:  Connecting to Mongo...
+09:20:24.617:  Successfully connected to MongoDB
+09:20:27.982:  Connecting to Mongo...
+09:20:29.100:  Successfully connected to MongoDB
+09:20:42.867:  Connecting to Mongo...
+09:20:43.957:  Successfully connected to MongoDB
+09:25:56.212:  Connecting to Mongo...
+09:25:57.353:  Successfully connected to MongoDB
+09:28:51.420:  Connecting to Mongo...
+09:28:52.629:  Successfully connected to MongoDB
+09:29:02.440:  Connecting to Mongo...
+09:29:03.552:  Successfully connected to MongoDB
+09:29:29.298:  Connecting to Mongo...
+09:29:30.379:  Successfully connected to MongoDB
+09:29:52.023:  Connecting to Mongo...
+09:29:53.235:  Successfully connected to MongoDB
+09:30:19.911:  Connecting to Mongo...
+09:30:20.992:  Successfully connected to MongoDB
+09:31:58.337:  Connecting to Mongo...
+09:31:59.569:  Successfully connected to MongoDB
+09:32:13.715:  Connecting to Mongo...
+09:32:14.836:  Successfully connected to MongoDB
+09:32:21.954:  Connecting to Mongo...
+09:32:23.078:  Successfully connected to MongoDB
+09:33:46.859:  Connecting to Mongo...
+09:33:48.045:  Successfully connected to MongoDB
+09:34:01.776:  Connecting to Mongo...
+09:34:02.874:  Successfully connected to MongoDB
+09:34:19.647:  Connecting to Mongo...
+09:34:20.738:  Successfully connected to MongoDB
+09:34:31.334:  Connecting to Mongo...
+09:34:32.422:  Successfully connected to MongoDB
+09:35:16.877:  Connecting to Mongo...
+09:35:17.681:  Successfully connected to MongoDB
+09:35:52.548:  Connecting to Mongo...
+09:35:53.226:  Successfully connected to MongoDB
+09:35:53.283:  Connecting to Mongo...
+09:35:54.373:  Successfully connected to MongoDB
+09:36:11.859:  Connecting to Mongo...
+09:36:12.517:  Successfully connected to MongoDB
+09:36:12.567:  Connecting to Mongo...
+09:36:13.565:  Successfully connected to MongoDB
+09:36:57.186:  Connecting to Mongo...
+09:36:58.346:  Successfully connected to MongoDB
+09:36:58.709:  Connecting to Mongo...
+09:36:59.698:  Successfully connected to MongoDB
+09:39:54.094:  Connecting to Mongo...
+09:39:55.217:  Successfully connected to MongoDB
+09:39:55.572:  Connecting to Mongo...
+09:39:56.584:  Successfully connected to MongoDB
+09:40:02.755:  Connecting to Mongo...
+09:40:03.827:  Successfully connected to MongoDB
+09:40:04.184:  Connecting to Mongo...
+09:40:05.219:  Successfully connected to MongoDB
+09:40:17.348:  Connecting to Mongo...
+09:40:18.455:  Successfully connected to MongoDB
+09:40:18.812:  Connecting to Mongo...
+09:40:19.771:  Successfully connected to MongoDB
+09:40:37.373:  Connecting to Mongo...
+09:40:38.492:  Successfully connected to MongoDB
+09:40:38.852:  Connecting to Mongo...
+09:40:39.840:  Successfully connected to MongoDB
+09:40:53.711:  Connecting to Mongo...
+09:40:54.487:  Successfully connected to MongoDB
+09:40:54.536:  Connecting to Mongo...
+09:40:55.613:  Successfully connected to MongoDB
+09:41:11.329:  Connecting to Mongo...
+09:41:12.026:  Successfully connected to MongoDB
+09:41:12.080:  Connecting to Mongo...
+09:41:13.055:  Successfully connected to MongoDB
+09:41:33.968:  Connecting to Mongo...
+09:41:34.725:  Successfully connected to MongoDB
+09:41:34.866:  Connecting to Mongo...
+09:41:35.873:  Successfully connected to MongoDB
+09:41:49.462:  Connecting to Mongo...
+09:41:50.117:  Successfully connected to MongoDB
+09:41:50.271:  Connecting to Mongo...
+09:41:51.241:  Successfully connected to MongoDB
+09:45:29.356:  Connecting to Mongo...
+09:45:30.138:  Successfully connected to MongoDB
+09:45:30.277:  Connecting to Mongo...
+09:45:31.318:  Successfully connected to MongoDB
+09:45:37.506:  Connecting to Mongo...
+09:45:38.123:  Successfully connected to MongoDB
+09:45:38.258:  Connecting to Mongo...
+09:45:39.266:  Successfully connected to MongoDB
+09:46:05.847:  Connecting to Mongo...
+09:46:06.586:  Successfully connected to MongoDB
+09:46:06.742:  Connecting to Mongo...
+09:46:07.765:  Successfully connected to MongoDB
+09:46:56.306:  Connecting to Mongo...
+09:46:56.989:  Successfully connected to MongoDB
+09:46:57.125:  Connecting to Mongo...
+09:46:58.222:  Successfully connected to MongoDB
+09:48:19.182:  Connecting to Mongo...
+09:48:19.939:  Successfully connected to MongoDB
+09:48:20.079:  Connecting to Mongo...
+09:48:21.151:  Successfully connected to MongoDB
+09:52:45.675:  Connecting to Mongo...
+09:52:46.373:  Successfully connected to MongoDB
+09:52:46.507:  Connecting to Mongo...
+09:52:47.548:  Successfully connected to MongoDB
+09:59:10.836:  Connecting to Mongo...
+09:59:11.514:  Successfully connected to MongoDB
+09:59:11.653:  Connecting to Mongo...
+09:59:12.755:  Successfully connected to MongoDB
+09:59:27.369:  Connecting to Mongo...
+09:59:27.974:  Successfully connected to MongoDB
+09:59:28.101:  Connecting to Mongo...
+09:59:29.099:  Successfully connected to MongoDB
+10:00:14.191:  Connecting to Mongo...
+10:00:15.004:  Successfully connected to MongoDB
+10:00:15.166:  Connecting to Mongo...
+10:00:16.291:  Successfully connected to MongoDB
+10:07:50.101:  Connecting to Mongo...
+10:07:50.835:  Successfully connected to MongoDB
+10:07:50.986:  Connecting to Mongo...
+10:07:52.092:  Successfully connected to MongoDB
+10:10:16.206:  Connecting to Mongo...
+10:10:17.000:  Successfully connected to MongoDB
+10:10:17.154:  Connecting to Mongo...
+10:10:18.213:  Successfully connected to MongoDB
+10:11:33.810:  Connecting to Mongo...
+10:11:34.499:  Successfully connected to MongoDB
+10:11:34.635:  Connecting to Mongo...
+10:11:35.752:  Successfully connected to MongoDB
+10:12:15.875:  Connecting to Mongo...
+10:12:16.960:  Successfully connected to MongoDB
+10:12:17.124:  Connecting to Mongo...
+10:12:18.180:  Successfully connected to MongoDB
+10:12:57.340:  Connecting to Mongo...
+10:12:58.100:  Successfully connected to MongoDB
+10:12:58.250:  Connecting to Mongo...
+10:12:59.325:  Successfully connected to MongoDB
+10:13:22.741:  Connecting to Mongo...
+10:13:23.397:  Successfully connected to MongoDB
+10:13:23.531:  Connecting to Mongo...
+10:13:24.523:  Successfully connected to MongoDB
+10:14:19.475:  Connecting to Mongo...
+10:14:20.280:  Successfully connected to MongoDB
+10:14:20.442:  Connecting to Mongo...
+10:14:21.485:  Successfully connected to MongoDB
+10:14:32.791:  Connecting to Mongo...
+10:14:33.519:  Successfully connected to MongoDB
+10:14:33.682:  Connecting to Mongo...
+10:14:34.700:  Successfully connected to MongoDB
+10:14:55.103:  Connecting to Mongo...
+10:14:55.791:  Successfully connected to MongoDB
+10:14:55.951:  Connecting to Mongo...
+10:14:56.957:  Successfully connected to MongoDB
+10:15:02.853:  Connecting to Mongo...
+10:15:03.524:  Successfully connected to MongoDB
+10:15:03.685:  Connecting to Mongo...
+10:15:04.713:  Successfully connected to MongoDB
+10:15:58.691:  Connecting to Mongo...
+10:15:59.432:  Successfully connected to MongoDB
+10:15:59.584:  Connecting to Mongo...
+10:16:00.657:  Successfully connected to MongoDB
+10:16:00.912:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:17:55.268:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:17:56.028:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:17:56.167:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:17:57.262:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:17:57.524:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:21:06.942:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:21:07.667:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:21:07.808:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:21:08.942:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:21:09.195:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:21:23.711:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:21:24.351:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:21:24.499:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:21:25.501:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:21:25.761:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:28:42.337:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:28:43.047:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:28:43.183:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:28:44.227:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:28:44.483:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:29:20.269:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:29:20.879:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:29:21.015:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:29:22.028:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:29:22.287:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:30:11.312:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:30:12.064:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:30:12.218:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:30:13.327:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:30:13.576:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:30:40.601:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:30:41.314:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:30:41.470:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:30:42.476:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:30:42.728:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:32:46.113:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:32:46.933:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:32:47.075:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:32:48.185:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:32:48.438:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:34:39.708:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:34:40.413:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:34:40.595:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:34:41.661:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:34:41.914:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:35:00.317:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:35:00.980:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:35:01.143:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:35:02.125:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:35:02.370:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:35:02.921:  Successfully connected to MongoDB
+10:35:12.286:  Connecting to Mongo...
+10:35:12.992:  Successfully connected to MongoDB
+10:35:13.162:  Connecting to Mongo...
+10:35:14.193:  Successfully connected to MongoDB
+10:35:14.443:  Connecting to Mongo...
+10:35:15.012:  Successfully connected to MongoDB
+10:37:21.905:  Connecting to Mongo...
+10:37:22.660:  Successfully connected to MongoDB
+10:37:22.812:  Connecting to Mongo...
+10:37:23.978:  Successfully connected to MongoDB
+10:37:24.237:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:38:12.056:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:38:12.795:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:38:12.970:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:38:13.998:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:38:14.252:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:38:45.928:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:38:46.805:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:38:46.973:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:38:48.035:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:38:48.285:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:38:48.897:  Successfully connected to MongoDB
+10:38:58.109:  Connecting to Mongo...
+10:38:58.845:  Successfully connected to MongoDB
+10:38:59.003:  Connecting to Mongo...
+10:39:00.027:  Successfully connected to MongoDB
+10:39:00.281:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:39:30.665:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:39:31.352:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:39:31.509:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:39:32.510:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:39:32.758:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:39:33.366:  Successfully connected to MongoDB
+10:42:06.356:  Connecting to Mongo...
+10:42:07.197:  Successfully connected to MongoDB
+10:42:07.363:  Connecting to Mongo...
+10:42:08.399:  Successfully connected to MongoDB
+10:42:08.663:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:43:32.688:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:43:33.420:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:43:33.573:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:43:34.760:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:43:35.017:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:44:49.311:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:44:50.063:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:44:50.223:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:44:51.362:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:44:51.623:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:46:14.667:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:46:15.462:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:46:15.627:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:46:16.709:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:46:16.967:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:48:28.457:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:48:29.218:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:48:29.383:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:48:30.482:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:48:30.741:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:49:16.345:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:49:16.951:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:49:17.089:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:49:18.099:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:49:18.348:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:50:17.721:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:50:18.435:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:50:18.579:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:50:19.700:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:50:19.956:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:51:00.567:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:51:01.251:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:51:01.430:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:51:02.484:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:51:02.748:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:52:03.615:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:52:04.445:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:52:04.608:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:52:05.804:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:52:06.069:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:52:39.213:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:52:39.891:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:52:40.037:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:52:41.038:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+10:52:41.286:  Connecting to Mongo...
+
+-- 7/31/2023 --
+10:52:41.845:  Successfully connected to MongoDB
+10:54:11.191:  Connecting to Mongo...
+10:54:11.917:  Successfully connected to MongoDB
+10:54:12.053:  Connecting to Mongo...
+10:54:13.170:  Successfully connected to MongoDB
+10:54:13.428:  Connecting to Mongo...
+10:54:14.012:  Successfully connected to MongoDB
+10:54:53.663:  Connecting to Mongo...
+10:54:54.298:  Successfully connected to MongoDB
+10:54:54.440:  Connecting to Mongo...
+10:54:55.438:  Successfully connected to MongoDB
+10:54:55.691:  Connecting to Mongo...
+10:54:56.261:  Successfully connected to MongoDB
+10:55:19.782:  Connecting to Mongo...
+10:55:20.485:  Successfully connected to MongoDB
+10:55:20.645:  Connecting to Mongo...
+10:55:21.710:  Successfully connected to MongoDB
+10:55:21.966:  Connecting to Mongo...
+10:55:22.546:  Successfully connected to MongoDB
+10:55:55.296:  Connecting to Mongo...
+10:55:55.920:  Successfully connected to MongoDB
+10:55:56.064:  Connecting to Mongo...
+10:55:57.081:  Successfully connected to MongoDB
+10:55:57.334:  Connecting to Mongo...
+10:55:57.900:  Successfully connected to MongoDB
+10:56:16.992:  Connecting to Mongo...
+10:56:17.631:  Successfully connected to MongoDB
+10:56:17.790:  Connecting to Mongo...
+10:56:18.779:  Successfully connected to MongoDB
+10:56:19.027:  Connecting to Mongo...
+10:56:19.645:  Successfully connected to MongoDB
+10:56:36.677:  Connecting to Mongo...
+10:56:37.323:  Successfully connected to MongoDB
+10:56:37.478:  Connecting to Mongo...
+10:56:38.607:  Successfully connected to MongoDB
+10:56:38.868:  Connecting to Mongo...
+10:56:39.414:  Successfully connected to MongoDB
+10:56:40.006:  Connecting to Mongo...
+10:56:40.990:  Successfully connected to MongoDB
+10:56:41.244:  Connecting to Mongo...
+10:56:41.801:  Successfully connected to MongoDB
+10:56:42.674:  Connecting to Mongo...
+10:56:43.647:  Successfully connected to MongoDB
+10:56:43.820:  Connecting to Mongo...
+10:56:44.354:  Successfully connected to MongoDB
+10:56:45.692:  Connecting to Mongo...
+10:56:46.683:  Successfully connected to MongoDB
+10:56:46.854:  Connecting to Mongo...
+10:56:47.409:  Successfully connected to MongoDB
+10:56:48.553:  Connecting to Mongo...
+10:56:49.567:  Successfully connected to MongoDB
+10:56:49.743:  Connecting to Mongo...
+10:56:50.301:  Successfully connected to MongoDB
+10:56:51.239:  Connecting to Mongo...
+10:56:52.235:  Successfully connected to MongoDB
+10:56:52.410:  Connecting to Mongo...
+10:56:52.946:  Successfully connected to MongoDB
+10:56:53.919:  Connecting to Mongo...
+10:56:54.902:  Successfully connected to MongoDB
+10:56:55.077:  Connecting to Mongo...
+10:56:55.677:  Successfully connected to MongoDB
+10:56:56.632:  Connecting to Mongo...
+10:56:57.614:  Successfully connected to MongoDB
+10:56:57.940:  Connecting to Mongo...
+10:57:52.371:  Connecting to Mongo...
+10:57:53.111:  Successfully connected to MongoDB
+10:57:53.280:  Connecting to Mongo...
+10:57:54.390:  Successfully connected to MongoDB
+10:57:54.650:  Connecting to Mongo...
+10:57:55.265:  Successfully connected to MongoDB
+10:57:55.922:  Connecting to Mongo...
+10:58:34.287:  Connecting to Mongo...
+10:58:34.950:  Successfully connected to MongoDB
+10:58:35.100:  Connecting to Mongo...
+10:58:36.147:  Successfully connected to MongoDB
+10:58:36.407:  Connecting to Mongo...
+10:58:36.993:  Successfully connected to MongoDB
+10:58:37.574:  Connecting to Mongo...
+10:59:07.523:  Connecting to Mongo...
+10:59:08.214:  Successfully connected to MongoDB
+10:59:08.357:  Connecting to Mongo...
+10:59:09.407:  Successfully connected to MongoDB
+10:59:09.660:  Connecting to Mongo...
+10:59:10.169:  Successfully connected to MongoDB
+10:59:10.742:  Connecting to Mongo...
+11:00:20.056:  Connecting to Mongo...
+11:00:20.751:  Successfully connected to MongoDB
+11:00:20.894:  Connecting to Mongo...
+11:00:21.940:  Successfully connected to MongoDB
+11:00:22.191:  Connecting to Mongo...
+11:00:22.723:  Successfully connected to MongoDB
+11:00:25.110:  Connecting to Mongo...
+11:00:25.775:  Successfully connected to MongoDB
+11:00:25.921:  Connecting to Mongo...
+11:00:26.944:  Successfully connected to MongoDB
+11:00:27.206:  Connecting to Mongo...
+11:00:27.779:  Successfully connected to MongoDB
+11:00:28.360:  Connecting to Mongo...
+11:00:56.970:  Connecting to Mongo...
+11:00:57.702:  Successfully connected to MongoDB
+11:00:57.866:  Connecting to Mongo...
+11:00:58.858:  Successfully connected to MongoDB
+11:00:59.123:  Connecting to Mongo...
+11:00:59.720:  Successfully connected to MongoDB
+11:01:00.328:  Connecting to Mongo...
+11:01:01.318:  Successfully connected to MongoDB
+11:01:40.348:  Connecting to Mongo...
+11:01:41.129:  Successfully connected to MongoDB
+11:01:41.286:  Connecting to Mongo...
+11:01:42.404:  Successfully connected to MongoDB
+11:01:42.664:  Connecting to Mongo...
+11:01:43.268:  Successfully connected to MongoDB
+11:01:43.858:  Connecting to Mongo...
+11:02:23.991:  Connecting to Mongo...
+11:02:24.749:  Successfully connected to MongoDB
+11:02:24.922:  Connecting to Mongo...
+11:02:25.948:  Successfully connected to MongoDB
+11:02:26.209:  Connecting to Mongo...
+11:02:26.822:  Successfully connected to MongoDB
+11:02:27.578:  Connecting to Mongo...
+11:02:28.588:  Successfully connected to MongoDB
+11:02:28.841:  Connecting to Mongo...
+11:02:29.423:  Successfully connected to MongoDB
+11:02:30.561:  Connecting to Mongo...
+11:02:31.572:  Successfully connected to MongoDB
+11:02:31.745:  Connecting to Mongo...
+11:02:32.290:  Successfully connected to MongoDB
+11:02:33.648:  Connecting to Mongo...
+11:02:34.652:  Successfully connected to MongoDB
+11:02:34.838:  Connecting to Mongo...
+11:02:35.398:  Successfully connected to MongoDB
+11:02:36.819:  Connecting to Mongo...
+11:02:37.856:  Successfully connected to MongoDB
+11:02:38.041:  Connecting to Mongo...
+11:02:38.620:  Successfully connected to MongoDB
+11:02:39.739:  Connecting to Mongo...
+11:02:40.788:  Successfully connected to MongoDB
+11:02:40.961:  Connecting to Mongo...
+11:02:41.591:  Successfully connected to MongoDB
+11:02:42.980:  Connecting to Mongo...
+11:02:44.071:  Successfully connected to MongoDB
+11:02:44.250:  Connecting to Mongo...
+11:03:10.151:  Connecting to Mongo...
+11:03:10.804:  Successfully connected to MongoDB
+11:03:10.859:  Connecting to Mongo...
+11:03:28.915:  Connecting to Mongo...
+11:03:29.564:  Successfully connected to MongoDB
+11:03:29.613:  Connecting to Mongo...
+11:03:30.644:  Successfully connected to MongoDB
+11:03:30.901:  Connecting to Mongo...
+11:03:31.429:  Successfully connected to MongoDB
+11:03:32.044:  Connecting to Mongo...
+11:03:33.029:  Successfully connected to MongoDB
+11:03:33.281:  Connecting to Mongo...
+11:03:33.852:  Successfully connected to MongoDB
+11:03:34.773:  Connecting to Mongo...
+11:03:35.753:  Successfully connected to MongoDB
+11:03:35.931:  Connecting to Mongo...
+11:03:36.452:  Successfully connected to MongoDB
+11:03:37.318:  Connecting to Mongo...
+11:03:38.324:  Successfully connected to MongoDB
+11:03:38.503:  Connecting to Mongo...
+11:03:39.054:  Successfully connected to MongoDB
+11:03:39.763:  Connecting to Mongo...
+11:03:40.737:  Successfully connected to MongoDB
+11:03:40.910:  Connecting to Mongo...
+11:03:41.495:  Successfully connected to MongoDB
+11:03:42.109:  Connecting to Mongo...
+11:03:43.229:  Successfully connected to MongoDB
+11:03:43.395:  Connecting to Mongo...
+11:03:43.937:  Successfully connected to MongoDB
+11:03:44.681:  Connecting to Mongo...
+11:03:45.704:  Successfully connected to MongoDB
+11:03:45.878:  Connecting to Mongo...
+11:03:46.508:  Successfully connected to MongoDB
+11:03:47.123:  Connecting to Mongo...
+11:03:48.077:  Successfully connected to MongoDB
+11:03:48.401:  Connecting to Mongo...
+11:03:48.975:  Successfully connected to MongoDB
+11:03:49.644:  Connecting to Mongo...
+11:03:50.631:  Successfully connected to MongoDB
+11:03:50.803:  Connecting to Mongo...
+11:03:51.352:  Successfully connected to MongoDB
+11:03:52.156:  Connecting to Mongo...
+11:03:53.133:  Successfully connected to MongoDB
+11:03:53.300:  Connecting to Mongo...
+11:03:53.791:  Successfully connected to MongoDB
+11:03:54.579:  Connecting to Mongo...
+11:03:55.540:  Successfully connected to MongoDB
+11:03:55.705:  Connecting to Mongo...
+11:03:56.336:  Successfully connected to MongoDB
+11:03:57.122:  Connecting to Mongo...
+11:03:58.125:  Successfully connected to MongoDB
+11:03:58.296:  Connecting to Mongo...
+11:03:58.820:  Successfully connected to MongoDB
+11:03:59.626:  Connecting to Mongo...
+11:04:00.592:  Successfully connected to MongoDB
+11:04:00.762:  Connecting to Mongo...
+11:04:01.353:  Successfully connected to MongoDB
+11:04:02.060:  Connecting to Mongo...
+11:04:03.016:  Successfully connected to MongoDB
+11:04:03.103:  Connecting to Mongo...
+11:04:03.703:  Successfully connected to MongoDB
+11:04:04.211:  Connecting to Mongo...
+11:04:05.237:  Successfully connected to MongoDB
+11:04:05.329:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:08:47.229:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:08:48.063:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:08:48.175:  Closed current
+
+-- 7/31/2023 --
+11:08:48.180:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:08:49.299:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:08:49.579:  Closed legacy
+
+-- 7/31/2023 --
+11:08:49.581:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:08:50.180:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:08:50.181:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:08:50.279:  Shorty28 already exists.
+
+-- 7/31/2023 --
+11:08:50.321:  alin already exists.
+
+-- 7/31/2023 --
+11:08:50.361:  alinam already exists.
+
+-- 7/31/2023 --
+11:08:50.405:  alex is a failure already exists.
+
+-- 7/31/2023 --
+11:08:50.449:  aadyah already exists.
+
+-- 7/31/2023 --
+11:08:50.455:  abrianas already exists.
+
+-- 7/31/2023 --
+11:08:50.512:  Admin already exists.
+
+-- 7/31/2023 --
+11:08:50.756:  END OF BATCH
+
+-- 7/31/2023 --
+11:08:50.761:  Closed current
+
+-- 7/31/2023 --
+11:08:50.764:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:08:51.766:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:08:52.022:  Closed legacy
+
+-- 7/31/2023 --
+11:08:52.025:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:08:52.668:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:08:52.667:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:08:52.726:  aaronc already exists.
+
+-- 7/31/2023 --
+11:08:52.793:  aaroncl already exists.
+
+-- 7/31/2023 --
+11:08:52.839:  abhinavu already exists.
+
+-- 7/31/2023 --
+11:08:52.886:  abelg already exists.
+
+-- 7/31/2023 --
+11:08:52.931:  alexg already exists.
+
+-- 7/31/2023 --
+11:08:52.947:  akhilk already exists.
+
+-- 7/31/2023 --
+11:08:52.974:  aanyaj already exists.
+
+-- 7/31/2023 --
+11:08:52.990:  aaron already exists.
+
+-- 7/31/2023 --
+11:08:52.992:  aaronn already exists.
+
+-- 7/31/2023 --
+11:08:53.035:  arinw already exists.
+
+-- 7/31/2023 --
+11:08:53.037:  abir already exists.
+
+-- 7/31/2023 --
+11:08:53.076:  adamh already exists.
+
+-- 7/31/2023 --
+11:08:53.082:  chandlerc already exists.
+
+-- 7/31/2023 --
+11:08:53.191:  alexandrar already exists.
+
+-- 7/31/2023 --
+11:08:53.255:  aditric already exists.
+
+-- 7/31/2023 --
+11:08:53.529:  END OF BATCH
+
+-- 7/31/2023 --
+11:08:53.534:  Closed current
+
+-- 7/31/2023 --
+11:08:53.537:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:08:54.542:  Successfully connected to MongoDB
+11:10:07.014:  Connecting to Mongo...
+11:10:07.797:  Successfully connected to MongoDB
+11:10:07.895:  Closed current
+11:10:07.899:  Connecting to Mongo...
+11:11:25.959:  Connecting to Mongo...
+11:11:26.745:  Successfully connected to MongoDB
+11:11:26.848:  Closed current
+11:11:26.852:  Connecting to Mongo...
+11:11:27.987:  Successfully connected to MongoDB
+11:11:28.255:  Closed legacy
+11:11:28.259:  Connecting to Mongo...
+11:11:28.838:  Successfully connected to MongoDB
+11:11:28.839:  
+
+START OF BATCH
+11:11:28.924:  Shorty28 already exists.
+11:11:28.967:  alin already exists.
+11:11:29.004:  alinam already exists.
+11:11:29.047:  alex is a failure already exists.
+11:11:29.087:  aadyah already exists.
+11:11:29.136:  Admin already exists.
+11:11:29.176:  abrianas already exists.
+11:11:29.407:  
+END OF BATCH
+11:11:29.411:  Closed current
+11:11:29.413:  Connecting to Mongo...
+11:11:30.408:  Successfully connected to MongoDB
+11:11:30.660:  Closed legacy
+11:11:30.663:  Connecting to Mongo...
+11:11:31.242:  Successfully connected to MongoDB
+11:11:31.243:  
+
+START OF BATCH
+11:11:31.279:  aaronc already exists.
+11:11:31.316:  aaroncl already exists.
+11:11:31.367:  abhinavu already exists.
+11:11:31.408:  abelg already exists.
+11:11:31.447:  alexg already exists.
+11:11:31.488:  alexandrar already exists.
+11:11:31.527:  aanyaj already exists.
+11:11:31.536:  aaron already exists.
+11:11:31.567:  abir already exists.
+11:11:31.575:  akhilk already exists.
+11:11:31.583:  adamh already exists.
+11:11:31.672:  chandlerc already exists.
+11:11:31.698:  arinw already exists.
+11:11:31.832:  aditric already exists.
+11:11:31.856:  aaronn already exists.
+11:11:32.129:  
+END OF BATCH
+11:11:32.134:  Closed current
+11:11:32.137:  Connecting to Mongo...
+11:11:33.143:  Successfully connected to MongoDB
+11:11:33.319:  Closed legacy
+11:11:33.321:  Connecting to Mongo...
+11:11:33.891:  Successfully connected to MongoDB
+11:11:33.891:  
+
+START OF BATCH
+11:11:33.940:  davidb already exists.
+11:11:34.012:  gracez already exists.
+11:11:34.054:  jaker already exists.
+11:11:34.097:  joshf already exists.
+11:11:34.141:  joshuac already exists.
+11:11:34.184:  aminan already exists.
+11:11:34.185:  davidk already exists.
+11:11:34.214:  cthrex already exists.
+11:11:34.224:  erics already exists.
+11:11:34.225:  evanb already exists.
+11:11:34.272:  jadynp already exists.
+11:11:34.273:  georger already exists.
+11:11:34.435:  dlloyd already exists.
+11:11:34.449:  justinb already exists.
+11:11:34.727:  
+END OF BATCH
+11:11:34.731:  Closed current
+11:11:34.733:  Connecting to Mongo...
+11:11:35.768:  Successfully connected to MongoDB
+11:11:35.939:  Closed legacy
+11:11:35.942:  Connecting to Mongo...
+11:11:36.519:  Successfully connected to MongoDB
+11:11:36.519:  
+
+START OF BATCH
+11:11:36.568:  brazilb already exists.
+11:11:36.607:  emmac already exists.
+11:11:36.664:  francisw already exists.
+11:11:36.704:  jangafet already exists.
+11:11:36.744:  jasonl already exists.
+11:11:36.786:  josephm already exists.
+11:11:36.828:  dallasz already exists.
+11:11:36.851:  colbyk already exists.
+11:11:37.091:  ashtenk already exists.
+11:11:37.137:  
+END OF BATCH
+11:11:37.140:  Closed current
+11:11:37.142:  Connecting to Mongo...
+11:11:38.152:  Successfully connected to MongoDB
+11:11:38.320:  Closed legacy
+11:11:38.323:  Connecting to Mongo...
+11:11:38.905:  Successfully connected to MongoDB
+11:11:38.905:  
+
+START OF BATCH
+11:11:38.952:  judef already exists.
+11:11:38.993:  davidz already exists.
+11:11:39.039:  dhevend already exists.
+11:11:39.196:  annl already exists.
+11:11:39.231:  benjiminb already exists.
+11:11:39.283:  
+END OF BATCH
+11:11:39.285:  Closed current
+11:11:39.287:  Connecting to Mongo...
+11:11:40.304:  Successfully connected to MongoDB
+11:11:40.465:  Closed legacy
+11:11:40.467:  Connecting to Mongo...
+11:11:41.002:  Successfully connected to MongoDB
+11:11:41.003:  
+
+START OF BATCH
+11:11:41.043:  jackc already exists.
+11:11:41.079:  kesavanr already exists.
+11:11:41.118:  amalp already exists.
+11:11:41.155:  jamesl already exists.
+11:11:41.187:  brycet already exists.
+11:11:41.268:  danielb already exists.
+11:11:41.311:  charliel already exists.
+11:11:41.549:  
+END OF BATCH
+11:11:41.551:  Closed current
+11:11:41.553:  Connecting to Mongo...
+11:11:42.520:  Successfully connected to MongoDB
+11:11:42.688:  Closed legacy
+11:11:42.690:  Connecting to Mongo...
+11:11:43.263:  Successfully connected to MongoDB
+11:11:43.263:  
+
+START OF BATCH
+11:11:43.308:  christianb already exists.
+11:11:43.378:  darrens already exists.
+11:11:43.420:  kamdyng already exists.
+11:11:43.460:  anishb already exists.
+11:11:43.500:  dariyk already exists.
+11:11:43.556:  austinl already exists.
+11:11:43.578:  arlynb already exists.
+11:11:43.825:  
+END OF BATCH
+11:11:43.828:  Closed current
+11:11:43.830:  Connecting to Mongo...
+11:11:44.812:  Successfully connected to MongoDB
+11:11:45.154:  Closed legacy
+11:11:45.157:  Connecting to Mongo...
+11:11:45.663:  Successfully connected to MongoDB
+11:11:45.663:  
+
+START OF BATCH
+11:11:45.700:  edwardm already exists.
+11:11:45.744:  hughk already exists.
+11:11:45.779:  icecreamosaurus already exists.
+11:11:45.814:  jonathanw already exists.
+11:11:45.848:  lloyd already exists.
+11:11:45.888:  krishb already exists.
+11:11:45.977:  kaih already exists.
+11:11:46.030:  bene already exists.
+11:11:46.227:  
+END OF BATCH
+11:11:46.229:  Closed current
+11:11:46.232:  Connecting to Mongo...
+11:11:47.184:  Successfully connected to MongoDB
+11:11:47.353:  Closed legacy
+11:11:47.356:  Connecting to Mongo...
+11:11:47.952:  Successfully connected to MongoDB
+11:11:47.953:  
+
+START OF BATCH
+11:11:48.004:  masonh already exists.
+11:11:48.070:  maxm already exists.
+11:11:48.114:  maryannh already exists.
+11:11:48.157:  mayoos already exists.
+11:11:48.201:  melaniam already exists.
+11:11:48.220:  mirask already exists.
+11:11:48.242:  lukej already exists.
+11:11:48.262:  krishs already exists.
+11:11:48.266:  mikeyajones already exists.
+11:11:48.281:  maiap already exists.
+11:11:48.443:  marcush already exists.
+11:11:48.526:  michaelw already exists.
+11:11:48.578:  
+END OF BATCH
+11:11:48.581:  Closed current
+11:11:48.583:  Connecting to Mongo...
+11:11:49.559:  Successfully connected to MongoDB
+11:11:49.720:  Closed legacy
+11:11:49.722:  Connecting to Mongo...
+11:11:50.303:  Successfully connected to MongoDB
+11:11:50.304:  
+
+START OF BATCH
+11:11:50.348:  penelopeo already exists.
+11:11:50.392:  nolanm already exists.
+11:11:50.431:  nicholast already exists.
+11:11:50.475:  nikhilg already exists.
+11:11:50.520:  mom already exists.
+11:11:50.564:  nathann already exists.
+11:11:50.568:  oweng already exists.
+11:11:50.606:  nickg already exists.
+11:11:50.608:  nicholasm already exists.
+11:11:50.800:  peterp already exists.
+11:11:50.865:  
+END OF BATCH
+11:11:50.868:  Closed current
+11:11:50.870:  Connecting to Mongo...
+11:11:51.825:  Successfully connected to MongoDB
+11:11:51.995:  Closed legacy
+11:11:51.998:  Connecting to Mongo...
+11:11:52.567:  Successfully connected to MongoDB
+11:11:52.568:  
+
+START OF BATCH
+11:11:52.616:  rachitj already exists.
+11:11:52.682:  pranavs already exists.
+11:11:52.728:  rickyd already exists.
+11:11:52.784:  raylans already exists.
+11:11:52.832:  sameerj already exists.
+11:11:52.836:  pranavm already exists.
+11:11:52.869:  razah already exists.
+11:11:52.876:  taruns already exists.
+11:11:52.898:  samueln already exists.
+11:11:53.064:  souradeepm already exists.
+11:11:53.123:  saib already exists.
+11:11:53.170:  
+END OF BATCH
+11:11:53.173:  Closed current
+11:11:53.175:  Connecting to Mongo...
+11:11:54.159:  Successfully connected to MongoDB
+11:11:54.329:  Closed legacy
+11:11:54.331:  Connecting to Mongo...
+11:11:54.856:  Successfully connected to MongoDB
+11:11:54.856:  
+
+START OF BATCH
+11:11:54.900:  stryderh already exists.
+11:11:54.975:  tariqc already exists.
+11:11:55.012:  ryul already exists.
+11:11:55.048:  sehars already exists.
+11:11:55.089:  rylan clone already exists.
+11:11:55.124:  shreyar already exists.
+11:11:55.129:  ryant already exists.
+11:11:55.160:  rylanr already exists.
+11:11:55.186:  spencert already exists.
+11:11:55.406:  sudeepm already exists.
+11:11:55.452:  
+END OF BATCH
+11:11:55.454:  Closed current
+11:11:55.456:  Connecting to Mongo...
+11:11:56.424:  Successfully connected to MongoDB
+11:11:56.599:  Closed legacy
+11:11:56.601:  Connecting to Mongo...
+11:11:57.139:  Successfully connected to MongoDB
+11:11:57.140:  
+
+START OF BATCH
+11:11:57.180:  wayanh already exists.
+11:11:57.224:  yatih already exists.
+11:11:57.269:  zoeb already exists.
+11:11:57.305:  williamd already exists.
+11:11:57.340:  trevorp already exists.
+11:11:57.376:  zachb already exists.
+11:11:57.420:  vincentg already exists.
+11:11:57.450:  zacharyd already exists.
+11:11:57.695:  
+END OF BATCH
+11:11:57.698:  Closed current
+11:11:57.700:  Connecting to Mongo...
+11:11:58.680:  Successfully connected to MongoDB
+11:11:58.765:  Closed legacy
+11:11:58.767:  Connecting to Mongo...
+11:13:56.733:  Connecting to Mongo...
+11:13:57.493:  Successfully connected to MongoDB
+11:13:57.546:  Closed current
+11:13:57.551:  Connecting to Mongo...
+11:13:58.677:  Successfully connected to MongoDB
+11:13:58.929:  Closed legacy
+11:13:58.932:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:21.367:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:22.113:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:22.167:  Closed current
+
+-- 7/31/2023 --
+11:15:22.171:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:23.261:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:23.523:  Closed legacy
+
+-- 7/31/2023 --
+11:15:23.526:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:24.158:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:24.159:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:15:24.472:  Created account mrcode/alin
+
+-- 7/31/2023 --
+11:15:24.502:  Created account mrcode/alex is a failure
+
+-- 7/31/2023 --
+11:15:24.543:  Created account mrcode/aadyah
+
+-- 7/31/2023 --
+11:15:24.572:  Created account mrcode/abrianas
+
+-- 7/31/2023 --
+11:15:24.618:  Created account mrcode/Admin
+
+-- 7/31/2023 --
+11:15:24.690:  Created account mrcode/Shorty28
+
+-- 7/31/2023 --
+11:15:24.761:  Created account mrcode/alinam
+
+-- 7/31/2023 --
+11:15:24.813:  
+END OF BATCH
+
+-- 7/31/2023 --
+11:15:24.818:  Closed current
+
+-- 7/31/2023 --
+11:15:24.821:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:25.808:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:26.070:  Closed legacy
+
+-- 7/31/2023 --
+11:15:26.073:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:26.694:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:26.695:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:15:27.105:  Created account mrcode/aaroncl
+
+-- 7/31/2023 --
+11:15:27.106:  Created account mrcode/aaronc
+
+-- 7/31/2023 --
+11:15:27.138:  Created account mrcode/abhinavu
+
+-- 7/31/2023 --
+11:15:27.160:  Created account mrcode/abelg
+
+-- 7/31/2023 --
+11:15:27.162:  Created account mrcode/alexg
+
+-- 7/31/2023 --
+11:15:27.177:  Created account mrcode/akhilk
+
+-- 7/31/2023 --
+11:15:27.209:  Created account mrcode/aanyaj
+
+-- 7/31/2023 --
+11:15:27.210:  Created account mrcode/aaron
+
+-- 7/31/2023 --
+11:15:27.216:  Created account mrcode/aaronn
+
+-- 7/31/2023 --
+11:15:27.266:  Created account mrcode/arinw
+
+-- 7/31/2023 --
+11:15:27.285:  Created account mrcode/abir
+
+-- 7/31/2023 --
+11:15:27.321:  Created account mrcode/chandlerc
+
+-- 7/31/2023 --
+11:15:27.431:  Created account mrcode/alexandrar
+
+-- 7/31/2023 --
+11:15:27.439:  Created account mrcode/aditric
+
+-- 7/31/2023 --
+11:15:27.570:  Created account mrcode/adamh
+
+-- 7/31/2023 --
+11:15:27.625:  
+END OF BATCH
+
+-- 7/31/2023 --
+11:15:27.629:  Closed current
+
+-- 7/31/2023 --
+11:15:27.631:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:28.653:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:28.827:  Closed legacy
+
+-- 7/31/2023 --
+11:15:28.829:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:29.446:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:29.446:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:15:29.858:  Created account mrcode/davidb
+
+-- 7/31/2023 --
+11:15:29.860:  Created account mrcode/jaker
+
+-- 7/31/2023 --
+11:15:29.861:  Created account mrcode/gracez
+
+-- 7/31/2023 --
+11:15:29.903:  Created account mrcode/joshuac
+
+-- 7/31/2023 --
+11:15:29.906:  Created account mrcode/joshf
+
+-- 7/31/2023 --
+11:15:29.923:  Created account mrcode/cthrex
+
+-- 7/31/2023 --
+11:15:29.943:  Created account mrcode/aminan
+
+-- 7/31/2023 --
+11:15:29.956:  Created account mrcode/davidk
+
+-- 7/31/2023 --
+11:15:30.014:  Created account mrcode/evanb
+
+-- 7/31/2023 --
+11:15:30.021:  Created account mrcode/jadynp
+
+-- 7/31/2023 --
+11:15:30.149:  Created account mrcode/justinb
+
+-- 7/31/2023 --
+11:15:30.155:  Created account mrcode/dlloyd
+
+-- 7/31/2023 --
+11:15:30.182:  Created account mrcode/erics
+
+-- 7/31/2023 --
+11:15:30.253:  Created account mrcode/georger
+
+-- 7/31/2023 --
+11:15:30.302:  
+END OF BATCH
+
+-- 7/31/2023 --
+11:15:30.305:  Closed current
+
+-- 7/31/2023 --
+11:15:30.307:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:31.273:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:31.446:  Closed legacy
+
+-- 7/31/2023 --
+11:15:31.449:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:32.063:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:32.064:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:15:32.397:  Created account mrcode/brazilb
+
+-- 7/31/2023 --
+11:15:32.414:  Created account mrcode/francisw
+
+-- 7/31/2023 --
+11:15:32.469:  Created account mrcode/jasonl
+
+-- 7/31/2023 --
+11:15:32.470:  Created account mrcode/jangafet
+
+-- 7/31/2023 --
+11:15:32.519:  Created account mrcode/dallasz
+
+-- 7/31/2023 --
+11:15:32.526:  Created account mrcode/josephm
+
+-- 7/31/2023 --
+11:15:32.575:  Created account mrcode/colbyk
+
+-- 7/31/2023 --
+11:15:32.638:  Created account mrcode/emmac
+
+-- 7/31/2023 --
+11:15:32.757:  Created account mrcode/ashtenk
+
+-- 7/31/2023 --
+11:15:32.801:  
+END OF BATCH
+
+-- 7/31/2023 --
+11:15:32.804:  Closed current
+
+-- 7/31/2023 --
+11:15:32.806:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:33.817:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:33.993:  Closed legacy
+
+-- 7/31/2023 --
+11:15:33.995:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:34.534:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:34.534:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:15:34.707:  Created account mrcode/judef
+
+-- 7/31/2023 --
+11:15:34.752:  Created account mrcode/davidz
+
+-- 7/31/2023 --
+11:15:34.921:  Created account mrcode/annl
+
+-- 7/31/2023 --
+11:15:34.947:  Created account mrcode/benjiminb
+
+-- 7/31/2023 --
+11:15:35.076:  Created account mrcode/dhevend
+
+-- 7/31/2023 --
+11:15:35.124:  
+END OF BATCH
+
+-- 7/31/2023 --
+11:15:35.127:  Closed current
+
+-- 7/31/2023 --
+11:15:35.130:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:36.141:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:36.310:  Closed legacy
+
+-- 7/31/2023 --
+11:15:36.312:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:36.919:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:36.920:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+11:15:37.205:  Created account mrcode/jackc
+
+-- 7/31/2023 --
+11:15:37.245:  Created account mrcode/kesavanr
+
+-- 7/31/2023 --
+11:15:37.286:  Created account mrcode/jamesl
+
+-- 7/31/2023 --
+11:15:37.334:  Created account mrcode/charliel
+
+-- 7/31/2023 --
+11:15:37.382:  Created account mrcode/danielb
+
+-- 7/31/2023 --
+11:15:37.504:  Created account mrcode/amalp
+
+-- 7/31/2023 --
+11:15:37.550:  Created account mrcode/brycet
+
+-- 7/31/2023 --
+11:15:37.601:  
+END OF BATCH
+
+-- 7/31/2023 --
+11:15:37.604:  Closed current
+
+-- 7/31/2023 --
+11:15:37.605:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:15:38.625:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:15:38.798:  Closed legacy
+
+-- 7/31/2023 --
+11:15:38.801:  Connecting to Mongo...
+11:15:40.168:  Connecting to Mongo...
+11:15:40.835:  Successfully connected to MongoDB
+11:15:40.887:  Closed current
+11:15:40.891:  Connecting to Mongo...
+11:15:41.903:  Successfully connected to MongoDB
+11:15:42.327:  Closed legacy
+11:15:42.330:  Connecting to Mongo...
+11:15:42.924:  Successfully connected to MongoDB
+11:15:42.924:  
+
+START OF BATCH
+11:15:43.046:  mrcode/Shorty28 already exists.
+11:15:43.092:  mrcode/alin already exists.
+11:15:43.141:  mrcode/alinam already exists.
+11:15:43.188:  mrcode/alex is a failure already exists.
+11:15:43.221:  mrcode/abrianas already exists.
+11:15:43.236:  mrcode/aaronc already exists.
+11:15:43.267:  mrcode/Admin already exists.
+11:15:43.274:  mrcode/aaron already exists.
+11:15:43.285:  mrcode/aaroncl already exists.
+11:15:43.315:  mrcode/abhinavu already exists.
+11:15:43.318:  mrcode/abelg already exists.
+11:15:43.338:  mrcode/alexg already exists.
+11:15:43.357:  mrcode/aanyaj already exists.
+11:15:43.362:  mrcode/alexandrar already exists.
+11:15:43.381:  mrcode/aditric already exists.
+11:15:43.397:  mrcode/aaronn already exists.
+11:15:43.411:  mrcode/abir already exists.
+11:15:43.424:  mrcode/adamh already exists.
+11:15:43.439:  mrcode/arinw already exists.
+11:15:43.459:  mrcode/chandlerc already exists.
+11:15:43.478:  mrcode/aadyah already exists.
+11:15:43.544:  mrcode/akhilk already exists.
+11:15:43.834:  
+END OF BATCH
+11:15:43.841:  Closed current
+11:15:43.844:  Connecting to Mongo...
+11:15:44.812:  Successfully connected to MongoDB
+11:15:45.066:  Closed legacy
+11:15:45.069:  Connecting to Mongo...
+11:15:45.628:  Successfully connected to MongoDB
+11:15:45.629:  
+
+START OF BATCH
+11:15:45.681:  mrcode/davidb already exists.
+11:15:45.767:  mrcode/gracez already exists.
+11:15:45.815:  mrcode/jaker already exists.
+11:15:45.862:  mrcode/joshf already exists.
+11:15:45.907:  mrcode/cthrex already exists.
+11:15:45.909:  mrcode/joshuac already exists.
+11:15:45.943:  mrcode/davidk already exists.
+11:15:45.946:  mrcode/dlloyd already exists.
+11:15:45.954:  mrcode/erics already exists.
+11:15:45.983:  mrcode/georger already exists.
+11:15:46.001:  mrcode/jadynp already exists.
+11:15:46.003:  mrcode/evanb already exists.
+11:15:46.023:  mrcode/brazilb already exists.
+11:15:46.043:  mrcode/colbyk already exists.
+11:15:46.049:  mrcode/dallasz already exists.
+11:15:46.063:  mrcode/emmac already exists.
+11:15:46.086:  mrcode/francisw already exists.
+11:15:46.090:  mrcode/jangafet already exists.
+11:15:46.102:  mrcode/jasonl already exists.
+11:15:46.129:  mrcode/justinb already exists.
+11:15:46.130:  mrcode/josephm already exists.
+11:15:46.134:  mrcode/ashtenk already exists.
+11:15:46.204:  mrcode/aminan already exists.
+11:15:46.474:  
+END OF BATCH
+11:15:46.478:  Closed current
+11:15:46.480:  Connecting to Mongo...
+11:15:47.460:  Successfully connected to MongoDB
+11:15:47.711:  Closed legacy
+11:15:47.713:  Connecting to Mongo...
+11:15:48.295:  Successfully connected to MongoDB
+11:15:48.296:  
+
+START OF BATCH
+11:15:48.346:  mrcode/judef already exists.
+11:15:48.411:  mrcode/davidz already exists.
+11:15:48.456:  mrcode/dhevend already exists.
+11:15:48.497:  mrcode/jackc already exists.
+11:15:48.538:  mrcode/charliel already exists.
+11:15:48.554:  mrcode/benjiminb already exists.
+11:15:48.582:  mrcode/kesavanr already exists.
+11:15:48.597:  mrcode/amalp already exists.
+11:15:48.620:  mrcode/annl already exists.
+11:15:48.629:  mrcode/brycet already exists.
+11:15:48.785:  mrcode/danielb already exists.
+11:15:48.877:  mrcode/jamesl already exists.
+11:15:48.924:  
+END OF BATCH
+11:15:48.928:  Closed current
+11:15:48.931:  Connecting to Mongo...
+11:15:49.909:  Successfully connected to MongoDB
+11:15:50.258:  Closed legacy
+11:15:50.261:  Connecting to Mongo...
+11:15:50.833:  
+
+START OF BATCH
+11:15:50.832:  Successfully connected to MongoDB
+11:15:51.220:  Created account mrcode/christianb
+11:15:51.251:  Created account mrcode/darrens
+11:15:51.264:  Created account mrcode/kamdyng
+11:15:51.270:  Created account mrcode/anishb
+11:15:51.299:  Created account mrcode/dariyk
+11:15:51.314:  Created account mrcode/kaih
+11:15:51.315:  Created account mrcode/arlynb
+11:15:51.351:  Created account mrcode/hughk
+11:15:51.367:  Created account mrcode/icecreamosaurus
+11:15:51.400:  Created account mrcode/lloyd
+11:15:51.429:  Created account mrcode/krishb
+11:15:51.499:  Created account mrcode/edwardm
+11:15:51.541:  Created account mrcode/bene
+11:15:51.584:  Created account mrcode/austinl
+11:15:51.689:  Created account mrcode/jonathanw
+11:15:51.744:  
+END OF BATCH
+11:15:51.747:  Closed current
+11:15:51.750:  Connecting to Mongo...
+11:15:52.748:  Successfully connected to MongoDB
+11:15:53.011:  Closed legacy
+11:15:53.013:  Connecting to Mongo...
+11:15:53.561:  Successfully connected to MongoDB
+11:15:53.561:  
+
+START OF BATCH
+11:15:54.015:  Created account mrcode/masonh
+11:15:54.038:  Created account mrcode/maxm
+11:15:54.054:  Created account mrcode/maryannh
+11:15:54.055:  Created account mrcode/mayoos
+11:15:54.086:  Created account mrcode/marcush
+11:15:54.103:  Created account mrcode/mikeyajones
+11:15:54.108:  Created account mrcode/lukej
+11:15:54.117:  Created account mrcode/mirask
+11:15:54.125:  Created account mrcode/penelopeo
+11:15:54.179:  Created account mrcode/oweng
+11:15:54.180:  Created account mrcode/nickg
+11:15:54.189:  Created account mrcode/nicholast
+11:15:54.193:  Created account mrcode/nolanm
+11:15:54.227:  Created account mrcode/mom
+11:15:54.241:  Created account mrcode/nikhilg
+11:15:54.274:  Created account mrcode/peterp
+11:15:54.288:  Created account mrcode/nathann
+11:15:54.296:  Created account mrcode/nicholasm
+11:15:54.349:  Created account mrcode/michaelw
+11:15:54.351:  Created account mrcode/melaniam
+11:15:54.358:  Created account mrcode/maiap
+11:15:54.441:  Created account mrcode/krishs
+11:15:54.667:  
+END OF BATCH
+11:15:54.673:  Connecting to Mongo...
+11:15:54.670:  Closed current
+11:15:55.646:  Successfully connected to MongoDB
+11:15:55.900:  Closed legacy
+11:15:55.902:  Connecting to Mongo...
+11:15:56.472:  Successfully connected to MongoDB
+11:15:56.473:  
+
+START OF BATCH
+11:15:56.960:  Created account mrcode/rachitj
+11:15:56.964:  Created account mrcode/pranavs
+11:15:56.982:  Created account mrcode/raylans
+11:15:57.006:  Created account mrcode/saib
+11:15:57.007:  Created account mrcode/sameerj
+11:15:57.012:  Created account mrcode/pranavm
+11:15:57.028:  Created account mrcode/razah
+11:15:57.046:  Created account mrcode/taruns
+11:15:57.056:  Created account mrcode/ryant
+11:15:57.060:  Created account mrcode/stryderh
+11:15:57.071:  Created account mrcode/tariqc
+11:15:57.088:  Created account mrcode/ryul
+11:15:57.137:  Created account mrcode/sehars
+11:15:57.142:  Created account mrcode/shreyar
+11:15:57.183:  Created account mrcode/rylan clone
+11:15:57.197:  Created account mrcode/sudeepm
+11:15:57.231:  Created account mrcode/rylanr
+11:15:57.248:  Created account mrcode/souradeepm
+11:15:57.294:  Created account mrcode/spencert
+11:15:57.310:  Created account mrcode/rickyd
+11:15:57.552:  Created account mrcode/samueln
+11:15:57.600:  
+END OF BATCH
+11:15:57.603:  Closed current
+11:15:57.605:  Connecting to Mongo...
+11:15:58.589:  Successfully connected to MongoDB
+11:15:58.878:  Closed legacy
+11:15:58.881:  Connecting to Mongo...
+11:15:59.468:  Successfully connected to MongoDB
+11:15:59.468:  
+
+START OF BATCH
+11:15:59.784:  Created account mrcode/wayanh
+11:15:59.848:  Created account mrcode/yatih
+11:15:59.857:  Created account mrcode/williamd
+11:15:59.878:  Created account mrcode/zoeb
+11:15:59.891:  Created account mrcode/trevorp
+11:15:59.897:  Created account mrcode/zachb
+11:15:59.937:  Created account mrcode/vincentg
+11:15:59.939:  Created account mrcode/zekef
+11:15:59.981:  Created account mrcode/virenc
+11:16:00.006:  Created account mrcode/zacharyd
+11:16:00.149:  Created account mrcode/xavierr
+11:16:00.151:  Created account mrcode/teog
+11:16:00.318:  
+END OF BATCH
+11:16:00.321:  Closed current
+11:16:00.322:  Connecting to Mongo...
+11:16:01.293:  Successfully connected to MongoDB
+11:16:01.376:  Closed legacy
+11:16:01.378:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:16:43.047:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:16:43.850:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:16:43.859:  app started!
+
+-- 7/31/2023 --
+11:16:43.860:  Retreiving data from https://www.mrcodeswildride.com/api/students
+
+-- 7/31/2023 --
+11:16:43.914:  Successfully constructed photo roll sequence
+
+-- 7/31/2023 --
+11:16:44.441:  {"err":"User account does not exist","code":-177,"type":"unable to find user with id [:root:] trying to add permissions"}
+
+-- 7/31/2023 --
+11:16:44.589:  Generating 750 new accounts
+11:16:59.758:  Connecting to Mongo...
+11:17:00.456:  Successfully connected to MongoDB
+11:17:00.470:  app started!
+11:17:00.473:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:17:00.535:  Successfully constructed photo roll sequence
+11:17:01.047:  Generating 109 new accounts
+11:17:03.501:  Generated 109 new accounts
+11:19:42.615:  Connecting to Mongo...
+11:19:43.344:  Successfully connected to MongoDB
+11:19:43.353:  app started!
+11:19:43.355:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:19:43.405:  Successfully constructed photo roll sequence
+11:19:43.832:  Generating 854 new accounts
+11:19:59.583:  Connecting to Mongo...
+11:20:00.270:  Successfully connected to MongoDB
+11:20:00.321:  Closed current
+11:20:00.324:  Connecting to Mongo...
+11:20:01.559:  Successfully connected to MongoDB
+11:20:01.911:  Closed legacy
+11:20:01.914:  Connecting to Mongo...
+11:20:02.608:  
+
+START OF BATCH
+11:20:02.607:  Successfully connected to MongoDB
+11:20:03.140:  Created account mrcode/Shorty28
+11:20:03.155:  Created account mrcode/alinam
+11:20:03.164:  Created account mrcode/alin
+11:20:03.190:  Created account mrcode/aadyah
+11:20:03.196:  Created account mrcode/abrianas
+11:20:03.221:  Created account mrcode/akhilk
+11:20:03.228:  Created account mrcode/aaroncl
+11:20:03.249:  Created account mrcode/abhinavu
+11:20:03.251:  Created account mrcode/abelg
+11:20:03.286:  Created account mrcode/alexg
+11:20:03.310:  Created account mrcode/aanyaj
+11:20:03.312:  Created account mrcode/alexandrar
+11:20:03.328:  Created account mrcode/aditric
+11:20:03.340:  Created account mrcode/aaronn
+11:20:03.375:  Created account mrcode/abir
+11:20:03.390:  Created account mrcode/chandlerc
+11:20:03.428:  Created account mrcode/adamh
+11:20:03.435:  Created account mrcode/arinw
+11:20:03.437:  Created account mrcode/alex is a failure
+11:20:03.484:  Created account mrcode/aaronc
+11:20:03.500:  Created account mrcode/aaron
+11:20:03.535:  Created account mrcode/Admin
+11:20:03.817:  
+END OF BATCH
+11:20:03.823:  Closed current
+11:20:03.826:  Connecting to Mongo...
+11:20:04.811:  Successfully connected to MongoDB
+11:20:05.076:  Closed legacy
+11:20:05.078:  Connecting to Mongo...
+11:20:05.743:  Successfully connected to MongoDB
+11:20:05.744:  
+
+START OF BATCH
+11:20:06.302:  Created account mrcode/jaker
+11:20:06.303:  Created account mrcode/gracez
+11:20:06.308:  Created account mrcode/joshf
+11:20:06.321:  Created account mrcode/joshuac
+11:20:06.366:  Created account davidk
+11:20:06.368:  Created account mrcode/dlloyd
+11:20:06.369:  Created account mrcode/cthrex
+11:20:06.370:  Created account mrcode/aminan
+11:20:06.409:  Created account mrcode/georger
+11:20:06.412:  Created account mrcode/jadynp
+11:20:06.419:  Created account mrcode/emmac
+11:20:06.422:  Created account mrcode/brazilb
+11:20:06.423:  Created account mrcode/colbyk
+11:20:06.453:  Created account mrcode/dallasz
+11:20:06.479:  Created account mrcode/francisw
+11:20:06.504:  Created account mrcode/jangafet
+11:20:06.522:  Created account jasonl
+11:20:06.570:  Created account mrcode/josephm
+11:20:06.585:  Created account mrcode/davidb
+11:20:06.604:  Created account mrcode/justinb
+11:20:06.652:  Created account mrcode/evanb
+11:20:06.844:  Created account mrcode/ashtenk
+11:20:06.890:  Created account mrcode/erics
+11:20:06.949:  
+END OF BATCH
+11:20:06.956:  Closed current
+11:20:06.958:  Connecting to Mongo...
+11:20:07.955:  Successfully connected to MongoDB
+11:20:08.224:  Closed legacy
+11:20:08.227:  Connecting to Mongo...
+11:20:08.750:  Successfully connected to MongoDB
+11:20:08.751:  
+
+START OF BATCH
+11:20:09.125:  Created account mrcode/davidz
+11:20:09.136:  Created account mrcode/judef
+11:20:09.141:  Created account mrcode/dhevend
+11:20:09.169:  Created account mrcode/jackc
+11:20:09.175:  Created account mrcode/charliel
+11:20:09.187:  Created account mrcode/danielb
+11:20:09.216:  Created account mrcode/benjiminb
+11:20:09.269:  Created account mrcode/jamesl
+11:20:09.348:  Created account mrcode/annl
+11:20:09.392:  Created account mrcode/kesavanr
+11:20:09.487:  Created account mrcode/amalp
+11:20:09.510:  Created account mrcode/brycet
+11:20:09.622:  
+END OF BATCH
+11:20:09.626:  Closed current
+11:20:09.629:  Connecting to Mongo...
+11:20:10.667:  Successfully connected to MongoDB
+11:20:11.088:  Closed legacy
+11:20:11.091:  Connecting to Mongo...
+11:20:11.622:  Successfully connected to MongoDB
+11:20:11.623:  
+
+START OF BATCH
+11:20:12.002:  Created account mrcode/christianb
+11:20:12.013:  Created account mrcode/darrens
+11:20:12.015:  Created account mrcode/kamdyng
+11:20:12.047:  Created account mrcode/anishb
+11:20:12.053:  Created account mrcode/dariyk
+11:20:12.059:  Created account mrcode/edwardm
+11:20:12.092:  Created account mrcode/austinl
+11:20:12.093:  Created account mrcode/kaih
+11:20:12.097:  Created account mrcode/hughk
+11:20:12.130:  Created account mrcode/icecreamosaurus
+11:20:12.172:  Created account mrcode/arlynb
+11:20:12.185:  Created account mrcode/lloyd
+11:20:12.199:  Created account mrcode/krishb
+11:20:12.312:  Created account mrcode/jonathanw
+11:20:12.331:  Created account bene
+11:20:12.492:  
+END OF BATCH
+11:20:12.495:  Closed current
+11:20:12.497:  Connecting to Mongo...
+11:20:13.457:  Successfully connected to MongoDB
+11:20:13.723:  Closed legacy
+11:20:13.725:  Connecting to Mongo...
+11:20:14.283:  Successfully connected to MongoDB
+11:20:14.283:  
+
+START OF BATCH
+11:20:14.788:  Created account mrcode/masonh
+11:20:14.794:  Created account mrcode/maxm
+11:20:14.855:  Created account mrcode/mayoos
+11:20:14.865:  Created account mrcode/maryannh
+11:20:14.870:  Created account melaniam
+11:20:14.956:  Created account mrcode/mirask
+11:20:14.973:  Created account mrcode/oweng
+11:20:14.974:  Created account mrcode/maiap
+11:20:14.998:  Created account krishs
+11:20:14.999:  Created account mrcode/penelopeo
+11:20:15.002:  Created account mrcode/nickg
+11:20:15.012:  Created account mrcode/nolanm
+11:20:15.043:  Created account nicholast
+11:20:15.044:  Created account mrcode/nikhilg
+11:20:15.052:  Created account mrcode/mom
+11:20:15.075:  Created account mrcode/nathann
+11:20:15.085:  Created account mrcode/peterp
+11:20:15.109:  Created account mrcode/mikeyajones
+11:20:15.124:  Created account mrcode/lukej
+11:20:15.128:  Created account mrcode/michaelw
+11:20:15.135:  Created account mrcode/marcush
+11:20:15.379:  Created account mrcode/nicholasm
+11:20:15.439:  
+END OF BATCH
+11:20:15.442:  Closed current
+11:20:15.444:  Connecting to Mongo...
+11:20:16.475:  Successfully connected to MongoDB
+11:20:16.738:  Closed legacy
+11:20:16.740:  Connecting to Mongo...
+11:20:17.331:  Successfully connected to MongoDB
+11:20:17.332:  
+
+START OF BATCH
+11:20:17.828:  Created account mrcode/rachitj
+11:20:17.839:  Created account mrcode/pranavs
+11:20:17.845:  Created account mrcode/rickyd
+11:20:17.870:  Created account mrcode/sameerj
+11:20:17.885:  Created account mrcode/saib
+11:20:17.886:  Created account mrcode/pranavm
+11:20:17.893:  Created account mrcode/razah
+11:20:17.909:  Created account mrcode/taruns
+11:20:17.942:  Created account mrcode/spencert
+11:20:17.943:  Created account mrcode/ryant
+11:20:17.948:  Created account mrcode/tariqc
+11:20:17.954:  Created account mrcode/sehars
+11:20:18.008:  Created account mrcode/ryul
+11:20:18.010:  Created account rylan clone
+11:20:18.053:  Created account mrcode/shreyar
+11:20:18.063:  Created account mrcode/sudeepm
+11:20:18.109:  Created account rylanr
+11:20:18.127:  Created account mrcode/souradeepm
+11:20:18.135:  Created account mrcode/raylans
+11:20:18.157:  Created account mrcode/samueln
+11:20:18.188:  Created account mrcode/stryderh
+11:20:18.452:  
+END OF BATCH
+11:20:18.455:  Closed current
+11:20:18.457:  Connecting to Mongo...
+11:20:19.455:  Successfully connected to MongoDB
+11:20:19.719:  Closed legacy
+11:20:19.722:  Connecting to Mongo...
+11:20:20.285:  Successfully connected to MongoDB
+11:20:20.285:  
+
+START OF BATCH
+11:20:20.638:  Created account mrcode/wayanh
+11:20:20.670:  Created account mrcode/yatih
+11:20:20.685:  Created account mrcode/zoeb
+11:20:20.686:  Created account mrcode/williamd
+11:20:20.711:  Created account mrcode/trevorp
+11:20:20.736:  Created account mrcode/zachb
+11:20:20.737:  Created account mrcode/zacharyd
+11:20:20.792:  Created account mrcode/zekef
+11:20:20.833:  Created account mrcode/teog
+11:20:20.847:  Created account mrcode/vincentg
+11:20:20.938:  Created account mrcode/xavierr
+11:20:21.008:  Created account mrcode/virenc
+11:20:21.180:  
+END OF BATCH
+11:20:21.184:  Closed current
+11:20:21.185:  Connecting to Mongo...
+11:20:22.212:  Successfully connected to MongoDB
+11:20:22.294:  Closed legacy
+11:20:22.296:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:20:29.540:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:20:30.231:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:20:30.240:  app started!
+
+-- 7/31/2023 --
+11:20:30.241:  Retreiving data from https://www.mrcodeswildride.com/api/students
+
+-- 7/31/2023 --
+11:20:30.293:  Successfully constructed photo roll sequence
+
+-- 7/31/2023 --
+11:20:30.750:  Generating 755 new accounts
+
+-- 7/31/2023 --
+11:20:38.279:  {"err":"User account does not exist","code":-177,"type":"unable to find user with id [:root:] trying to add permissions"}
+
+-- 7/31/2023 --
+11:20:45.516:  Generated 755 new accounts
+
+-- 7/31/2023 --
+11:21:01.631:  [mrcode/nicholast] has logged in
+
+-- 7/31/2023 --
+11:21:07.259:  [mrcode/nicholast] has logged out
+
+-- 7/31/2023 --
+11:21:13.920:  {"err":"password","code":-117,"type":"invalid password"}
+11:23:52.284:  Connecting to Mongo...
+11:23:53.029:  Successfully connected to MongoDB
+11:23:53.039:  app started!
+11:23:53.041:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:23:53.096:  Successfully constructed photo roll sequence
+11:23:53.678:  No updates required
+11:24:30.564:  Connecting to Mongo...
+11:24:31.254:  Successfully connected to MongoDB
+11:24:31.268:  app started!
+11:24:31.271:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:24:31.329:  Successfully constructed photo roll sequence
+11:24:31.932:  No updates required
+11:24:41.852:  {"err":"User account does not exist","code":-177,"type":"unable to find user with id [:root:] trying to add permissions"}
+11:24:53.550:  Connecting to Mongo...
+11:24:54.355:  Successfully connected to MongoDB
+11:24:54.364:  app started!
+11:24:54.365:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:24:54.420:  Successfully constructed photo roll sequence
+11:24:54.978:  No updates required
+11:25:52.304:  Connecting to Mongo...
+11:25:53.006:  Successfully connected to MongoDB
+11:25:53.021:  app started!
+11:25:53.024:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:25:53.089:  Successfully constructed photo roll sequence
+11:25:53.675:  No updates required
+11:25:53.905:  {"err":"User account does not exist","code":-177,"type":"unable to find user with id [:root:] trying to add permissions"}
+11:27:10.895:  Connecting to Mongo...
+11:27:11.612:  Successfully connected to MongoDB
+11:27:11.625:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:27:11.623:  app started!
+11:27:11.675:  Successfully constructed photo roll sequence
+11:27:12.251:  No updates required
+11:27:18.337:  Connecting to Mongo...
+11:27:18.951:  Successfully connected to MongoDB
+11:27:18.959:  app started!
+11:27:18.961:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:27:19.009:  Successfully constructed photo roll sequence
+11:27:19.600:  No updates required
+11:27:19.675:  {"err":"User account does not exist","code":-177,"type":"unable to find user with id [:root:] trying to add permissions"}
+11:28:01.903:  Connecting to Mongo...
+11:28:02.561:  Successfully connected to MongoDB
+11:28:02.572:  app started!
+11:28:02.575:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:28:02.647:  Successfully constructed photo roll sequence
+11:28:03.190:  No updates required
+11:28:03.267:  {"err":"User account does not exist","code":-177,"type":"unable to find user with id [:root:] trying to add permissions"}
+11:28:26.588:  Connecting to Mongo...
+11:28:27.213:  Successfully connected to MongoDB
+11:28:27.225:  app started!
+11:28:27.227:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:28:27.275:  Successfully constructed photo roll sequence
+11:28:27.833:  No updates required
+11:28:32.766:  Connecting to Mongo...
+11:28:33.406:  Successfully connected to MongoDB
+11:28:33.417:  app started!
+11:28:33.419:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:28:33.469:  Successfully constructed photo roll sequence
+11:28:33.975:  No updates required
+11:28:47.604:  Connecting to Mongo...
+11:28:48.255:  Successfully connected to MongoDB
+11:28:48.263:  app started!
+11:28:48.265:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:28:48.312:  Successfully constructed photo roll sequence
+11:28:48.840:  No updates required
+11:29:02.595:  {"err":"password","code":-117,"type":"invalid password"}
+11:29:09.038:  Connecting to Mongo...
+11:29:09.727:  Successfully connected to MongoDB
+11:29:09.736:  app started!
+11:29:09.738:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:29:09.783:  Successfully constructed photo roll sequence
+11:29:10.315:  No updates required
+11:29:12.461:  {"err":"password","code":-117,"type":"invalid password"}
+11:31:29.463:  {"err":"password","code":-117,"type":"invalid password"}
+11:31:35.173:  [:root:] has logged in
+11:32:06.880:  C:\Code\JavaScript\Hangout_V2\V2\documents\staging\upload_f25e47ba2943e2d7b35496629da819e5
+11:32:16.359:  {"err":"Failed to remove document","code":-108,"type":"no documents exist with _id [B7apHh0MOSFV4JF1]"}
+11:32:16.361:  C:\Code\JavaScript\Hangout_V2\V2\documents\staging\upload_1aa5f607f0ad31ecc44c585d95f4143f
+11:32:54.595:  {"err":"Failed to remove document","code":-108,"type":"no documents exist with _id [KqM1bfo0jejb2Wd7]"}
+11:32:54.597:  C:\Code\JavaScript\Hangout_V2\V2\documents\staging\upload_94e8bceabde57a7972dddaec91495ba5
+11:33:14.348:  {"err":"Failed to remove document","code":-108,"type":"no documents exist with _id [2QQRN3lSKsDGl9vr]"}
+11:33:14.350:  C:\Code\JavaScript\Hangout_V2\V2\documents\staging\upload_afe77531a5ce9c0f26ee372100c75e93
+11:33:50.482:  Connecting to Mongo...
+11:33:51.199:  Successfully connected to MongoDB
+11:33:51.208:  app started!
+11:33:51.209:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:33:51.263:  Successfully constructed photo roll sequence
+11:33:51.790:  No updates required
+11:33:58.822:  {"err":"password","code":-117,"type":"invalid password"}
+11:34:03.383:  [:root:] has logged in
+11:34:09.338:  {"err":"Failed to remove document","code":-108,"type":"no documents exist with _id [oYk6ind2C45symRr]"}
+11:34:40.346:  Connecting to Mongo...
+11:34:41.010:  Successfully connected to MongoDB
+11:34:41.023:  app started!
+11:34:41.024:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:34:41.082:  Successfully constructed photo roll sequence
+11:34:41.611:  No updates required
+11:34:48.486:  [:root:] has logged in
+11:34:55.677:  {"err":"Failed to remove document","code":-108,"type":"no documents exist with _id [xrTDYRgGhZl6k2Vk]"}
+11:35:25.682:  Connecting to Mongo...
+11:35:26.411:  Successfully connected to MongoDB
+11:35:26.421:  app started!
+11:35:26.422:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:35:26.475:  Successfully constructed photo roll sequence
+11:35:27.056:  No updates required
+11:35:29.323:  Connecting to Mongo...
+11:35:29.985:  Successfully connected to MongoDB
+11:35:29.994:  app started!
+11:35:29.995:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:35:30.022:  [undefined] has logged out
+11:35:30.057:  Successfully constructed photo roll sequence
+11:35:30.572:  No updates required
+11:35:39.529:  {"err":"password","code":-117,"type":"invalid password"}
+11:35:44.491:  [:root:] has logged in
+11:36:24.166:  [:root:] has logged out
+11:36:26.549:  [mrcode/nicholast] has logged in
+11:36:32.261:  [mrcode/nicholast] has logged out
+11:36:40.691:  {"err":"password","code":-117,"type":"invalid password"}
+11:36:45.270:  [:root:] has logged in
+11:36:59.779:  [:root:] has logged out
+11:37:07.321:  [nicholast] has logged in
+11:38:38.483:  Connecting to Mongo...
+11:38:39.208:  Successfully connected to MongoDB
+11:38:39.261:  Closed current
+11:38:39.265:  Connecting to Mongo...
+11:38:40.303:  Successfully connected to MongoDB
+11:38:40.648:  Closed legacy
+11:38:40.651:  Connecting to Mongo...
+11:38:41.266:  Successfully connected to MongoDB
+11:38:41.267:  
+
+START OF BATCH
+11:38:41.791:  Created account mrcode/alin
+11:38:41.793:  Created account mrcode/Shorty28
+11:38:41.802:  Created account mrcode/alinam
+11:38:41.844:  Created account mrcode/aaronc
+11:38:41.845:  Created account mrcode/aaron
+11:38:41.850:  Created account mrcode/abrianas
+11:38:41.870:  Created account mrcode/Admin
+11:38:41.903:  Created account mrcode/abhinavu
+11:38:41.922:  Created account mrcode/abelg
+11:38:41.923:  Created account mrcode/alexg
+11:38:41.924:  Created account mrcode/aanyaj
+11:38:41.929:  Created account mrcode/alexandrar
+11:38:41.951:  Created account mrcode/aditric
+11:38:41.971:  Created account mrcode/aaronn
+11:38:41.994:  Created account mrcode/abir
+11:38:42.008:  Created account mrcode/adamh
+11:38:42.048:  Created account mrcode/arinw
+11:38:42.060:  Created account mrcode/chandlerc
+11:38:42.078:  Created account mrcode/aadyah
+11:38:42.084:  Created account mrcode/aaroncl
+11:38:42.109:  Created account mrcode/alex is a failure
+11:38:42.346:  Created account mrcode/akhilk
+11:38:42.398:  
+END OF BATCH
+11:38:42.403:  Closed current
+11:38:42.405:  Connecting to Mongo...
+11:38:43.399:  Successfully connected to MongoDB
+11:38:43.669:  Closed legacy
+11:38:43.671:  Connecting to Mongo...
+11:38:44.232:  Successfully connected to MongoDB
+11:38:44.232:  
+
+START OF BATCH
+11:38:44.725:  Created account mrcode/davidb
+11:38:44.729:  Created account mrcode/gracez
+11:38:44.736:  Created account mrcode/jaker
+11:38:44.766:  Created account mrcode/joshuac
+11:38:44.768:  Created account mrcode/justinb
+11:38:44.784:  Created account mrcode/cthrex
+11:38:44.806:  Created account mrcode/dlloyd
+11:38:44.813:  Created account mrcode/georger
+11:38:44.814:  Created account mrcode/davidk
+11:38:44.823:  Created account mrcode/jadynp
+11:38:44.851:  Created account mrcode/brazilb
+11:38:44.856:  Created account mrcode/dallasz
+11:38:44.857:  Created account mrcode/colbyk
+11:38:44.859:  Created account mrcode/emmac
+11:38:44.903:  Created account mrcode/francisw
+11:38:44.905:  Created account mrcode/jangafet
+11:38:44.952:  Created account mrcode/josephm
+11:38:44.956:  Created account mrcode/ashtenk
+11:38:44.975:  Created account mrcode/joshf
+11:38:45.021:  Created account mrcode/aminan
+11:38:45.072:  Created account mrcode/evanb
+11:38:45.087:  Created account mrcode/erics
+11:38:45.185:  Created account mrcode/jasonl
+11:38:45.333:  
+END OF BATCH
+11:38:45.337:  Closed current
+11:38:45.339:  Connecting to Mongo...
+11:38:46.334:  Successfully connected to MongoDB
+11:38:46.594:  Closed legacy
+11:38:46.598:  Connecting to Mongo...
+11:38:47.176:  Successfully connected to MongoDB
+11:38:47.177:  
+
+START OF BATCH
+11:38:47.530:  Created account mrcode/judef
+11:38:47.555:  Created account mrcode/davidz
+11:38:47.561:  Created account mrcode/dhevend
+11:38:47.579:  Created account mrcode/jackc
+11:38:47.595:  Created account mrcode/charliel
+11:38:47.610:  Created account mrcode/danielb
+11:38:47.631:  Created account mrcode/benjiminb
+11:38:47.664:  Created account mrcode/amalp
+11:38:47.688:  Created account mrcode/jamesl
+11:38:47.712:  Created account mrcode/annl
+11:38:47.800:  Created account mrcode/kesavanr
+11:38:47.904:  Created account mrcode/brycet
+11:38:48.049:  
+END OF BATCH
+11:38:48.057:  Connecting to Mongo...
+11:38:48.053:  Closed current
+11:38:49.039:  Successfully connected to MongoDB
+11:38:49.376:  Closed legacy
+11:38:49.379:  Connecting to Mongo...
+11:38:50.020:  Successfully connected to MongoDB
+11:38:50.020:  
+
+START OF BATCH
+11:38:50.485:  Created account mrcode/christianb
+11:38:50.495:  Created account mrcode/kamdyng
+11:38:50.496:  Created account mrcode/darrens
+11:38:50.533:  Created account mrcode/anishb
+11:38:50.543:  Created account mrcode/dariyk
+11:38:50.551:  Created account mrcode/arlynb
+11:38:50.576:  Created account mrcode/austinl
+11:38:50.583:  Created account mrcode/hughk
+11:38:50.604:  Created account mrcode/jonathanw
+11:38:50.656:  Created account mrcode/lloyd
+11:38:50.682:  Created account mrcode/krishb
+11:38:50.771:  Created account mrcode/edwardm
+11:38:50.777:  Created account mrcode/bene
+11:38:50.827:  Created account mrcode/kaih
+11:38:50.918:  Created account mrcode/icecreamosaurus
+11:38:50.973:  Closed current
+11:38:50.975:  Connecting to Mongo...
+11:38:50.970:  
+END OF BATCH
+11:38:51.958:  Successfully connected to MongoDB
+11:38:52.209:  Closed legacy
+11:38:52.212:  Connecting to Mongo...
+11:38:52.783:  
+
+START OF BATCH
+11:38:52.782:  Successfully connected to MongoDB
+11:38:53.310:  Created account mrcode/maxm
+11:38:53.317:  Created account mrcode/maryannh
+11:38:53.329:  Created account mrcode/mayoos
+11:38:53.341:  Created account mrcode/melaniam
+11:38:53.373:  Created account mrcode/mirask
+11:38:53.393:  Created account mrcode/mikeyajones
+11:38:53.394:  Created account mrcode/lukej
+11:38:53.400:  Created account mrcode/maiap
+11:38:53.434:  Created account mrcode/oweng
+11:38:53.435:  Created account mrcode/penelopeo
+11:38:53.440:  Created account mrcode/nickg
+11:38:53.456:  Created account mrcode/nicholast
+11:38:53.479:  Created account mrcode/nolanm
+11:38:53.487:  Created account mrcode/nikhilg
+11:38:53.511:  Created account mrcode/mom
+11:38:53.538:  Created account mrcode/nathann
+11:38:53.555:  Created account mrcode/nicholasm
+11:38:53.563:  Created account mrcode/peterp
+11:38:53.571:  Created account mrcode/masonh
+11:38:53.643:  Created account mrcode/michaelw
+11:38:53.683:  Created account mrcode/krishs
+11:38:53.795:  Created account mrcode/marcush
+11:38:53.953:  
+END OF BATCH
+11:38:53.956:  Closed current
+11:38:53.958:  Connecting to Mongo...
+11:38:54.982:  Successfully connected to MongoDB
+11:38:55.245:  Closed legacy
+11:38:55.247:  Connecting to Mongo...
+11:38:55.815:  Successfully connected to MongoDB
+11:38:55.816:  
+
+START OF BATCH
+11:38:56.324:  Created account mrcode/rachitj
+11:38:56.361:  Created account mrcode/rickyd
+11:38:56.362:  Created account mrcode/pranavs
+11:38:56.377:  Created account mrcode/sameerj
+11:38:56.443:  Created account mrcode/saib
+11:38:56.469:  Created account mrcode/taruns
+11:38:56.470:  Created account mrcode/stryderh
+11:38:56.479:  Created account mrcode/razah
+11:38:56.499:  Created account mrcode/spencert
+11:38:56.528:  Created account mrcode/ryant
+11:38:56.531:  Created account mrcode/tariqc
+11:38:56.534:  Created account mrcode/ryul
+11:38:56.557:  Created account mrcode/rylan clone
+11:38:56.571:  Created account mrcode/sehars
+11:38:56.584:  Created account mrcode/shreyar
+11:38:56.606:  Created account mrcode/raylans
+11:38:56.613:  Created account mrcode/sudeepm
+11:38:56.619:  Created account mrcode/souradeepm
+11:38:56.668:  Created account mrcode/samueln
+11:38:56.695:  Created account mrcode/pranavm
+11:38:56.836:  Created account mrcode/rylanr
+11:38:56.953:  
+END OF BATCH
+11:38:56.956:  Closed current
+11:38:56.958:  Connecting to Mongo...
+11:38:57.955:  Successfully connected to MongoDB
+11:38:58.218:  Closed legacy
+11:38:58.220:  Connecting to Mongo...
+11:38:58.835:  Successfully connected to MongoDB
+11:38:58.836:  
+
+START OF BATCH
+11:38:59.186:  Created account mrcode/wayanh
+11:38:59.197:  Created account mrcode/yatih
+11:38:59.206:  Created account mrcode/zoeb
+11:38:59.228:  Created account mrcode/williamd
+11:38:59.251:  Created account mrcode/trevorp
+11:38:59.256:  Created account mrcode/zacharyd
+11:38:59.300:  Created account mrcode/xavierr
+11:38:59.353:  Created account mrcode/virenc
+11:38:59.357:  Created account mrcode/vincentg
+11:38:59.375:  Created account mrcode/teog
+11:38:59.477:  Created account mrcode/zachb
+11:38:59.533:  Created account mrcode/zekef
+11:38:59.702:  
+END OF BATCH
+11:38:59.704:  Closed current
+11:38:59.706:  Connecting to Mongo...
+11:39:00.739:  Successfully connected to MongoDB
+11:39:00.821:  Closed legacy
+11:39:00.822:  Connecting to Mongo...

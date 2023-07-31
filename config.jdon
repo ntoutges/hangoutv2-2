@@ -1,5 +1,12 @@
 // note: JDON = [J]ava [D]umb [O]bject [N]otation
 
+// mongo stuff
+db-name: HangoutV2-2
+legacy-db: hangouts
+
+legacy-collections: Posts,tags,users
+db-collections: accounts,awards,channels,documents,posts,ratings,transactions
+
 salting-rounds: 10 // basic security stuff
 
 // this sets the picture received by a client who has not yet set their profile picture
@@ -7,6 +14,7 @@ default-profile-picture: documents/public/1685079322620-1.png
 
 // this is of type ("mongodb" | "nedb")
 database-type: mongodb
+legacy-database-type: mongodb
 
 // sync.js params
 root-account: :root:

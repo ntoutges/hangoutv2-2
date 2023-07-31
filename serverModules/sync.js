@@ -1,13 +1,11 @@
 const https = require("https");
 
-var sponsorId;
 var accounts;
 var config;
 var env;
 var logger;
 
-function init(lSponsorId, lAccounts, lConfig, lEnv, lLogger) {
-  sponsorId = lSponsorId;
+function init(lAccounts, lConfig, lEnv, lLogger) {
   accounts = lAccounts;
   config = lConfig;
   env = lEnv;

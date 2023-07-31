@@ -79,9 +79,11 @@ exports.postUpdateBio = (req,res) => {
 
   let bio = (req.body.bio ?? "").toString().substring(0, MAX_BIO_LENGTH); // bio must ALWAYS be a string // limit bio to 500 characters
   gDbManager.api.update(
-    gDbManager.db.collection("accounts"), {
+    gDbManager.db.collection("accounts"),
+    {
       "name": req.session.name
-    }, {
+    },
+    {
       $set: {
         "bio": bio
       }
@@ -343,7 +345,6 @@ exports.postSetProfilePicture = (req,res) => {
             }
           }
   
-          gLogger.log(files.file.path)
           gDocuments.createImageDocument(files.file.path, fileType).then(docId => {
             gDbManager.api.update(
               gDbManager.db.collection("accounts"), {

@@ -80,7 +80,6 @@ function createAccount(username, password, sponsor, name=null) {
           });
           return;
         }
-        
         bcrypt.hash(password, parseInt(config["salting-rounds"])).then(hashPassword => {
           api.insert(
             collection, {
@@ -248,9 +247,9 @@ function addPermission(user, permission) {
         }
         if (amountUpdated == 0) {
           reject({
-            "err": "User account does not exist",
+            "err": "User account was not updated", // this could just mean that user already has permission (such as login)
             "code": -177,
-            "type": `unable to find user with id [${user}] trying to add permissions`,
+            "type": `unable to update user with id [${user}] trying to add permissions`,
           });
           return;
         }
