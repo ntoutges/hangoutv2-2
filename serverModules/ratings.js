@@ -159,7 +159,8 @@ function changeRating(
         if (!postDoc) await createRating(postId); // create new rating document
   
         api.update(
-          ratingsCollection, {
+          ratingsCollection,
+          {
             _id: postId
           },
           ratingsUpdateData, (err, numUpdated) => {

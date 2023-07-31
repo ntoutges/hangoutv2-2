@@ -91,6 +91,7 @@ logger.init(fs, __dirname + "/logs", "logs.txt", "logs.html", "lastlog.txt", () 
     ratings.init(dbManager.db.collection("posts"), dbManager.db.collection("ratings"), dbManager.api);
     documents.init(dbManager.db.collection("documents"), jimp, fs, __dirname, "documents", dbManager.api);
     sync.init(accounts, config, process.env, logger);
+    channels.init(dbManager.api, dbManager.db.collection("channels"));
     http.listen(process.env.PORT || 52975, () => {
       // getPhotoRollContents();
       constructPhotoRollSequence();
@@ -107,6 +108,8 @@ logger.init(fs, __dirname + "/logs", "logs.txt", "logs.html", "lastlog.txt", () 
       // run once every day
       sync.doContinuousSync(1000 * 60 * 60 * 24); // commented out to stop errors from being offline
     });
+
+    // channels.createChannel("archives");
 
     initFunctions({
       photoRollContents,

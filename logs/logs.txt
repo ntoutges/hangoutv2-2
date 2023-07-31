@@ -2773,3 +2773,426 @@ END OF BATCH
 11:39:00.739:  Successfully connected to MongoDB
 11:39:00.821:  Closed legacy
 11:39:00.822:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:52:50.203:  Connecting to Mongo...
+
+-- 7/31/2023 --
+11:52:50.953:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+11:52:50.963:  app started!
+
+-- 7/31/2023 --
+11:52:50.965:  Retreiving data from https://www.mrcodeswildride.com/api/students
+
+-- 7/31/2023 --
+11:52:51.263:  Successfully constructed photo roll sequence
+
+-- 7/31/2023 --
+11:52:51.506:  Generating 750 new accounts
+
+-- 7/31/2023 --
+11:52:51.609:  {"err":"User account was not updated","code":-177,"type":"unable to update user with id [:root:] trying to add permissions"}
+11:52:58.499:  Connecting to Mongo...
+11:52:59.183:  Successfully connected to MongoDB
+11:52:59.195:  Retreiving data from https://www.mrcodeswildride.com/api/students
+11:52:59.193:  app started!
+11:52:59.250:  Successfully constructed photo roll sequence
+11:52:59.740:  Generating 750 new accounts
+11:53:13.325:  {"err":"password","code":-117,"type":"invalid password"}
+11:53:14.219:  {"err":"password","code":-117,"type":"invalid password"}
+11:53:14.309:  Generated 750 new accounts
+11:53:14.433:  {"err":"password","code":-117,"type":"invalid password"}
+11:53:30.610:  [mrcode/nicholast] has logged in
+12:07:44.303:  Connecting to Mongo...
+12:07:45.058:  Successfully connected to MongoDB
+12:07:45.202:  Closed current
+12:07:45.206:  Connecting to Mongo...
+12:07:46.302:  Successfully connected to MongoDB
+12:07:46.658:  Closed legacy
+12:07:46.660:  Connecting to Mongo...
+12:07:47.244:  Successfully connected to MongoDB
+12:07:47.245:  
+
+START OF BATCH
+12:07:47.333:  mrcode/Shorty28 already exists.
+12:07:47.369:  mrcode/alin already exists.
+12:07:47.403:  mrcode/abhayd already exists.
+12:07:47.438:  mrcode/adenp already exists.
+12:07:47.474:  mrcode/adyam already exists.
+12:07:47.511:  mrcode/Admin already exists.
+12:07:47.513:  mrcode/alinam already exists.
+12:07:47.546:  mrcode/alex is a failure already exists.
+12:07:47.554:  mrcode/alexh already exists.
+12:07:47.571:  mrcode/abrianas already exists.
+12:07:47.580:  mrcode/aaronc already exists.
+12:07:47.586:  mrcode/akhilk already exists.
+12:07:47.615:  mrcode/aaron already exists.
+12:07:47.616:  mrcode/aaroncl already exists.
+12:07:47.621:  mrcode/abhinavu already exists.
+12:07:47.652:  mrcode/alberta already exists.
+12:07:47.657:  mrcode/alexs already exists.
+12:07:47.659:  mrcode/ajayd already exists.
+12:07:47.690:  mrcode/abelg already exists.
+12:07:47.691:  mrcode/allenm already exists.
+12:07:47.706:  mrcode/adarshs already exists.
+12:07:47.725:  mrcode/alid already exists.
+12:07:47.727:  mrcode/alexanders already exists.
+12:07:47.751:  mrcode/alexg already exists.
+12:07:47.761:  mrcode/adenl already exists.
+12:07:47.766:  mrcode/alexandrar already exists.
+12:07:47.786:  mrcode/aidanc already exists.
+12:07:47.790:  mrcode/aadyah already exists.
+12:07:47.798:  mrcode/abigailc already exists.
+12:07:47.799:  mrcode/aditya already exists.
+12:07:47.806:  mrcode/aidenh already exists.
+12:07:47.835:  mrcode/abbyh already exists.
+12:07:47.864:  mrcode/alexv already exists.
+12:07:47.884:  mrcode/abir already exists.
+12:07:47.885:  mrcode/aaronn already exists.
+12:07:47.894:  mrcode/adis already exists.
+12:07:47.895:  mrcode/adamh already exists.
+12:07:47.915:  mrcode/alexanderg already exists.
+12:07:47.939:  mrcode/aidans already exists.
+12:07:47.940:  mrcode/aidant already exists.
+12:07:47.941:  mrcode/aidens already exists.
+12:07:47.948:  mrcode/amosk already exists.
+12:07:47.958:  mrcode/arinw already exists.
+12:07:47.979:  mrcode/artyi already exists.
+12:07:47.988:  mrcode/austinb already exists.
+12:07:47.986:  mrcode/brandonb already exists.
+12:07:47.989:  mrcode/carleyt already exists.
+12:07:48.012:  mrcode/chandlerc already exists.
+12:07:48.075:  mrcode/aditric already exists.
+12:07:48.080:  mrcode/aanyaj already exists.
+12:07:48.607:  
+END OF BATCH
+12:07:48.613:  Closed current
+12:07:48.615:  Connecting to Mongo...
+12:07:49.603:  Successfully connected to MongoDB
+12:07:49.859:  Closed legacy
+12:07:49.862:  Connecting to Mongo...
+12:07:50.389:  Successfully connected to MongoDB
+12:07:50.390:  
+
+START OF BATCH
+12:07:50.442:  mrcode/cjh already exists.
+12:07:50.533:  mrcode/daniell already exists.
+12:07:50.570:  mrcode/davidb already exists.
+12:07:50.606:  mrcode/drewl already exists.
+12:07:50.646:  mrcode/ethanha already exists.
+12:07:50.685:  mrcode/hannahn already exists.
+12:07:50.699:  mrcode/corwink already exists.
+12:07:50.718:  mrcode/judahe already exists.
+12:07:50.722:  mrcode/connerk already exists.
+12:07:50.734:  mrcode/anthonym already exists.
+12:07:50.786:  mrcode/archithr already exists.
+12:07:50.788:  mrcode/arvindm already exists.
+12:07:50.789:  mrcode/armaant already exists.
+12:07:50.822:  mrcode/cthrex already exists.
+12:07:50.826:  mrcode/danielp already exists.
+12:07:50.834:  mrcode/danteg already exists.
+12:07:50.862:  mrcode/davidk already exists.
+12:07:50.864:  mrcode/elijahma already exists.
+12:07:50.882:  mrcode/elishas already exists.
+12:07:50.903:  mrcode/emilioh already exists.
+12:07:50.904:  mrcode/ethanh already exists.
+12:07:50.926:  mrcode/finno already exists.
+12:07:50.937:  mrcode/jacka already exists.
+12:07:50.942:  mrcode/heleenam already exists.
+12:07:50.942:  mrcode/ivoryh already exists.
+12:07:50.970:  mrcode/jacobhr already exists.
+12:07:50.972:  mrcode/isaacl already exists.
+12:07:50.974:  mrcode/jackw already exists.
+12:07:50.978:  mrcode/jaker already exists.
+12:07:50.983:  mrcode/jordanw already exists.
+12:07:51.033:  mrcode/joshf already exists.
+12:07:51.039:  mrcode/justinb already exists.
+12:07:51.040:  mrcode/karmynneh already exists.
+12:07:51.041:  mrcode/josiahn already exists.
+12:07:51.041:  mrcode/joshuac already exists.
+12:07:51.070:  mrcode/katv already exists.
+12:07:51.079:  mrcode/aminan already exists.
+12:07:51.080:  mrcode/andrewl already exists.
+12:07:51.087:  mrcode/dlloyd already exists.
+12:07:51.088:  mrcode/erics already exists.
+12:07:51.105:  mrcode/evanb already exists.
+12:07:51.115:  mrcode/finleyv already exists.
+12:07:51.116:  mrcode/gabrielc already exists.
+12:07:51.130:  mrcode/georger already exists.
+12:07:51.133:  mrcode/gerardh already exists.
+12:07:51.138:  mrcode/isaack already exists.
+12:07:51.155:  mrcode/jadynp already exists.
+12:07:51.156:  mrcode/israeld already exists.
+12:07:51.171:  mrcode/jakeg already exists.
+12:07:51.174:  mrcode/josephs already exists.
+12:07:51.175:  mrcode/jaxe already exists.
+12:07:51.193:  mrcode/jacobh already exists.
+12:07:51.194:  mrcode/amyk already exists.
+12:07:51.196:  mrcode/julianr already exists.
+12:07:51.210:  mrcode/anirudhs already exists.
+12:07:51.214:  mrcode/andreiv already exists.
+12:07:51.216:  mrcode/ankhzaya already exists.
+12:07:51.226:  mrcode/gracez already exists.
+12:07:51.229:  mrcode/armaans already exists.
+12:07:51.235:  mrcode/ayvindh already exists.
+12:07:51.236:  mrcode/brazilb already exists.
+12:07:51.245:  mrcode/carsonb already exists.
+12:07:51.258:  mrcode/dallasz already exists.
+12:07:51.259:  mrcode/colbyk already exists.
+12:07:51.283:  mrcode/ericsn already exists.
+12:07:51.284:  mrcode/danao already exists.
+12:07:51.285:  mrcode/emmac already exists.
+12:07:51.286:  mrcode/graceh already exists.
+12:07:51.287:  mrcode/francisw already exists.
+12:07:51.303:  mrcode/harrisn already exists.
+12:07:51.304:  mrcode/henryr already exists.
+12:07:51.323:  mrcode/autumns already exists.
+12:07:51.324:  mrcode/jangafet already exists.
+12:07:51.325:  mrcode/arthurp already exists.
+12:07:51.326:  mrcode/averyr already exists.
+12:07:51.331:  mrcode/jasonl already exists.
+12:07:51.344:  mrcode/cadenh already exists.
+12:07:51.346:  mrcode/caitlynw already exists.
+12:07:51.358:  mrcode/christopherf already exists.
+12:07:51.362:  mrcode/creighac already exists.
+12:07:51.363:  mrcode/cloverp already exists.
+12:07:51.370:  mrcode/elijahda already exists.
+12:07:51.386:  mrcode/elliek already exists.
+12:07:51.387:  mrcode/eshanr already exists.
+12:07:51.390:  mrcode/haydenb already exists.
+12:07:51.393:  mrcode/haydens already exists.
+12:07:51.401:  mrcode/jaanvis already exists.
+12:07:51.403:  mrcode/jasona already exists.
+12:07:51.410:  mrcode/jordanl already exists.
+12:07:51.432:  mrcode/joshuato already exists.
+12:07:51.433:  mrcode/kail already exists.
+12:07:51.434:  mrcode/judeg already exists.
+12:07:51.436:  mrcode/josephm already exists.
+12:07:51.439:  mrcode/katherinel already exists.
+12:07:51.440:  mrcode/kavanl already exists.
+12:07:51.446:  mrcode/khines already exists.
+12:07:51.450:  mrcode/annat already exists.
+12:07:51.465:  mrcode/juliah already exists.
+12:07:51.469:  mrcode/benb already exists.
+12:07:51.475:  mrcode/baileym already exists.
+12:07:51.496:  mrcode/brettr already exists.
+12:07:52.107:  mrcode/anishas already exists.
+12:07:52.156:  mrcode/ashtenk already exists.
+12:07:52.767:  
+END OF BATCH
+12:07:52.772:  Closed current
+12:07:52.774:  Connecting to Mongo...
+12:07:53.814:  Successfully connected to MongoDB
+12:07:54.075:  Closed legacy
+12:07:54.078:  Connecting to Mongo...
+12:07:58.942:  Connecting to Mongo...
+12:08:00.040:  Successfully connected to MongoDB
+12:08:00.406:  Closed legacy
+12:08:00.411:  Connecting to Mongo...
+12:08:00.998:  Successfully connected to MongoDB
+12:08:00.999:  
+
+START OF BATCH
+12:08:01.828:  
+END OF BATCH
+12:08:01.831:  Closed current
+12:08:01.834:  Connecting to Mongo...
+12:08:02.798:  Successfully connected to MongoDB
+12:08:03.052:  Closed legacy
+12:08:03.054:  Connecting to Mongo...
+12:08:03.653:  Successfully connected to MongoDB
+12:08:03.653:  
+
+START OF BATCH
+12:08:04.157:  
+END OF BATCH
+12:08:04.160:  Closed current
+12:08:04.162:  Connecting to Mongo...
+12:08:05.143:  Successfully connected to MongoDB
+12:08:05.230:  Closed legacy
+12:08:05.232:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:21:54.670:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:21:55.874:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:21:56.242:  Closed legacy
+
+-- 7/31/2023 --
+12:21:56.250:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:23:10.869:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:23:12.037:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:23:12.398:  Closed legacy
+
+-- 7/31/2023 --
+12:23:12.402:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:23:13.095:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:23:13.096:  
+
+START OF BATCH
+12:29:02.134:  Connecting to Mongo...
+12:29:03.343:  Successfully connected to MongoDB
+12:29:03.695:  Closed legacy
+12:29:03.699:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:29:13.785:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:29:14.920:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:29:15.289:  Closed legacy
+
+-- 7/31/2023 --
+12:29:15.293:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:29:15.887:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:29:15.888:  
+
+START OF BATCH
+
+-- 7/31/2023 --
+12:29:22.376:  
+END OF BATCH
+
+-- 7/31/2023 --
+12:29:22.384:  Closed current
+
+-- 7/31/2023 --
+12:29:22.386:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:29:23.399:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:29:23.646:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:29:23.644:  Closed legacy
+
+-- 7/31/2023 --
+12:29:24.274:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:29:24.275:  
+
+START OF BATCH
+12:30:57.378:  Connecting to Mongo...
+12:30:58.549:  Successfully connected to MongoDB
+12:30:58.919:  Closed legacy
+12:30:58.923:  Connecting to Mongo...
+12:30:59.503:  Successfully connected to MongoDB
+12:30:59.504:  
+
+START OF BATCH
+12:31:05.980:  
+END OF BATCH
+12:31:05.987:  Closed current
+12:31:05.990:  Connecting to Mongo...
+12:31:06.995:  Successfully connected to MongoDB
+12:31:07.255:  Closed legacy
+12:31:07.258:  Connecting to Mongo...
+12:31:07.950:  Successfully connected to MongoDB
+12:31:07.950:  
+
+START OF BATCH
+12:31:12.924:  
+END OF BATCH
+12:31:12.929:  Closed current
+12:31:12.932:  Connecting to Mongo...
+12:31:13.929:  Successfully connected to MongoDB
+12:31:14.011:  Closed legacy
+12:31:14.014:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:31:23.911:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:31:24.580:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:31:24.589:  app started!
+
+-- 7/31/2023 --
+12:31:24.590:  Retreiving data from https://www.mrcodeswildride.com/api/students
+
+-- 7/31/2023 --
+12:31:24.647:  Successfully constructed photo roll sequence
+
+-- 7/31/2023 --
+12:31:25.274:  No updates required
+
+-- 7/31/2023 --
+12:31:29.228:  {"err":"password","code":-117,"type":"invalid password"}
+
+-- 7/31/2023 --
+12:31:36.295:  {"err":"password","code":-117,"type":"invalid password"}
+
+-- 7/31/2023 --
+12:31:47.070:  [mrcode/nicholast] has logged in
+12:32:43.803:  Connecting to Mongo...
+12:32:44.953:  Successfully connected to MongoDB
+12:32:45.351:  Closed legacy
+12:32:45.355:  Connecting to Mongo...
+12:32:46.019:  Successfully connected to MongoDB
+12:32:46.020:  
+
+START OF BATCH
+12:32:52.283:  
+END OF BATCH
+12:32:52.290:  Closed current
+12:32:52.293:  Connecting to Mongo...
+12:32:53.272:  Successfully connected to MongoDB
+12:32:53.529:  Closed legacy
+12:32:53.531:  Connecting to Mongo...
+12:32:54.115:  Successfully connected to MongoDB
+12:32:54.115:  
+
+START OF BATCH
+12:32:58.616:  
+END OF BATCH
+12:32:58.622:  Closed current
+12:32:58.624:  Connecting to Mongo...
+12:32:59.676:  Successfully connected to MongoDB
+12:32:59.758:  Closed legacy
+12:32:59.762:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:33:10.983:  Connecting to Mongo...
+
+-- 7/31/2023 --
+12:33:11.692:  Successfully connected to MongoDB
+
+-- 7/31/2023 --
+12:33:11.702:  app started!
+
+-- 7/31/2023 --
+12:33:11.703:  Retreiving data from https://www.mrcodeswildride.com/api/students
+
+-- 7/31/2023 --
+12:33:11.762:  Successfully constructed photo roll sequence
+
+-- 7/31/2023 --
+12:33:12.354:  No updates required
+
+-- 7/31/2023 --
+12:34:14.318:  [mrcode/nicholast] has logged in

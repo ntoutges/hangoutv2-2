@@ -17,16 +17,18 @@ const config = JDON.toJSON(
   ),
 );
 
-logger.init(fs, __dirname + "/logs", "logs.txt", "logs.html", "lastlog.txt", () => {
-  run();
+logger.init(fs, __dirname + "/logs", "logs.txt", "logs.html", "lastlog.txt", async () => {
+  legacy.init(logger, config);
+  sync.init(null, config, process.env, logger); // database from sync.js not required
+  // await run1();
+  await run2();
+
+  process.exit();
 });
 
 
 // changing code goes in here, for migration
-async function run() {
-  legacy.init(logger, config);
-  sync.init(null, config, process.env, logger); // database from sync.js not required
-  
+async function run1() {
   await legacy.connectCurrent();
 
   accounts.init(
@@ -131,6 +133,73 @@ async function run() {
       break;
     }
   }
+}
 
-  process.exit();
+async function run2() {
+  let batch = 0;
+  while (true) {
+    await legacy.connectLegacy();
+    await legacy.fillQueue(
+      "Posts",
+      batch++,
+      200
+    );
+
+    await legacy.connectCurrent();
+
+    logger.log("\n\nSTART OF BATCH");
+    const length = await legacy.emptyQueue(async (id, doc) => {
+      let plainBody = "";
+      for (const section of doc.body) {
+        plainBody += section.text;
+      }
+      if (Object.keys(doc.blacklist).length > 0) {
+        plainBody += "\n\nBlacklisted from viewing:\n";
+        for (let person in doc.blacklist) {
+          plainBody += person + "\n";
+        }
+      }
+
+      const time = new Date(doc.date);
+
+      const document = {
+        "title": "[" + doc.creater + "]\'s post",
+        "content": plainBody,
+        "published": time.getTime(),
+        "user": "mrcode/" + doc.creater,
+        "channel": "archives",
+        "rating": doc.likes - doc.dislikes
+      }
+    
+      await new Promise((resolve,reject) => {
+        legacy.dbManager.api.insert(
+          legacy.dbManager.db.collection("posts"),
+          document,
+          (err, finalDocId) => {
+            legacy.dbManager.api.update(
+              legacy.dbManager.db.collection("channels"), {
+                "_id": "archives"
+              }, {
+                $push: {
+                  "posts": finalDocId
+                },
+                $set: {
+                  "activity": document.published
+                }
+              }, (err) => {
+                if (err) logger.log("ERROR:", err);
+                resolve();
+              }
+            );
+          }
+        );
+      });
+      logger.log(document.title);
+    });
+    logger.log("\nEND OF BATCH")
+
+    if (length == 0) {
+      break;
+    }
+  }
 }
