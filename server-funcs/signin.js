@@ -86,7 +86,7 @@ function doSignIn(username, password, req,res) {
     });
   }).catch((err) => {
     gLogger.log(err)
-    if (err.code < 0) res.send("Invalid"); // non-critical error = incorrect credentials
+    if (err.code < 0) res.send(err.err); // non-critical error = incorrect credentials
     else res.send(err.type);
   });
 }

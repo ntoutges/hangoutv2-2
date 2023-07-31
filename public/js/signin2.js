@@ -1,5 +1,6 @@
 const $ = document.querySelector.bind(document);
 import * as req from "./modules/easyReq.js";
+import { Query, RevQuery } from "./modules/query.js";
 
 
 function init() { // prevents code from floating in space
@@ -9,6 +10,9 @@ function init() { // prevents code from floating in space
   $("#username").addEventListener("focusout", function() { focusOut.call(this, "username" ); });
   $("#username").addEventListener("keydown", submitViaEnter);
   $("#submit").addEventListener("click", submitCredentials);
+
+  const query = new Query(window.location.search);
+  if (query.has("user")) $("#username").value = query.get("user");
 }
 
 function submitCredentials() {
@@ -39,11 +43,15 @@ function submitCredentials() {
           displayWarning("username", "Your account is locked");
           displayWarning("password", "Your account is locked");
           break;
-        case "Invalid":
-          displayWarning("username", "invalid username or password");
-          displayWarning("password", "invalid username or password");
+        case "username":
+          displayWarning("username", "invalid username");
+          break;
+        case "password": // invalid password, therefore send to password sign in
+          const query = new RevQuery({ "user": `mrcode/${username}` });
+          window.location.href = "/signin2?" + query.toString();
           break;
         default:
+          debugger;
           window.location.replace("/home");
       }
     }

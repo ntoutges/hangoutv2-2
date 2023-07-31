@@ -38,10 +38,10 @@
   height: 100%;
   width: 100%;
 
-  image-rendering: pixelated;
+  /* image-rendering: pixelated; */
   /* background-position: center;
   background-size: contain; */
-  object-fit: contain;
+  object-fit: cover;
 
   /* position: absolute;
   top: 50%;

@@ -1,5 +1,6 @@
 const $ = document.querySelector.bind(document);
 import * as req from "./modules/easyReq.js";
+import { Query } from "./modules/query.js";
 
 
 function init() { // prevents code from floating in space
@@ -12,6 +13,12 @@ function init() { // prevents code from floating in space
   $("#password").addEventListener("focusout", function() { focusOut.call(this, "password" ); });
   $("#password").addEventListener("keydown", submitViaEnter);
   $("#submit").addEventListener("click", submitCredentials);
+
+  const query = new Query(window.location.search);
+  if (query.has("user")) {
+    $("#username").value = query.get("user");
+    $("#password").focus(); // autofocus on password field to fill that in quickly
+  }
 }
 
 function submitCredentials() {
@@ -42,7 +49,9 @@ function submitCredentials() {
           displayWarning("username", "Your account is locked");
           displayWarning("password", "Your account is locked");
           break;
-        case "Invalid":
+        case "username":
+        case "password": // invalid password, therefore send to password sign in
+        // case "Invalid":
           displayWarning("username", "invalid username or password");
           displayWarning("password", "invalid username or password");
           break;
